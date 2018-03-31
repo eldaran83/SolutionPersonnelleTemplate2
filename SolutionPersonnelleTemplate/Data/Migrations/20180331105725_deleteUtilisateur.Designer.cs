@@ -11,9 +11,10 @@ using System;
 namespace SolutionPersonnelleTemplate.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20180331105725_deleteUtilisateur")]
+    partial class deleteUtilisateur
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -179,31 +180,6 @@ namespace SolutionPersonnelleTemplate.Data.Migrations
                     b.ToTable("AspNetUsers");
                 });
 
-            modelBuilder.Entity("SolutionPersonnelleTemplate.Models.BO.Utilisateur", b =>
-                {
-                    b.Property<string>("ApplicationUserID");
-
-                    b.Property<bool>("ConfirmEmail");
-
-                    b.Property<DateTime>("DateCreationUtilisateur");
-
-                    b.Property<DateTime>("DateDeNaissance");
-
-                    b.Property<string>("Email");
-
-                    b.Property<bool>("ProfilUtilisateurComplet");
-
-                    b.Property<string>("Pseudo");
-
-                    b.Property<string>("Role");
-
-                    b.Property<string>("UrlAvatarImage");
-
-                    b.HasKey("ApplicationUserID");
-
-                    b.ToTable("Utilisateurs");
-                });
-
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
                 {
                     b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole")
@@ -246,14 +222,6 @@ namespace SolutionPersonnelleTemplate.Data.Migrations
                     b.HasOne("SolutionPersonnelleTemplate.Models.ApplicationUser")
                         .WithMany()
                         .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade);
-                });
-
-            modelBuilder.Entity("SolutionPersonnelleTemplate.Models.BO.Utilisateur", b =>
-                {
-                    b.HasOne("SolutionPersonnelleTemplate.Models.ApplicationUser", "ApplicationUser")
-                        .WithOne("Utilisateur")
-                        .HasForeignKey("SolutionPersonnelleTemplate.Models.BO.Utilisateur", "ApplicationUserID")
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 #pragma warning restore 612, 618

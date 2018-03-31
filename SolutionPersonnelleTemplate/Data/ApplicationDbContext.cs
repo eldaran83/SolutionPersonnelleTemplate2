@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using SolutionPersonnelleTemplate.Models;
+using SolutionPersonnelleTemplate.Models.BO;
 
 namespace SolutionPersonnelleTemplate.Data
 {
@@ -22,5 +23,7 @@ namespace SolutionPersonnelleTemplate.Data
             // For example, you can rename the ASP.NET Identity table names and more.
             // Add your customizations after calling base.OnModelCreating(builder);
         }
+
+        public DbSet<Utilisateur> Utilisateurs { get; set; }
     }
 }

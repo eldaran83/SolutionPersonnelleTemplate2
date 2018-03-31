@@ -11,9 +11,10 @@ using System;
 namespace SolutionPersonnelleTemplate.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20180331103711_addPropsUtilisateur")]
+    partial class addPropsUtilisateur
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -190,6 +191,8 @@ namespace SolutionPersonnelleTemplate.Data.Migrations
                     b.Property<DateTime>("DateDeNaissance");
 
                     b.Property<string>("Email");
+
+                    b.Property<int?>("NombreDePartieJouee");
 
                     b.Property<bool>("ProfilUtilisateurComplet");
 

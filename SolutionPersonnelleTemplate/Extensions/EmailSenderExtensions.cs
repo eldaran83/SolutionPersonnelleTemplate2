@@ -11,8 +11,9 @@ namespace SolutionPersonnelleTemplate.Services
     {
         public static Task SendEmailConfirmationAsync(this IEmailSender emailSender, string email, string link)
         {
-            return emailSender.SendEmailAsync(email, "Confirm your email",
-                $"Please confirm your account by clicking this link: <a href='{HtmlEncoder.Default.Encode(link)}'>link</a>");
+            return emailSender.SendEmailAsync(email, "- Confirmer votre inscription ",
+                 $"<h2>Cliquez sur le lien et à vous de jouer :<a style='text-decoration: none' href='{HtmlEncoder.Default.Encode(link)}'> ça se passe par ici</a></h2>");
+
         }
     }
 }

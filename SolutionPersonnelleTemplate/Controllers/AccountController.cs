@@ -226,6 +226,10 @@ namespace SolutionPersonnelleTemplate.Controllers
                 {
                     _logger.LogInformation("User created a new account with password.");
 
+                    // Add a user to the default role, or any role you prefer here
+                    await _userManager.AddToRoleAsync(user, "Membre");
+                    //
+
                     var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
                     var callbackUrl = Url.EmailConfirmationLink(user.Id, code, Request.Scheme);
                     await _emailSender.SendEmailConfirmationAsync(model.Email, callbackUrl);
@@ -343,6 +347,9 @@ namespace SolutionPersonnelleTemplate.Controllers
                 throw new ApplicationException($"Unable to load user with ID '{userId}'.");
             }
             var result = await _userManager.ConfirmEmailAsync(user, code);
+
+            ViewData["userID"] = userId;
+
             return View(result.Succeeded ? "ConfirmEmail" : "Error");
         }
 

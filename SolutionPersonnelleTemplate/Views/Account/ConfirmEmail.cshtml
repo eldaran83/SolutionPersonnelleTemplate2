@@ -1,10 +1,12 @@
 ﻿@{
-    ViewData["Title"] = "Confirm email";
+    ViewData["Title"] = "Compte confirmé";
 }
-
-<h2>@ViewData["Title"]</h2>
+<h2>Votre inscription a bien été confirmée</h2>
 <div>
     <p>
-        Thank you for confirming your email.
+        Si vous m'en disiez plus sur vous, on pourrait terminer votre inscription et commencer à jouer.
+    </p>
+    <p>
+        <a href="/Utilisateur/Inscription/?userId=@ViewData["userID"]">Finir inscription</a>
     </p>
 </div>

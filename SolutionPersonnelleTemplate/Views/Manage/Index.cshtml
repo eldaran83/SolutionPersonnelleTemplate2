@@ -1,6 +1,6 @@
 ﻿@model IndexViewModel
 @{
-    ViewData["Title"] = "Profile";
+    ViewData["Title"] = "Profil";
     ViewData.AddActivePage(ManageNavPages.Index);
 }
 
@@ -17,17 +17,17 @@
             <div class="form-group">
                 <label asp-for="Email"></label>
                 @if (Model.IsEmailConfirmed)
-                {
-                    <div class="input-group">
-                        <input asp-for="Email" class="form-control" />
-                        <span class="input-group-addon" aria-hidden="true"><span class="glyphicon glyphicon-ok text-success"></span></span>
-                    </div>
-                }
-                else
-                {
-                    <input asp-for="Email" class="form-control" />
-                    <button asp-action="SendVerificationEmail" class="btn btn-link">Send verification email</button>
-                }
+        {
+            <div class="input-group">
+                <input asp-for="Email" class="form-control" />
+                <span class="input-group-addon" aria-hidden="true"><span class="glyphicon glyphicon-ok text-success"></span></span>
+            </div>
+}
+else
+{
+        <input asp-for="Email" class="form-control" />
+        <button asp-action="SendVerificationEmail" class="btn btn-link">Send verification email</button>
+}
                 <span asp-validation-for="Email" class="text-danger"></span>
             </div>
             <div class="form-group">
@@ -35,7 +35,11 @@
                 <input asp-for="PhoneNumber" class="form-control" />
                 <span asp-validation-for="PhoneNumber" class="text-danger"></span>
             </div>
-            <button type="submit" class="btn btn-default">Save</button>
+            <div class="form-group">
+                  <a href="/Utilisateur/MonCompte/" class="btn btn-info" role="button">Gérer mon compte.</a>
+            </div>
+
+                <button type="submit" class="btn btn-success">Sauvegarder</button>
         </form>
     </div>
 </div>

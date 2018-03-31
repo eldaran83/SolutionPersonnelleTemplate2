@@ -11,6 +11,10 @@ using Microsoft.Extensions.DependencyInjection;
 using SolutionPersonnelleTemplate.Data;
 using SolutionPersonnelleTemplate.Models;
 using SolutionPersonnelleTemplate.Services;
+ 
+using SolutionPersonnelleTemplate.Models.BLL.Interfaces;
+using SolutionPersonnelleTemplate.Models.BLL.Managers;
+using SolutionPersonnelleTemplate.Models.BO;
 
 namespace SolutionPersonnelleTemplate
 {
@@ -33,8 +37,18 @@ namespace SolutionPersonnelleTemplate
                 .AddEntityFrameworkStores<ApplicationDbContext>()
                 .AddDefaultTokenProviders();
 
+            //Add mail methode personnelle
+            services.Configure<EmailSettings>(Configuration.GetSection("EmailSettings"));
+            // add utilisateur
+            services.Configure<Utilisateur>(Configuration);
+
             // Add application services.
             services.AddTransient<IEmailSender, EmailSender>();
+
+            //Add utilisateur services
+            services.AddScoped<IUtilisateurInterface, UtilisateurManager>();
+            //Add application services for fichier
+            services.AddScoped<IRepositoryFichier, FichierRepository>();
 
             services.AddMvc();
         }
