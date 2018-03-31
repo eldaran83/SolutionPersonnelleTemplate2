@@ -31,7 +31,11 @@
             </div>
             <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
+                    @*les icones pour la gestion de l'application n'apparaissent que si l'utisateur est logé en tant que Admin*@
+                    @if (User.IsInRole("Administrateur")){
                     <li><a asp-area="" asp-controller="Admin" asp-action="Index">Admin-Zone</a></li>
+                     }
+
                     <li><a asp-area="" asp-controller="Home" asp-action="About">About</a></li>
                     <li><a asp-area="" asp-controller="Home" asp-action="Contact">Contact</a></li>
                 </ul>
