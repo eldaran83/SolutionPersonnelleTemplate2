@@ -11,9 +11,10 @@ using System;
 namespace SolutionPersonnelleTemplate.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20180402101354_AddClassBO")]
+    partial class AddClassBO
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -184,39 +185,15 @@ namespace SolutionPersonnelleTemplate.Data.Migrations
                     b.Property<int>("HistoireID")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<string>("Createur");
-
                     b.Property<int>("NombreDeFoisJouee");
 
                     b.Property<int>("Score");
 
                     b.Property<string>("Titre");
 
-                    b.Property<string>("UtilisateurID");
-
                     b.HasKey("HistoireID");
 
-                    b.HasIndex("UtilisateurID");
-
                     b.ToTable("Histoires");
-                });
-
-            modelBuilder.Entity("SolutionPersonnelleTemplate.Models.BO.Message", b =>
-                {
-                    b.Property<int>("MessageID")
-                        .ValueGeneratedOnAdd();
-
-                    b.Property<string>("Contenu");
-
-                    b.Property<int>("HistoireID");
-
-                    b.Property<string>("Titre");
-
-                    b.HasKey("MessageID");
-
-                    b.HasIndex("HistoireID");
-
-                    b.ToTable("Messages");
                 });
 
             modelBuilder.Entity("SolutionPersonnelleTemplate.Models.BO.Partie", b =>
@@ -224,17 +201,25 @@ namespace SolutionPersonnelleTemplate.Data.Migrations
                     b.Property<int>("PartieID")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<int>("HistoireID");
+                    b.Property<int?>("HistoireID1");
+
+                    b.Property<int?>("HistoireID2");
 
                     b.Property<TimeSpan>("Horodatage");
 
-                    b.Property<string>("UtilisateurID");
+                    b.Property<string>("UtilisateurApplicationUserID");
+
+                    b.Property<string>("UtilisateurIDApplicationUserID");
 
                     b.HasKey("PartieID");
 
-                    b.HasIndex("HistoireID");
+                    b.HasIndex("HistoireID1");
 
-                    b.HasIndex("UtilisateurID");
+                    b.HasIndex("HistoireID2");
+
+                    b.HasIndex("UtilisateurApplicationUserID");
+
+                    b.HasIndex("UtilisateurIDApplicationUserID");
 
                     b.ToTable("Parties");
                 });
@@ -309,31 +294,23 @@ namespace SolutionPersonnelleTemplate.Data.Migrations
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 
-            modelBuilder.Entity("SolutionPersonnelleTemplate.Models.BO.Histoire", b =>
-                {
-                    b.HasOne("SolutionPersonnelleTemplate.Models.BO.Utilisateur", "Utilisateur")
-                        .WithMany()
-                        .HasForeignKey("UtilisateurID");
-                });
-
-            modelBuilder.Entity("SolutionPersonnelleTemplate.Models.BO.Message", b =>
-                {
-                    b.HasOne("SolutionPersonnelleTemplate.Models.BO.Histoire", "Histoire")
-                        .WithMany("Messages")
-                        .HasForeignKey("HistoireID")
-                        .OnDelete(DeleteBehavior.Cascade);
-                });
-
             modelBuilder.Entity("SolutionPersonnelleTemplate.Models.BO.Partie", b =>
                 {
                     b.HasOne("SolutionPersonnelleTemplate.Models.BO.Histoire", "Histoire")
                         .WithMany()
-                        .HasForeignKey("HistoireID")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .HasForeignKey("HistoireID1");
+
+                    b.HasOne("SolutionPersonnelleTemplate.Models.BO.Histoire", "HistoireID")
+                        .WithMany()
+                        .HasForeignKey("HistoireID2");
 
                     b.HasOne("SolutionPersonnelleTemplate.Models.BO.Utilisateur", "Utilisateur")
-                        .WithMany("Parties")
-                        .HasForeignKey("UtilisateurID");
+                        .WithMany()
+                        .HasForeignKey("UtilisateurApplicationUserID");
+
+                    b.HasOne("SolutionPersonnelleTemplate.Models.BO.Utilisateur", "UtilisateurID")
+                        .WithMany()
+                        .HasForeignKey("UtilisateurIDApplicationUserID");
                 });
 
             modelBuilder.Entity("SolutionPersonnelleTemplate.Models.BO.Utilisateur", b =>

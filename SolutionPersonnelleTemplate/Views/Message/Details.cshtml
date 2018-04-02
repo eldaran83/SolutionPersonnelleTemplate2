@@ -1,0 +1,36 @@
+﻿@model SolutionPersonnelleTemplate.Models.BO.Message
+
+@{
+    ViewData["Title"] = "Details";
+}
+
+<h2>Details</h2>
+
+<div>
+    <h4>Message</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.Titre)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Titre)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Contenu)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Contenu)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Histoire)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Histoire.HistoireID)
+        </dd>
+    </dl>
+</div>
+<div>
+    <a asp-action="Edit" asp-route-id="@Model.MessageID">Edit</a> |
+    <a asp-action="Index">Back to List</a>
+</div>

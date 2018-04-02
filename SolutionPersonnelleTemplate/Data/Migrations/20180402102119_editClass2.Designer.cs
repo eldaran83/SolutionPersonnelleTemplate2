@@ -11,9 +11,10 @@ using System;
 namespace SolutionPersonnelleTemplate.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20180402102119_editClass2")]
+    partial class editClass2
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -184,39 +185,15 @@ namespace SolutionPersonnelleTemplate.Data.Migrations
                     b.Property<int>("HistoireID")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<string>("Createur");
-
                     b.Property<int>("NombreDeFoisJouee");
 
                     b.Property<int>("Score");
 
                     b.Property<string>("Titre");
 
-                    b.Property<string>("UtilisateurID");
-
                     b.HasKey("HistoireID");
 
-                    b.HasIndex("UtilisateurID");
-
                     b.ToTable("Histoires");
-                });
-
-            modelBuilder.Entity("SolutionPersonnelleTemplate.Models.BO.Message", b =>
-                {
-                    b.Property<int>("MessageID")
-                        .ValueGeneratedOnAdd();
-
-                    b.Property<string>("Contenu");
-
-                    b.Property<int>("HistoireID");
-
-                    b.Property<string>("Titre");
-
-                    b.HasKey("MessageID");
-
-                    b.HasIndex("HistoireID");
-
-                    b.ToTable("Messages");
                 });
 
             modelBuilder.Entity("SolutionPersonnelleTemplate.Models.BO.Partie", b =>
@@ -309,21 +286,6 @@ namespace SolutionPersonnelleTemplate.Data.Migrations
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 
-            modelBuilder.Entity("SolutionPersonnelleTemplate.Models.BO.Histoire", b =>
-                {
-                    b.HasOne("SolutionPersonnelleTemplate.Models.BO.Utilisateur", "Utilisateur")
-                        .WithMany()
-                        .HasForeignKey("UtilisateurID");
-                });
-
-            modelBuilder.Entity("SolutionPersonnelleTemplate.Models.BO.Message", b =>
-                {
-                    b.HasOne("SolutionPersonnelleTemplate.Models.BO.Histoire", "Histoire")
-                        .WithMany("Messages")
-                        .HasForeignKey("HistoireID")
-                        .OnDelete(DeleteBehavior.Cascade);
-                });
-
             modelBuilder.Entity("SolutionPersonnelleTemplate.Models.BO.Partie", b =>
                 {
                     b.HasOne("SolutionPersonnelleTemplate.Models.BO.Histoire", "Histoire")
@@ -332,7 +294,7 @@ namespace SolutionPersonnelleTemplate.Data.Migrations
                         .OnDelete(DeleteBehavior.Cascade);
 
                     b.HasOne("SolutionPersonnelleTemplate.Models.BO.Utilisateur", "Utilisateur")
-                        .WithMany("Parties")
+                        .WithMany()
                         .HasForeignKey("UtilisateurID");
                 });
 

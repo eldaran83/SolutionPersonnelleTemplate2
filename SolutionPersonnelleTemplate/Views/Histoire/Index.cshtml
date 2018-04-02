@@ -1,0 +1,22 @@
+﻿@model IEnumerable<SolutionPersonnelleTemplate.Models.BO.Histoire>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h2>Le recueil des Codex</h2>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+
+@foreach (var item in Model)
+{
+    <p>ID : @item.HistoireID</p>
+    <p>Titre :@item.Titre</p>
+    <p>Id utilisateur :@item.UtilisateurID</p>
+    <p>Créateur :@item.Createur</p>
+    <p>Score: @item.Score</p>
+    <p>Nb de fois jouée: @item.NombreDeFoisJouee</p>
+
+}

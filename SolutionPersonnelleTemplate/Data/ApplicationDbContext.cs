@@ -25,5 +25,8 @@ namespace SolutionPersonnelleTemplate.Data
         }
 
         public DbSet<Utilisateur> Utilisateurs { get; set; }
+        public DbSet<Partie> Parties { get; set; }
+        public DbSet<Histoire> Histoires { get; set; }
+        public DbSet<Message> Messages { get; set; }
     }
 }

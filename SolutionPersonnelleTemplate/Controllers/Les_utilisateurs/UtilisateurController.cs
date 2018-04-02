@@ -257,6 +257,7 @@ namespace SolutionPersonnelleTemplate.Controllers.Les_utilisateurs
             ///////////////////////////////////////////////////////////////////////
             //  FIN gestion image
             ///////////////////////////////////////////////////////////////////////
+
             ViewData["ApplicationUserID"] = utilisateur.ApplicationUserID;
             return View(utilisateur);
         }

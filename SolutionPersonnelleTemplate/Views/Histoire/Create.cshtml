@@ -1,0 +1,42 @@
+﻿@model SolutionPersonnelleTemplate.Models.BO.Histoire
+
+@{
+    ViewData["Title"] = "Créer votre histoire";
+}
+
+<h2>Créer votre histoire</h2>
+
+<h4>Histoire</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Create">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                @{ 
+                    if (ViewBag.error != "")
+                    {
+                        <p class="alert-danger">@ViewBag.error</p>
+                    }
+                }
+                <label asp-for="Titre" class="control-label"></label>
+                <input asp-for="Titre" class="form-control" />
+                <span asp-validation-for="Titre" class="text-danger"></span>
+            </div>
+ 
+ 
+            <div class="form-group">
+                <input type="hidden" asp-for="UtilisateurID" value="@ViewBag.UtilisateurID" />
+                <input type="hidden" asp-for="Createur" value="@ViewBag.Createur" />
+                <input type="hidden" asp-for="NombreDeFoisJouee" value="0" />
+                <input type="hidden" asp-for="Score" value="0" />
+                <input type="submit" value="Valider" class="btn btn-success" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Retour</a>
+</div>
+

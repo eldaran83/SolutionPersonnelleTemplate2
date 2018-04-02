@@ -31,5 +31,6 @@ namespace SolutionPersonnelleTemplate.Models.BO
         public string UrlAvatarImage { get; set; }
         //nav
         public ApplicationUser ApplicationUser { get; set; }
+        public ICollection<Partie> Parties { get; set; }
     }
 }

@@ -11,9 +11,10 @@ using System;
 namespace SolutionPersonnelleTemplate.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20180402124831_changeHistoire2")]
+    partial class changeHistoire2
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -183,8 +184,6 @@ namespace SolutionPersonnelleTemplate.Data.Migrations
                 {
                     b.Property<int>("HistoireID")
                         .ValueGeneratedOnAdd();
-
-                    b.Property<string>("Createur");
 
                     b.Property<int>("NombreDeFoisJouee");
 

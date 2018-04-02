@@ -49,6 +49,8 @@ namespace SolutionPersonnelleTemplate
             services.AddScoped<IUtilisateurInterface, UtilisateurManager>();
             //Add application services for fichier
             services.AddScoped<IRepositoryFichier, FichierRepository>();
+            //Add application services for histoire
+            services.AddScoped<IRepositoryHistoire, HistoireRepository>();
 
             services.AddMvc();
         }

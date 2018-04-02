@@ -45,7 +45,7 @@ namespace SolutionPersonnelleTemplate.Models.BLL.Managers
                 DateCreationUtilisateur = DateTime.Now,
                 DateDeNaissance = DateTime.Parse("21/09/1976"),
                 Email = eldaran.Email,
-                Pseudo = eldaran.UserName,
+                Pseudo = "Eldaran83",
                 Role = "Administrateur",
                 ProfilUtilisateurComplet = true,
                 UrlAvatarImage = "/images/userDefault.png"
@@ -64,7 +64,7 @@ namespace SolutionPersonnelleTemplate.Models.BLL.Managers
                 DateCreationUtilisateur = DateTime.Now,
                 DateDeNaissance = DateTime.Parse("21/09/1976"),
                 Email = pilou.Email,
-                Pseudo = pilou.UserName,
+                Pseudo = "Pilou",
                 Role = "Manager",
                 ProfilUtilisateurComplet = true,
                 UrlAvatarImage = "/images/userDefault.png"
@@ -84,7 +84,7 @@ namespace SolutionPersonnelleTemplate.Models.BLL.Managers
                 DateCreationUtilisateur = DateTime.Now,
                 DateDeNaissance = DateTime.Parse("21/09/1976"),
                 Email = membreTest.Email,
-                Pseudo = membreTest.UserName,
+                Pseudo = "MembreTest",
                 Role = "Membre",
                 ProfilUtilisateurComplet = true,
                 UrlAvatarImage = "/images/userDefault.png"

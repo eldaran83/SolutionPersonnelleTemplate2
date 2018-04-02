@@ -1,0 +1,36 @@
+﻿@model SolutionPersonnelleTemplate.Models.BO.Histoire
+
+@{
+    ViewData["Title"] = "Details";
+}
+
+<h2>Details</h2>
+
+<div>
+    <h4>Histoire</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.Titre)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Titre)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Score)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Score)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.NombreDeFoisJouee)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.NombreDeFoisJouee)
+        </dd>
+    </dl>
+</div>
+<div>
+    <a asp-action="Edit" asp-route-id="@Model.HistoireID">Edit</a> |
+    <a asp-action="Index">Back to List</a>
+</div>

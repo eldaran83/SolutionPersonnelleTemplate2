@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -71,6 +72,7 @@ namespace SolutionPersonnelleTemplate.Controllers.Admin
 
             //renvoyer la liste des utilisateurs
             IEnumerable<Utilisateur> listeUtilisateurs = await _utilisateurManager.GetAllUtilisateursAsync();
+
             return View(listeUtilisateurs);
         }
 
