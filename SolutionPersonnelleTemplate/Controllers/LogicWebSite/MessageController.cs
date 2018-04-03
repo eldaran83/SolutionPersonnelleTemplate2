@@ -4,8 +4,10 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.AspNetCore.Routing;
 using Microsoft.EntityFrameworkCore;
 using SolutionPersonnelleTemplate.Data;
+using SolutionPersonnelleTemplate.Models.BLL.Interfaces;
 using SolutionPersonnelleTemplate.Models.BO;
 
 namespace SolutionPersonnelleTemplate.Controllers.LogicWebSite
@@ -13,17 +15,19 @@ namespace SolutionPersonnelleTemplate.Controllers.LogicWebSite
     public class MessageController : Controller
     {
         private readonly ApplicationDbContext _context;
+        private readonly IRepositoryMessage _messageRepository;
 
-        public MessageController(ApplicationDbContext context)
+        public MessageController(ApplicationDbContext context, IRepositoryMessage messageRepository)
         {
             _context = context;
+            _messageRepository = messageRepository;
         }
 
         // GET: Message
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(int histoireID)
         {
-            var applicationDbContext = _context.Messages.Include(m => m.Histoire);
-            return View(await applicationDbContext.ToListAsync());
+            var listeMessages = await _messageRepository.GetAllMessageOfStoryAsync(histoireID);
+            return View(listeMessages);
         }
 
         // GET: Message/Details/5

@@ -51,6 +51,8 @@ namespace SolutionPersonnelleTemplate
             services.AddScoped<IRepositoryFichier, FichierRepository>();
             //Add application services for histoire
             services.AddScoped<IRepositoryHistoire, HistoireRepository>();
+            //Add application services for message
+            services.AddScoped<IRepositoryMessage, MessageRepository>();
 
             services.AddMvc();
         }

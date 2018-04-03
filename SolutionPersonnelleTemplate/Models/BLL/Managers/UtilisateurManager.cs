@@ -101,7 +101,7 @@ namespace SolutionPersonnelleTemplate.Models.BLL.Managers
         /// <returns></returns>
         public async Task<IEnumerable<Utilisateur>> GetAllUtilisateursAsync()
         {
-            var utilisateurs = await _context.Utilisateurs
+            IEnumerable<Utilisateur> utilisateurs = await _context.Utilisateurs
                .Include(u => u.ApplicationUser)
                .ToListAsync();
 
