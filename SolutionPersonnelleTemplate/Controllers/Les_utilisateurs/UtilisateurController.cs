@@ -223,7 +223,7 @@ namespace SolutionPersonnelleTemplate.Controllers.Les_utilisateurs
         /// <param name="userId"></param>
         /// <returns></returns>
         [HttpGet]
-        public async Task<IActionResult> Edit(string userId)
+        public async Task<IActionResult> Edit(string userId, string returnURL)
         {
             //je recupere la vraie identité de l user
             var ApplicationUser = _userManager.GetUserId(HttpContext.User);
@@ -257,8 +257,7 @@ namespace SolutionPersonnelleTemplate.Controllers.Les_utilisateurs
             ///////////////////////////////////////////////////////////////////////
             //  FIN gestion image
             ///////////////////////////////////////////////////////////////////////
-
-            ViewData["ApplicationUserID"] = utilisateur.ApplicationUserID;
+ 
             return View(utilisateur);
         }
 

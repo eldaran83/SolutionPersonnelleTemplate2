@@ -65,21 +65,9 @@ namespace SolutionPersonnelleTemplate.Controllers.LogicWebSite
             string role = utilisateur.Role;
 
             // seul un manager ou un administrateur a le droit de créer une histoire
-            bool utilisateurALeDroitDeCreerUneHistoire = false;
-            if (role == "Manager")
+             if (role == "Membre")
             {
-                utilisateurALeDroitDeCreerUneHistoire = true;
-            }else if(role == "Administrateur"){
-                utilisateurALeDroitDeCreerUneHistoire = true;
-            }
-            else
-            {
-                utilisateurALeDroitDeCreerUneHistoire = false;
-            }
-
-            if (!utilisateurALeDroitDeCreerUneHistoire)
-            {
-                return RedirectToAction("MonCompte", new RouteValueDictionary(new
+                 return RedirectToAction("MonCompte", new RouteValueDictionary(new
                 {
                     controller = "Utilisateur",
                     action = "MonCompte",

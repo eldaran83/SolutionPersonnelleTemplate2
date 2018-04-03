@@ -4,11 +4,13 @@ using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using SolutionPersonnelleTemplate.Data;
 using SolutionPersonnelleTemplate.Models;
+
  
 namespace SolutionPersonnelleTemplate.Controllers
 {
@@ -43,22 +45,18 @@ namespace SolutionPersonnelleTemplate.Controllers
 
         public  IActionResult Index()
         {
-
             return View();
         }
 
-        public IActionResult About()
+        public IActionResult About(string toto)
         {
-            ViewData["Message"] = "Your application description page.";
-
             return View();
         }
 
         public IActionResult Contact()
         {
             ViewData["Message"] = "Your contact page.";
-
-            return View();
+             return View();
         }
 
         public IActionResult Error()
