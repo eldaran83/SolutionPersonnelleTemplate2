@@ -65,8 +65,7 @@ namespace SolutionPersonnelleTemplate.Controllers.LogicWebSite
         {
             if (ModelState.IsValid)
             {
-                _context.Add(messageModele);
-                await _context.SaveChangesAsync();
+                await _messageRepository.NouveauMessage(messageModele);
                 return RedirectToAction(nameof(Index));
             }
             ViewData["HistoireID"] = messageModele.HistoireID;
