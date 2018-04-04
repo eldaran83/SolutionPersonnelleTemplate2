@@ -257,7 +257,20 @@ namespace SolutionPersonnelleTemplate.Controllers.Les_utilisateurs
             ///////////////////////////////////////////////////////////////////////
             //  FIN gestion image
             ///////////////////////////////////////////////////////////////////////
- 
+
+            //string absoluteUrl = string.Concat(
+            //            Request.Scheme,
+            //            "://",
+            //            Request.Host.ToUriComponent(),
+            //            Request.PathBase.ToUriComponent(),
+            //            Request.Path.ToUriComponent(),
+            //            Request.QueryString.ToUriComponent());
+
+             string absoluteUrl = string.Concat(
+                                   Request.Path.ToUriComponent(),
+                                   Request.QueryString.ToUriComponent()) ;
+
+            ViewData["returnURL"] = absoluteUrl;
             return View(utilisateur);
         }
 
@@ -268,7 +281,7 @@ namespace SolutionPersonnelleTemplate.Controllers.Les_utilisateurs
         /// <returns></returns>
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(Utilisateur utilisateur)
+        public async Task<IActionResult> Edit(Utilisateur utilisateur, string returnURL)
         {
 
             utilisateur.DateCreationUtilisateur = DateTime.Now;
@@ -298,6 +311,9 @@ namespace SolutionPersonnelleTemplate.Controllers.Les_utilisateurs
             ///////////////////////////////////////////////////////////////////////
             //  FIN gestion image
             ///////////////////////////////////////////////////////////////////////
+
+
+            ViewData["returnURL"] = returnURL;
             ViewData["ApplicationUserID"] = utilisateur.ApplicationUserID;
             return View(utilisateur);
 
@@ -403,10 +419,10 @@ namespace SolutionPersonnelleTemplate.Controllers.Les_utilisateurs
         /// <param name="form"></param>
         /// <returns></returns>
         [HttpGet]
-        public async Task<IActionResult> UploadImage(string userId)
+        public async Task<IActionResult> UploadImage(string userId, string returnURL)
         {
-            // je recupere la vraie identité de l user
-            var ApplicationUser = _userManager.GetUserId(HttpContext.User);
+             // je recupere la vraie identité de l user
+                var ApplicationUser = _userManager.GetUserId(HttpContext.User);
             if (userId != ApplicationUser)
             {
                 userId = ApplicationUser;
@@ -416,6 +432,7 @@ namespace SolutionPersonnelleTemplate.Controllers.Les_utilisateurs
             {
                 return NotFound();
             }
+            ViewData["returnURL"] = returnURL;
             ViewData["ApplicationUserID"] = utilisateur.ApplicationUserID;
             return View(utilisateur);
         }
@@ -427,8 +444,11 @@ namespace SolutionPersonnelleTemplate.Controllers.Les_utilisateurs
         /// <param name="form"></param>
         /// <returns></returns>
         [HttpPost]
-        public async Task<IActionResult> UploadImage(IFormCollection form)
+        public async Task<IActionResult> UploadImage(IFormCollection form, string returnURL)
         {
+            ViewData["returnURL"] = returnURL; 
+
+
             //verifie qu un fichier est bien passé en param et qu'il y a qlq chose dedans
             if (form.Files == null || form.Files[0].Length == 0)
                 return RedirectToAction("Edit", new { userId = Convert.ToString(form["ApplicationUserID"]) });
@@ -466,7 +486,16 @@ namespace SolutionPersonnelleTemplate.Controllers.Les_utilisateurs
             await _utilisateurManager.UpdateUtilisateur(utilisateur);
 
             //renvoi vers le edit 
-            return RedirectToAction("Edit", new { userId = Convert.ToString(form["ApplicationUserID"]) });
+            // return RedirectToAction("Edit", new { userId = Convert.ToString(form["ApplicationUserID"]) });
+            //redirection vers ledit
+            //return RedirectToAction("Edit", new RouteValueDictionary(new
+            //{
+            //    controller = "Utilisateur",
+            //    action = "Edit", 
+
+            //}));
+
+            return Redirect(returnURL);
         }
 
     }

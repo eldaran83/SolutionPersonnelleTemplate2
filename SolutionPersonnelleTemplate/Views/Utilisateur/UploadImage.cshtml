@@ -8,6 +8,8 @@
         <form asp-action="UploadImage" method="post" enctype="multipart/form-data">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <input type="hidden" id="userId" name="userId" value="@ViewData["ApplicationUserID"]" />
+            <input type="hidden" id="returnURL" name="returnURL" value="@ViewData["returnURL"]" />
+ 
 
             @*Pour l image*@
             <div class="form-group">
