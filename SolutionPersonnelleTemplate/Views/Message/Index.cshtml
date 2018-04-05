@@ -4,23 +4,32 @@
     ViewData["Title"] = "Index";
 }
 
-<h2>Index</h2>
+<h2>Recueil des messages de l'histoire : @{
+    foreach (var item in Model)
+    {
+        <span>@item.Histoire.Titre</span>
+    }
+
+}
+    </h2>
 
 <p>
-    <a asp-action="Create">Create New</a>
+    <a asp-action="Create" asp-controller="Message" asp-route-histoireID="@ViewData["HistoireID"]">Créer un nouveau message pour cette histoire</a>
+    @*<a asp-action="Create" asp-route-histoireId="@ViewData["HistoireID"]" asp-controller="Message">Créer un nouveau message pour cette histoire</a>*@
 </p>
 <table class="table">
     <thead>
         <tr>
+                <th>
+                    N°
+                </th>
                 <th>
                     @Html.DisplayNameFor(model => model.Titre)
                 </th>
                 <th>
                     @Html.DisplayNameFor(model => model.Contenu)
                 </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Histoire)
-            </th>
+ 
             <th></th>
         </tr>
     </thead>
@@ -28,18 +37,19 @@
 @foreach (var item in Model) {
         <tr>
             <td>
+                @Html.DisplayFor(modelItem => item.MessageID)
+            </td>
+            <td>
                 @Html.DisplayFor(modelItem => item.Titre)
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.Contenu)
             </td>
+ 
             <td>
-                @Html.DisplayFor(modelItem => item.Histoire.HistoireID)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.MessageID">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.MessageID">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.MessageID">Delete</a>
+                <a asp-action="Edit" asp-route-messageId="@item.MessageID" asp-route-HistoireID="@item.HistoireID">Edit</a> |
+                <a asp-action="Details" asp-route-messageId="@item.MessageID" asp-route-HistoireID="@item.HistoireID">Details</a> |
+                <a asp-action="Delete" asp-route-messageId="@item.MessageID" asp-route-HistoireID="@item.HistoireID">Delete</a>
             </td>
         </tr>
 }

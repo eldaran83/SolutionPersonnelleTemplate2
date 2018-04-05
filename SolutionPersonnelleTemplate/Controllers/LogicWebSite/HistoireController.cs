@@ -32,7 +32,7 @@ namespace SolutionPersonnelleTemplate.Controllers.LogicWebSite
         // GET: Histoire
         public async Task<IActionResult> Index()
         {
-            var lesHistoires = await _histoireRepository.GetAllHistoiresAsync();
+            IEnumerable<Histoire> lesHistoires = await _histoireRepository.GetAllHistoiresAsync();
             return View(lesHistoires);
         }
 

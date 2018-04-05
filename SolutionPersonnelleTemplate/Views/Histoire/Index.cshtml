@@ -1,22 +1,67 @@
 ﻿@model IEnumerable<SolutionPersonnelleTemplate.Models.BO.Histoire>
-
 @{
     ViewData["Title"] = "Index";
 }
-
 <h2>Le recueil des Codex</h2>
-
 <p>
     <a asp-action="Create">Create New</a>
 </p>
 
-@foreach (var item in Model)
-{
-    <p>ID : @item.HistoireID</p>
-    <p>Titre :@item.Titre</p>
-    <p>Id utilisateur :@item.UtilisateurID</p>
-    <p>Créateur :@item.Createur</p>
-    <p>Score: @item.Score</p>
-    <p>Nb de fois jouée: @item.NombreDeFoisJouee</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.HistoireID)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Titre)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.UtilisateurID)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Createur)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Score)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.NombreDeFoisJouee)
+            </th>
 
-}
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.HistoireID)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Titre)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.UtilisateurID)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Createur)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Score)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.NombreDeFoisJouee)
+                </td>
+
+                <td>
+                    <a asp-action="Index" asp-controller="Message" asp-route-histoireID="@item.HistoireID" class="btn btn-block btn-success">Les messages</a>
+                    <a asp-action="Edit" asp-route-userId="@item.HistoireID" class="btn btn-block btn-warning">MAJ</a>
+                    <a asp-action="Details" asp-route-userId="@item.HistoireID" class="btn btn-block btn-info">Détails</a>
+                    <a asp-action="Delete" asp-route-userId="@item.HistoireID" class="btn btn-block btn-danger">Supprimer</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

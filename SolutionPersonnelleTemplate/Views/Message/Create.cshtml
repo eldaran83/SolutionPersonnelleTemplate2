@@ -4,7 +4,7 @@
     ViewData["Title"] = "Create";
 }
 
-<h2>Create</h2>
+<h2>Créer votre nouveau message</h2>
 
 <h4>Message</h4>
 <hr />
@@ -13,26 +13,29 @@
         <form asp-action="Create">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
+                @if (ViewBag.error != null)
+                {
+                <p class="alert-danger">@ViewBag.error</p>
+                }
                 <label asp-for="Titre" class="control-label"></label>
                 <input asp-for="Titre" class="form-control" />
                 <span asp-validation-for="Titre" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="Contenu" class="control-label"></label>
-                <textarea name="Contenu" cols="80" rows="10" class="form-control"></textarea>
-               @*<input asp-for="Contenu" class="form-control" />*@
-                <span asp-validation-for="Contenu" class="text-danger"></span>
+                <textarea asp-for="Contenu" cols="80" rows="10" class="form-control"></textarea>
+                 <span asp-validation-for="Contenu" class="text-danger"></span>
             </div>
  
             <div class="form-group">
                 <input type="hidden" asp-for="HistoireID" value="@ViewData["HistoireID"]" />
-                <input type="submit" value="Create" class="btn btn-default" />
+                <input type="submit" value="Valider" class="btn btn-success" />
             </div>
         </form>
     </div>
 </div>
 
 <div>
-    <a asp-action="Index">Back to List</a>
+    <a asp-action="Index"  asp-controller="Message" asp-route-histoireID="@ViewData["HistoireID"]">Retour au recueil </a>
 </div>
 

@@ -27,6 +27,7 @@ namespace SolutionPersonnelleTemplate.Controllers.LogicWebSite
         public async Task<IActionResult> Index(int histoireID)
         {
             var listeMessages = await _messageRepository.GetAllMessageOfStoryAsync(histoireID);
+            ViewData["HistoireID"] = histoireID;
             return View(listeMessages);
         }
 
@@ -50,9 +51,9 @@ namespace SolutionPersonnelleTemplate.Controllers.LogicWebSite
         }
 
         // GET: Message/Create
-        public IActionResult Create(int histoireId)
+        public IActionResult Create(int histoireID)
         {
-            ViewData["HistoireID"] = histoireId;
+            ViewData["HistoireID"] = histoireID;
             return View();
         }
 
@@ -63,29 +64,46 @@ namespace SolutionPersonnelleTemplate.Controllers.LogicWebSite
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(Message messageModele)
         {
+            if (await _messageRepository.messageTitreExistDansCetteHistoire(messageModele.Titre, messageModele.HistoireID))
+            {
+                ViewBag.error = "Ce titre de message est déjà utilisé dans cette histoire";
+                ViewData["HistoireID"] = messageModele.HistoireID;
+                return View(messageModele);
+            }
             if (ModelState.IsValid)
             {
                 await _messageRepository.NouveauMessage(messageModele);
-                return RedirectToAction(nameof(Index));
+
+                ViewData["HistoireID"] = messageModele.HistoireID;
+                return RedirectToAction("Index", new RouteValueDictionary(new
+                {
+                    controller = "Message",
+                    action = "Index",
+                    histoireID = messageModele.HistoireID
+                }));
             }
             ViewData["HistoireID"] = messageModele.HistoireID;
             return View(messageModele);
         }
 
         // GET: Message/Edit/5
-        public async Task<IActionResult> Edit(int? id)
+        public async Task<IActionResult> Edit(int? messageId , int? HistoireID)
         {
-            if (id == null)
+            if (messageId == null)
+            {
+                return NotFound();
+            }
+            if (HistoireID == null)
             {
                 return NotFound();
             }
 
-            var message = await _context.Messages.SingleOrDefaultAsync(m => m.MessageID == id);
+            Message message = await _messageRepository.GetMessageByMessageIDAndHistoireId(messageId, HistoireID);
             if (message == null)
             {
                 return NotFound();
             }
-            ViewData["HistoireID"] = new SelectList(_context.Histoires, "HistoireID", "HistoireID", message.HistoireID);
+            ViewData["HistoireID"] = message.HistoireID;
             return View(message);
         }
 
@@ -94,35 +112,31 @@ namespace SolutionPersonnelleTemplate.Controllers.LogicWebSite
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("MessageID,Titre,Contenu,HistoireID")] Message message)
+        public async Task<IActionResult> Edit(Message messageModele)
         {
-            if (id != message.MessageID)
+
+            if (await _messageRepository.messageTitreExistDansCetteHistoire(messageModele.Titre, messageModele.HistoireID))
             {
-                return NotFound();
+                ViewBag.error = "Ce titre de message est déjà utilisé dans cette histoire";
+                ViewData["HistoireID"] = messageModele.HistoireID;
+                return View(messageModele);
             }
 
             if (ModelState.IsValid)
             {
-                try
+                await _messageRepository.UpdateMessage(messageModele);
+
+                ViewData["HistoireID"] = messageModele.HistoireID;
+                return RedirectToAction("Index", new RouteValueDictionary(new
                 {
-                    _context.Update(message);
-                    await _context.SaveChangesAsync();
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!MessageExists(message.MessageID))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
-                }
-                return RedirectToAction(nameof(Index));
+                    controller = "Message",
+                    action = "Index",
+                    histoireID = messageModele.HistoireID
+                }));
             }
-            ViewData["HistoireID"] = new SelectList(_context.Histoires, "HistoireID", "HistoireID", message.HistoireID);
-            return View(message);
+
+            ViewData["HistoireID"] = messageModele.HistoireID;
+            return View(messageModele);
         }
 
         // GET: Message/Delete/5

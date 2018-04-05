@@ -56,7 +56,7 @@ namespace SolutionPersonnelleTemplate.Models.BLL.Managers
         {
             try
             {
-                Histoire histoireAChercher =  await _context.Histoires.Where(h => h.Titre.ToUpper() == titreHistoire.ToUpper()).FirstOrDefaultAsync();
+                Histoire histoireAChercher =  await _context.Histoires.Where(h => h.Titre.ToUpper().Trim() == titreHistoire.ToUpper().Trim()).FirstOrDefaultAsync();
 
                  if (histoireAChercher != null)
                 {
@@ -80,7 +80,7 @@ namespace SolutionPersonnelleTemplate.Models.BLL.Managers
         /// <returns></returns>
         public async  Task<IEnumerable<Histoire>> GetAllHistoiresAsync()
         {
-            var lesHistoires = await _context.Histoires
+            IEnumerable<Histoire> lesHistoires = await _context.Histoires
                                      .Include(u=>u.Utilisateur)
                                      .OrderByDescending(h=>h.NombreDeFoisJouee)
                                      .ToListAsync();
