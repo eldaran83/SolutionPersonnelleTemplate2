@@ -37,15 +37,14 @@ namespace SolutionPersonnelleTemplate.Controllers.LogicWebSite
         }
 
         // GET: Histoire/Details/5
-        public async Task<IActionResult> Details(int? id)
+        public async Task<IActionResult> Details(int? histoireID)
         {
-            if (id == null)
+            if (histoireID == null)
             {
                 return NotFound();
             }
 
-            var histoire = await _context.Histoires
-                .SingleOrDefaultAsync(m => m.HistoireID == id);
+            Histoire histoire = await _histoireRepository.GetHistoireByID(histoireID);
             if (histoire == null)
             {
                 return NotFound();
@@ -101,9 +100,7 @@ namespace SolutionPersonnelleTemplate.Controllers.LogicWebSite
             if (ModelState.IsValid)
             {
                var laNouvelleHistoire = await _histoireRepository.NouvelleHistoire(histoireModele);
-                //_context.Add(histoireModele);
-                //await _context.SaveChangesAsync();
-                // return RedirectToAction(nameof(Index));
+ 
                 return RedirectToAction("Create", new RouteValueDictionary(new
                 {
                     controller = "Message",
@@ -113,6 +110,91 @@ namespace SolutionPersonnelleTemplate.Controllers.LogicWebSite
             }
             return View(histoireModele);
         }
- 
+
+        // GET: Message/Delete/5
+        public async Task<IActionResult> Delete(int? HistoireID)
+        {
+            if (HistoireID == null)
+            {
+                return NotFound();
+            }
+            Histoire histoire = await _histoireRepository.GetHistoireByID(HistoireID);
+             if (histoire == null)
+            {
+                return NotFound();
+            }
+
+            ViewData["HistoireID"] = HistoireID;
+            return View(histoire);
+        }
+
+        // POST: Message/Delete/5
+        [HttpPost, ActionName("Delete")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> DeleteConfirmed(int? HistoireID)
+        {
+
+            if (HistoireID == null)
+            {
+                return NotFound();
+            }
+            await _histoireRepository.RemoveHistoireById(HistoireID);
+            return RedirectToAction("Index", new RouteValueDictionary(new
+            {
+                controller = "Histoire",
+                action = "Index",
+              
+            }));
+        }
+
+        // GET: Message/Edit/5
+        public async Task<IActionResult> Edit(int? HistoireID)
+        {
+            if (HistoireID == null)
+            {
+                return NotFound();
+            }
+
+            Histoire histoire = await _histoireRepository.GetHistoireByID(HistoireID);
+            if (histoire == null)
+            {
+                return NotFound();
+            }
+            ViewData["HistoireID"] = HistoireID;
+            return View(histoire);
+        }
+
+        // POST: Message/Edit/5
+        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
+        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Edit(Histoire histoireModele)
+        {
+
+            if (await _histoireRepository.HistoireExist(histoireModele.Titre))
+            {
+                ViewBag.error = "Ce titre de message est déjà utilisé dans cette histoire";
+                ViewData["HistoireID"] = histoireModele.HistoireID;
+                return View(histoireModele);
+            }
+
+            if (ModelState.IsValid)
+            {
+                await _histoireRepository.UpdateHistoire(histoireModele);
+
+                ViewData["HistoireID"] = histoireModele.HistoireID;
+                return RedirectToAction("Index", new RouteValueDictionary(new
+                {
+                    controller = "Histoire",
+                    action = "Index",
+                   
+                }));
+            }
+
+            ViewData["HistoireID"] = histoireModele.HistoireID;
+            return View(histoireModele);
+        }
+
     }
 }

@@ -12,14 +12,12 @@ namespace SolutionPersonnelleTemplate.Models.BLL.Managers
     public class HistoireRepository : IRepositoryHistoire
     {
         private readonly ApplicationDbContext _context;
- 
-        /// <summary>
-        /// contructeur 
-        /// </summary>
-         /// <param name="context"></param>
-        public HistoireRepository(ApplicationDbContext context)
+        private readonly IRepositoryMessage _messageRepository;
+
+        public HistoireRepository(ApplicationDbContext context, IRepositoryMessage messageRepository)
         {
-             _context = context;
+            _context = context;
+            _messageRepository = messageRepository;
         }
 
         /// <summary>
@@ -87,5 +85,66 @@ namespace SolutionPersonnelleTemplate.Models.BLL.Managers
              return lesHistoires;
         }
 
+        /// <summary>
+        /// supprime une histoire
+        /// avec tous ses messages
+        /// </summary>
+        /// <param name="histoireId"></param>
+        /// <returns></returns>
+        public async Task<bool> RemoveHistoireById(int? histoireId)
+        {
+            //L'histoire doit etre supprimé en dernier  !!
+            try
+            {
+                //suppresion des messages de l histoire
+              IEnumerable<Message> lesMessagesDeLhistoire= await _messageRepository.GetAllMessageOfStoryAsync(histoireId);
+
+                //Supprime l histoire
+                Histoire histoire = await _context.Histoires
+                                         .Where(m => m.HistoireID == histoireId)
+                                        .FirstOrDefaultAsync();
+
+                _context.Histoires.Remove(histoire);
+                await _context.SaveChangesAsync();
+
+                return true;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("La supression de l histoire a rencontré un problème :" + ex);
+                return false;
+            }
+        }
+
+        /// <summary>
+        /// met a jour l histoire
+        /// </summary>
+        /// <param name="messageModele"></param>
+        /// <returns></returns>
+        public async Task<Histoire> UpdateHistoire(Histoire histoireModele)
+        {
+            try
+            {
+                _context.Update(histoireModele);
+                await _context.SaveChangesAsync();
+                return histoireModele;
+            }
+            catch (DbUpdateConcurrencyException ex)
+            {
+                Console.WriteLine("La MAJ du message a rencontré un problème :" + ex);
+                return histoireModele;
+            }
+        }
+
+        /// <summary>
+        /// retourne une histoire grace a son id
+        /// </summary>
+        /// <param name="histoireID"></param>
+        /// <returns></returns>
+        public async Task<Histoire> GetHistoireByID(int? histoireID)
+        {
+            Histoire histoire = await _context.Histoires.Where(h => h.HistoireID == histoireID).FirstOrDefaultAsync();
+            return histoire;
+        }
     }
 }

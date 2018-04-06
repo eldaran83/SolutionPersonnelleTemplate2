@@ -24,29 +24,31 @@ namespace SolutionPersonnelleTemplate.Controllers.LogicWebSite
         }
 
         // GET: Message
-        public async Task<IActionResult> Index(int histoireID)
+        public async Task<IActionResult> Index(int? histoireID)
         {
-            var listeMessages = await _messageRepository.GetAllMessageOfStoryAsync(histoireID);
+            IEnumerable<Message> listeMessages = await _messageRepository.GetAllMessageOfStoryAsync(histoireID);
             ViewData["HistoireID"] = histoireID;
             return View(listeMessages);
         }
 
         // GET: Message/Details/5
-        public async Task<IActionResult> Details(int? id)
+        public async Task<IActionResult> Details(int? messageId, int? HistoireID)
         {
-            if (id == null)
+            if (messageId == null)
+            {
+                return NotFound();
+            }
+            if (HistoireID == null)
             {
                 return NotFound();
             }
 
-            var message = await _context.Messages
-                .Include(m => m.Histoire)
-                .SingleOrDefaultAsync(m => m.MessageID == id);
+            Message message = await _messageRepository.GetMessageByMessageIDAndHistoireId(messageId, HistoireID);
             if (message == null)
             {
                 return NotFound();
             }
-
+            ViewData["HistoireID"] = message.HistoireID;
             return View(message);
         }
 
@@ -140,33 +142,47 @@ namespace SolutionPersonnelleTemplate.Controllers.LogicWebSite
         }
 
         // GET: Message/Delete/5
-        public async Task<IActionResult> Delete(int? id)
+        public async Task<IActionResult> Delete(int? messageId, int? HistoireID)
         {
-            if (id == null)
+            if (messageId == null)
+            {
+                return NotFound();
+            }
+            if (HistoireID == null)
             {
                 return NotFound();
             }
 
-            var message = await _context.Messages
-                .Include(m => m.Histoire)
-                .SingleOrDefaultAsync(m => m.MessageID == id);
-            if (message == null)
+            Message leMessage = await _messageRepository.GetMessageByMessageIDAndHistoireId(messageId, HistoireID);
+            if (leMessage == null)
             {
                 return NotFound();
             }
 
-            return View(message);
+            ViewData["HistoireID"] = HistoireID;
+            return View(leMessage);
         }
 
         // POST: Message/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int id)
+        public async Task<IActionResult> DeleteConfirmed(int? messageId, int? HistoireID)
         {
-            var message = await _context.Messages.SingleOrDefaultAsync(m => m.MessageID == id);
-            _context.Messages.Remove(message);
-            await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
+            if (messageId == null)
+            {
+                return NotFound();
+            }
+            if (HistoireID == null)
+            {
+                return NotFound();
+            }
+            await _messageRepository.RemoveMessageOfStoryById(messageId, HistoireID);
+            return RedirectToAction("Index", new RouteValueDictionary(new
+            {
+                controller = "Message",
+                action = "Index",
+                histoireID = HistoireID
+            }));
         }
 
         private bool MessageExists(int id)

@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using SolutionPersonnelleTemplate.Data;
 using SolutionPersonnelleTemplate.Models.BLL.Interfaces;
@@ -152,6 +153,13 @@ namespace SolutionPersonnelleTemplate.Models.BLL.Managers
             // on ajoute pas de role car pour le moment l'admin eldaran83 a deja un role lors de l instanciation dans le starup
             await _context.SaveChangesAsync();
 
+            ApplicationUser user = await _userManager.FindByIdAsync(utilisateurAdmin.ApplicationUserID);
+            user.Email = utilisateurAdmin.Email;
+            user.NormalizedEmail = utilisateurAdmin.Email.ToUpper();
+            user.UserName = utilisateurAdmin.Email;
+            user.NormalizedUserName = utilisateurAdmin.Email.ToUpper();
+            _context.Update(user);
+            await _context.SaveChangesAsync();
             return utilisateurAdmin;
         }
 
@@ -166,6 +174,15 @@ namespace SolutionPersonnelleTemplate.Models.BLL.Managers
             {
                 _context.Update(utilisateur);
                 await _context.SaveChangesAsync();
+
+                ApplicationUser user = await _userManager.FindByIdAsync(utilisateur.ApplicationUserID);
+                user.Email = utilisateur.Email;
+                user.NormalizedEmail = utilisateur.Email.ToUpper();
+                user.UserName = utilisateur.Email;
+                user.NormalizedUserName = utilisateur.Email.ToUpper();
+                _context.Update(user);
+                await _context.SaveChangesAsync();
+
                 return utilisateur;
             }
             catch (DbUpdateConcurrencyException ex)
@@ -219,6 +236,17 @@ namespace SolutionPersonnelleTemplate.Models.BLL.Managers
                 //je met a jour tout le reste de l utilisateur 
                 _context.Update(updateUtilisateurAdmin);
                 await _context.SaveChangesAsync();
+
+                //je met a jour dans applicationUser 
+                applicationUser.Email = updateUtilisateurAdmin.Email;
+                applicationUser.NormalizedEmail = updateUtilisateurAdmin.Email.ToUpper();
+                applicationUser.UserName = updateUtilisateurAdmin.Email;
+                applicationUser.NormalizedUserName = updateUtilisateurAdmin.Email.ToUpper();
+                applicationUser.EmailConfirmed = updateUtilisateurAdmin.ConfirmEmail;
+
+                _context.Update(applicationUser);
+                await _context.SaveChangesAsync();
+
                 return updateUtilisateurAdmin;
             }
             catch (DbUpdateConcurrencyException ex)

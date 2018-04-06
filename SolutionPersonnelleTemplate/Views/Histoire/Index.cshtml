@@ -4,7 +4,7 @@
 }
 <h2>Le recueil des Codex</h2>
 <p>
-    <a asp-action="Create">Create New</a>
+    <a asp-action="Create">Créer une nouvelle histoire</a>
 </p>
 
 <table class="table">
@@ -57,9 +57,9 @@
 
                 <td>
                     <a asp-action="Index" asp-controller="Message" asp-route-histoireID="@item.HistoireID" class="btn btn-block btn-success">Les messages</a>
-                    <a asp-action="Edit" asp-route-userId="@item.HistoireID" class="btn btn-block btn-warning">MAJ</a>
-                    <a asp-action="Details" asp-route-userId="@item.HistoireID" class="btn btn-block btn-info">Détails</a>
-                    <a asp-action="Delete" asp-route-userId="@item.HistoireID" class="btn btn-block btn-danger">Supprimer</a>
+                    <a asp-action="Edit" asp-route-histoireID="@item.HistoireID" class="btn btn-block btn-warning">MAJ</a>
+                    <a asp-action="Details" asp-route-histoireID="@item.HistoireID" class="btn btn-block btn-info">Détails</a>
+                    <a asp-action="Delete" asp-route-histoireID="@item.HistoireID" class="btn btn-block btn-danger">Supprimer</a>
                 </td>
             </tr>
         }

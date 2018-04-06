@@ -1,4 +1,4 @@
-﻿@model SolutionPersonnelleTemplate.Models.BO.Utilisateur
+﻿@model SolutionPersonnelleTemplate.Models.ViewModels.UtilisateurViewModel
 
 @{
     ViewData["Title"] = "MAJ | Mon Compte ";
@@ -9,56 +9,52 @@
     <div class="col-md-4">
         <form asp-action="Edit" method="post" enctype="multipart/form-data">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <input type="hidden" asp-for="ApplicationUserID" />
+            <input type="hidden" asp-for="Utilisateur.ApplicationUserID" />
             <div class="form-group">
-                <label asp-for="Pseudo" class="control-label"></label>
-                <input id="Pseudo" name="Pseudo" value="@Model.Pseudo" class="form-control" readonly />
-                <span asp-validation-for="Pseudo" class="text-danger"></span>
+                <label asp-for="Utilisateur.Pseudo" class="control-label"></label>
+                <input id="Pseudo" name="Pseudo" value="@Model.Utilisateur..Pseudo" class="form-control" readonly />
+                <span asp-validation-for="Utilisateur.Pseudo" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="Role" class="control-label"></label>
-                <input asp-for="Role" class="form-control" readonly />
-                <span asp-validation-for="Role" class="text-danger"></span>
+                <label asp-for="Utilisateur.Role" class="control-label"></label>
+                <input asp-for="Utilisateur.Role" class="form-control" readonly />
+                <span asp-validation-for="Utilisateur.Role" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="DateCreationUtilisateur" class="control-label"></label>
-                <input id="DateCreationUtilisateur" name="DateCreationUtilisateur" value="@Model.DateCreationUtilisateur" class="form-control" readonly />
-                <span asp-validation-for="DateCreationUtilisateur" class="text-danger"></span>
+                <label asp-for="Utilisateur.DateCreationUtilisateur" class="control-label"></label>
+                <input id="Utilisateur.DateCreationUtilisateur" name="Utilisateur.DateCreationUtilisateur" value="@Model.Utilisateur.DateCreationUtilisateur" class="form-control" readonly />
+                <span asp-validation-for="Utilisateur.DateCreationUtilisateur" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="DateDeNaissance" class="control-label"></label>
- 
-                <input id="DateDeNaissance" name="DateDeNaissance" value="@Model.DateDeNaissance" class="form-control" />
-                <span asp-validation-for="DateDeNaissance" class="text-danger"></span>
+                <label asp-for="Utilisateur.DateDeNaissance" class="control-label"></label>
+
+                <input id="Utilisateur.DateDeNaissance" name="Utilisateur.DateDeNaissance" value="@Model.Utilisateur.DateDeNaissance" class="form-control" />
+                <span asp-validation-for="Utilisateur.DateDeNaissance" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="Email" class="control-label"></label>
-                <input asp-for="Email" asp-value="Email" class="form-control" />
-                 <span asp-validation-for="Email" class="text-danger"></span>
-            </div>
-            @*Pour l image*@
-            <div class="form-group">
-                <label class="control-label">
-                    Avatar | <a asp-controller="Utilisateur"
-                                   asp-action="UploadImage"
-                                   asp-route-userId="@Model.ApplicationUserID"
-                                   asp-route-returnURL="@ViewData["returnURL"]">
-                                    Changer son Avatar
-                                </a>
-                </label><br />
-                <img src="@ViewBag.ImgPath" alt="@Model.Pseudo" class="img-responsive" /><br />
-                 <input id="UrlAvatarImage" name="UrlAvatarImage" value="@Model.UrlAvatarImage" type="hidden" />
+                <label asp-for="Utilisateur.Email" class="control-label"></label>
+                <input asp-for="Utilisateur.Email" asp-value="Email" class="form-control" />
+                <span asp-validation-for="Utilisateur.Email" class="text-danger"></span>
             </div>
 
             <div class="form-group">
-                <input asp-for="ConfirmEmail" type="hidden" />
-                <input asp-for="ProfilUtilisateurComplet" type="hidden" />
-                <input type="submit" value="Save" class="btn btn-primary" />
+                @*Pour l image*@
+                <label class="control-label">Avatar</label><br />
+                <img src="@ViewBag.ImgPath" class="img-responsive" /><br />
+            </div>
+            @*Pour l image changer d'image avatar*@
+            <div class="form-group">
+                <label class="control-label">Changer son Avatar</label><br />
+                <input type="file" name="user_image" id="user_image" />
+            </div>
+            <div class="form-group">
+                <input asp-for="Utilisateur.ConfirmEmail" type="hidden" />
+                <input asp-for="Utilisateur.ProfilUtilisateurComplet" type="hidden" />
+                <input type="submit" value="Save" class="btn btn-info" />
             </div>
         </form>
     </div>
 </div>
-<div></div>
 <div>
     <a asp-controller="Home" asp-action="Index">Acceuil</a>
 </div>

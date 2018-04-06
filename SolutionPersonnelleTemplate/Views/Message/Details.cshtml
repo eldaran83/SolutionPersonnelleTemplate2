@@ -4,7 +4,9 @@
     ViewData["Title"] = "Details";
 }
 
-<h2>Details</h2>
+<h2>
+    Details du message de l'histoire @Model.Histoire.Titre
+</h2>
 
 <div>
     <h4>Message</h4>
@@ -31,6 +33,6 @@
     </dl>
 </div>
 <div>
-    <a asp-action="Edit" asp-route-id="@Model.MessageID">Edit</a> |
-    <a asp-action="Index">Back to List</a>
+    <a asp-action="Edit" asp-controller="Message" asp-route-histoireID="@ViewData["HistoireID"]" asp-route-messageId="@Model.MessageID">Edit</a> |
+     <a asp-action="Index" asp-controller="Message" asp-route-histoireID="@ViewData["HistoireID"]">Retour au recueil </a>
 </div>

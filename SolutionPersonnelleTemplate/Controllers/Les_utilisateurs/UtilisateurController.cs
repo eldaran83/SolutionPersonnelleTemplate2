@@ -16,6 +16,7 @@ using SolutionPersonnelleTemplate.Data;
 using SolutionPersonnelleTemplate.Models;
 using SolutionPersonnelleTemplate.Models.BLL.Interfaces;
 using SolutionPersonnelleTemplate.Models.BO;
+using SolutionPersonnelleTemplate.Models.ViewModels;
 using SolutionPersonnelleTemplate.Services;
 
 namespace SolutionPersonnelleTemplate.Controllers.Les_utilisateurs
@@ -105,7 +106,7 @@ namespace SolutionPersonnelleTemplate.Controllers.Les_utilisateurs
             await _utilisateurManager.AddUtilisateur(user, nouvel_utilisateur); //ajoute le nouvel utilisateur
 
             // recherche utilisateur avec l'id 
-            var utilisateur = await _utilisateurManager.GetUtilisateurByIdAsync(userId);
+            Utilisateur utilisateur = await _utilisateurManager.GetUtilisateurByIdAsync(userId);
 
             if (utilisateur == null)
             {
@@ -164,7 +165,7 @@ namespace SolutionPersonnelleTemplate.Controllers.Les_utilisateurs
             {
                 return NotFound();
             }
-            var utilisateur = await _utilisateurManager.GetUtilisateurByIdAsync(userId);
+            Utilisateur utilisateur = await _utilisateurManager.GetUtilisateurByIdAsync(userId);
             if (utilisateur == null)
             {
                 return NotFound();
@@ -223,7 +224,7 @@ namespace SolutionPersonnelleTemplate.Controllers.Les_utilisateurs
         /// <param name="userId"></param>
         /// <returns></returns>
         [HttpGet]
-        public async Task<IActionResult> Edit(string userId, string returnURL)
+        public async Task<IActionResult> TOTO(string userId, string returnURL)
         {
             //je recupere la vraie identité de l user
             var ApplicationUser = _userManager.GetUserId(HttpContext.User);
@@ -236,7 +237,7 @@ namespace SolutionPersonnelleTemplate.Controllers.Les_utilisateurs
                 return NotFound();
             }
             //cherche le user dans la base 
-            var utilisateur = await _utilisateurManager.GetUtilisateurByIdAsync(userId);
+            Utilisateur utilisateur = await _utilisateurManager.GetUtilisateurByIdAsync(userId);
             if (utilisateur == null) //si on en trouve pas
             {
                 return NotFound();
@@ -281,7 +282,7 @@ namespace SolutionPersonnelleTemplate.Controllers.Les_utilisateurs
         /// <returns></returns>
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(Utilisateur utilisateur, string returnURL)
+        public async Task<IActionResult> TOTO(Utilisateur utilisateur, string returnURL)
         {
 
             utilisateur.DateCreationUtilisateur = DateTime.Now;
@@ -338,7 +339,7 @@ namespace SolutionPersonnelleTemplate.Controllers.Les_utilisateurs
                 return NotFound();
             }
             //cherche le user dans la base 
-            var utilisateur = await _utilisateurManager.GetUtilisateurByIdAsync(userId);
+            Utilisateur utilisateur = await _utilisateurManager.GetUtilisateurByIdAsync(userId);
             if (utilisateur == null) //si on en trouve pas
             {
                 return NotFound();
@@ -378,7 +379,7 @@ namespace SolutionPersonnelleTemplate.Controllers.Les_utilisateurs
                 return NotFound();
             }
             //cherche le user dans la base 
-            var utilisateur = await _utilisateurManager.GetUtilisateurByIdAsync(userId);
+            Utilisateur utilisateur = await _utilisateurManager.GetUtilisateurByIdAsync(userId);
             if (utilisateur == null) //si on en trouve pas
             {
                 return NotFound();
@@ -427,7 +428,7 @@ namespace SolutionPersonnelleTemplate.Controllers.Les_utilisateurs
             {
                 userId = ApplicationUser;
             }
-            var utilisateur = await _context.Utilisateurs.SingleOrDefaultAsync(m => m.ApplicationUserID == userId);
+            Utilisateur utilisateur = await _context.Utilisateurs.SingleOrDefaultAsync(m => m.ApplicationUserID == userId);
             if (utilisateur == null)
             {
                 return NotFound();
@@ -481,7 +482,7 @@ namespace SolutionPersonnelleTemplate.Controllers.Les_utilisateurs
             //ajoute le fichier 
             var avatarURl = _fichierRepository.SaveFichierAvatar(webRoot, userId, nomDuDossier, form);
             //cherche le user dans la base 
-            var utilisateur = await _utilisateurManager.GetUtilisateurByIdAsync(userId);
+            Utilisateur utilisateur = await _utilisateurManager.GetUtilisateurByIdAsync(userId);
             utilisateur.UrlAvatarImage = avatarURl;
             await _utilisateurManager.UpdateUtilisateur(utilisateur);
 
@@ -496,6 +497,96 @@ namespace SolutionPersonnelleTemplate.Controllers.Les_utilisateurs
             //}));
 
             return Redirect(returnURL);
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> Edit (string userId)
+        {
+            //je recupere la vraie identité de l user
+            var ApplicationUser = _userManager.GetUserId(HttpContext.User);
+            if (userId != ApplicationUser)
+            {
+                userId = ApplicationUser;
+            }
+            if (userId == null) // vérifie qu un id est bien passé en param
+            {
+                return NotFound();
+            }
+            //cherche le user dans la base 
+            Utilisateur utilisateur = await _utilisateurManager.GetUtilisateurByIdAsync(userId);
+            if (utilisateur == null) //si on en trouve pas
+            {
+                return NotFound();
+            }
+
+            //////////////////////////////////////////////////////////////////////////////////////////
+            //      GESTION de la photo
+            //////////////////////////////////////////////////////////////////////////////////////////
+            if (utilisateur.UrlAvatarImage != null)
+            {
+                string img = utilisateur.UrlAvatarImage.ToString();
+                ViewBag.ImgPath = img;
+            }
+            else
+            {
+                ViewBag.ImgPath = "/images/userDefault.png";
+            }
+            ///////////////////////////////////////////////////////////////////////
+            //  FIN gestion image
+            ///////////////////////////////////////////////////////////////////////
+
+            UtilisateurViewModel utilisateurVM = new UtilisateurViewModel
+            {
+                Utilisateur = utilisateur,
+                form = null
+            };
+            return View(utilisateurVM);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Edit(Utilisateur utilisateur, IFormCollection form)
+        {
+            //verifie qu un fichier est bien passé en param et qu'il y a qlq chose dedans
+            if (form.Files[0].FileName != "")
+            {
+                string webRoot = _env.WebRootPath; // récupère l environnement
+                string userId = Convert.ToString(utilisateur.ApplicationUserID); // sert à la personnalisation du dossier pour l utilisateur
+                string nomDuDossier = "/Avatar/"; // variable qui sert à nommer le dossier dans lequel le fichier sera ajouté, ICI c est le dossier avatar
+
+                //Comme l utilisateur ne peut avoir qu'un seul avatar, on vérifie avant d'ajouter un fichier
+                //que le dossier n'a pas d autre image en supprimant tous les fichiers qui pourraient s y trouver
+                try
+                {
+                    var sourceDir = Path.Combine(
+                                Directory.GetCurrentDirectory(), "wwwroot" + "/UserFiles/" + userId + nomDuDossier);
+
+                    string[] listeAvatar = Directory.GetFiles(sourceDir);
+                    // Copy picture files.          
+                    foreach (string f in listeAvatar)
+                    {
+                        // Remove path from the file name.
+                        string fName = f.Substring(sourceDir.Length);
+                        _fichierRepository.RemoveFichierAvatar(sourceDir, fName);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine(ex);
+                }
+
+                //ajoute le fichier 
+                var avatarURl = _fichierRepository.SaveFichierAvatar(webRoot, userId, nomDuDossier, form);
+                 utilisateur.UrlAvatarImage = avatarURl;
+            }
+          
+             await _utilisateurManager.UpdateUtilisateur(utilisateur);
+
+            return RedirectToAction("MonCompte", new RouteValueDictionary(new
+            {
+                controller = "Utilisateur",
+                action = "MonCompte",
+                Id = utilisateur.ApplicationUserID
+            }));
         }
 
     }

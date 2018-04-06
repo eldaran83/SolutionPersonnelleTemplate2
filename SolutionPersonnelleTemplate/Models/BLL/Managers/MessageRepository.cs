@@ -26,7 +26,7 @@ namespace SolutionPersonnelleTemplate.Models.BLL.Managers
         /// </summary>
         /// <param name="histoireID"></param>
         /// <returns></returns>
-        public async Task<IEnumerable<Message>> GetAllMessageOfStoryAsync(int histoireID)
+        public async Task<IEnumerable<Message>> GetAllMessageOfStoryAsync(int? histoireID)
         {
             IEnumerable<Message> lesMessagesDeLHistoire = await _context.Messages
                                                                 .Include(h => h.Histoire)
@@ -44,6 +44,7 @@ namespace SolutionPersonnelleTemplate.Models.BLL.Managers
         public async Task<Message> GetMessageByMessageIDAndHistoireId(int? messageId, int? histoireID)
         {
             Message leMessage = await _context.Messages
+                                 .Include(h=>h.Histoire)
                                  .Where(m => m.MessageID == messageId)
                                  .Where(m => m.HistoireID == histoireID)
                                  .FirstOrDefaultAsync();
@@ -81,6 +82,37 @@ namespace SolutionPersonnelleTemplate.Models.BLL.Managers
             _context.Add(messageModele);
             await _context.SaveChangesAsync();
             return messageModele;
+        }
+
+        /// <summary>
+        /// supprime un message de la bdd lié a une histoire
+        /// </summary>
+        /// <param name="messageId"></param>
+        /// <param name="histoireId"></param>
+        /// <returns></returns>
+        public async Task<bool> RemoveMessageOfStoryById(int? messageId, int? histoireId)
+        {
+            //Le message doit etre supprimé en dernier  !!
+            try
+            {
+                //Il faut supprimer ici les médias de ce message par la suite 
+
+                //Supprime le message 
+                Message leMessage  = await _context.Messages
+                                         .Where(m=>m.MessageID == messageId)
+                                        .Where(m=>m.HistoireID == histoireId)
+                                        .FirstOrDefaultAsync();
+
+                _context.Messages.Remove(leMessage);
+                await _context.SaveChangesAsync();
+
+                return true;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("La supression du message a rencontré un problème :" + ex);
+                return false;
+            }
         }
 
         /// <summary>

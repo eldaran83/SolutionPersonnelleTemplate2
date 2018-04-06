@@ -10,7 +10,8 @@ namespace SolutionPersonnelleTemplate.Models.BLL.Interfaces
     {
         Task<Message> NouveauMessage(Message messageModele);
         Task<bool> messageTitreExistDansCetteHistoire(string titreMessage, int HistoireID);
-        Task<IEnumerable<Message>> GetAllMessageOfStoryAsync(int histoireID);
+        Task<IEnumerable<Message>> GetAllMessageOfStoryAsync(int? histoireID);
+        Task<bool> RemoveMessageOfStoryById(int? messageId, int? histoireId);
         Task<Message> UpdateMessage(Message messageModele);
         Task<Message> GetMessageByMessageIDAndHistoireId(int? messageId,int? histoireID);
     }
