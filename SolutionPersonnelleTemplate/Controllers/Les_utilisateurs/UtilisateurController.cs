@@ -218,107 +218,7 @@ namespace SolutionPersonnelleTemplate.Controllers.Les_utilisateurs
         }
 
 
-        /// <summary>
-        /// Get/edit
-        /// </summary>
-        /// <param name="userId"></param>
-        /// <returns></returns>
-        [HttpGet]
-        public async Task<IActionResult> TOTO(string userId, string returnURL)
-        {
-            //je recupere la vraie identité de l user
-            var ApplicationUser = _userManager.GetUserId(HttpContext.User);
-            if (userId != ApplicationUser)
-            {
-                userId = ApplicationUser;
-            }
-            if (userId == null) // vérifie qu un id est bien passé en param
-            {
-                return NotFound();
-            }
-            //cherche le user dans la base 
-            Utilisateur utilisateur = await _utilisateurManager.GetUtilisateurByIdAsync(userId);
-            if (utilisateur == null) //si on en trouve pas
-            {
-                return NotFound();
-            }
-
-            //////////////////////////////////////////////////////////////////////////////////////////
-            //      GESTION de la photo
-            //////////////////////////////////////////////////////////////////////////////////////////
-            if (utilisateur.UrlAvatarImage != null)
-            {
-                string img = utilisateur.UrlAvatarImage.ToString();
-                ViewBag.ImgPath = img;
-            }
-            else
-            {
-                ViewBag.ImgPath = "/images/userDefault.png";
-            }
-            ///////////////////////////////////////////////////////////////////////
-            //  FIN gestion image
-            ///////////////////////////////////////////////////////////////////////
-
-            //string absoluteUrl = string.Concat(
-            //            Request.Scheme,
-            //            "://",
-            //            Request.Host.ToUriComponent(),
-            //            Request.PathBase.ToUriComponent(),
-            //            Request.Path.ToUriComponent(),
-            //            Request.QueryString.ToUriComponent());
-
-             string absoluteUrl = string.Concat(
-                                   Request.Path.ToUriComponent(),
-                                   Request.QueryString.ToUriComponent()) ;
-
-            ViewData["returnURL"] = absoluteUrl;
-            return View(utilisateur);
-        }
-
-        /// <summary>
-        /// post/Edit
-        /// </summary>
-        /// <param name="utilisateur"></param>
-        /// <returns></returns>
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> TOTO(Utilisateur utilisateur, string returnURL)
-        {
-
-            utilisateur.DateCreationUtilisateur = DateTime.Now;
-
-            if (ModelState.IsValid)
-            {
-                await _utilisateurManager.UpdateUtilisateur(utilisateur);
-                return RedirectToAction("MonCompte", new RouteValueDictionary(new
-                {
-                    controller = "Utilisateur",
-                    action = "MonCompte",
-                    Id = utilisateur.ApplicationUserID
-                }));
-            }
-            //////////////////////////////////////////////////////////////////////////////////////////
-            //      GESTION de la photo
-            //////////////////////////////////////////////////////////////////////////////////////////
-            if (utilisateur.UrlAvatarImage != null)
-            {
-                string img = utilisateur.UrlAvatarImage.ToString();
-                ViewBag.ImgPath = img;
-            }
-            else
-            {
-                ViewBag.ImgPath = "/images/userDefault.png";
-            }
-            ///////////////////////////////////////////////////////////////////////
-            //  FIN gestion image
-            ///////////////////////////////////////////////////////////////////////
-
-
-            ViewData["returnURL"] = returnURL;
-            ViewData["ApplicationUserID"] = utilisateur.ApplicationUserID;
-            return View(utilisateur);
-
-        }
+       
 
         /// <summary>
         /// supprime un utilisateur
@@ -455,6 +355,7 @@ namespace SolutionPersonnelleTemplate.Controllers.Les_utilisateurs
                 return RedirectToAction("Edit", new { userId = Convert.ToString(form["ApplicationUserID"]) });
 
             string webRoot = _env.WebRootPath; // récupère l environnement
+            string nameDirectory = "/UserFiles/"; // nomme le dossier dans lequel le média va se retrouver ici UserFile pour l image de son avatar
             string userId = Convert.ToString(form["userId"]); // sert à la personnalisation du dossier pour l utilisateur
             string nomDuDossier = "/Avatar/"; // variable qui sert à nommer le dossier dans lequel le fichier sera ajouté, ICI c est le dossier avatar
 
@@ -463,7 +364,7 @@ namespace SolutionPersonnelleTemplate.Controllers.Les_utilisateurs
             try
             {
                 var sourceDir = Path.Combine(
-                            Directory.GetCurrentDirectory(), "wwwroot" + "/UserFiles/" + userId + nomDuDossier);
+                            Directory.GetCurrentDirectory(), "wwwroot" + nameDirectory + userId + nomDuDossier);
 
                 string[] listeAvatar = Directory.GetFiles(sourceDir);
                 // Copy picture files.          
@@ -480,7 +381,7 @@ namespace SolutionPersonnelleTemplate.Controllers.Les_utilisateurs
             }
 
             //ajoute le fichier 
-            var avatarURl = _fichierRepository.SaveFichierAvatar(webRoot, userId, nomDuDossier, form);
+            var avatarURl = _fichierRepository.SaveFichierAvatar(webRoot, nameDirectory, userId, nomDuDossier, form);
             //cherche le user dans la base 
             Utilisateur utilisateur = await _utilisateurManager.GetUtilisateurByIdAsync(userId);
             utilisateur.UrlAvatarImage = avatarURl;
@@ -550,7 +451,8 @@ namespace SolutionPersonnelleTemplate.Controllers.Les_utilisateurs
             if (form.Files[0].FileName != "")
             {
                 string webRoot = _env.WebRootPath; // récupère l environnement
-                string userId = Convert.ToString(utilisateur.ApplicationUserID); // sert à la personnalisation du dossier pour l utilisateur
+                string nameDirectory = "/UserFiles/"; // nomme le dossier dans lequel le média va se retrouver ici UserFile pour l image de son avatar
+                 string userId = Convert.ToString(utilisateur.ApplicationUserID); // sert à la personnalisation du dossier pour l utilisateur
                 string nomDuDossier = "/Avatar/"; // variable qui sert à nommer le dossier dans lequel le fichier sera ajouté, ICI c est le dossier avatar
 
                 //Comme l utilisateur ne peut avoir qu'un seul avatar, on vérifie avant d'ajouter un fichier
@@ -558,7 +460,7 @@ namespace SolutionPersonnelleTemplate.Controllers.Les_utilisateurs
                 try
                 {
                     var sourceDir = Path.Combine(
-                                Directory.GetCurrentDirectory(), "wwwroot" + "/UserFiles/" + userId + nomDuDossier);
+                                Directory.GetCurrentDirectory(), "wwwroot" + nameDirectory + userId + nomDuDossier);
 
                     string[] listeAvatar = Directory.GetFiles(sourceDir);
                     // Copy picture files.          
@@ -575,7 +477,7 @@ namespace SolutionPersonnelleTemplate.Controllers.Les_utilisateurs
                 }
 
                 //ajoute le fichier 
-                var avatarURl = _fichierRepository.SaveFichierAvatar(webRoot, userId, nomDuDossier, form);
+                var avatarURl = _fichierRepository.SaveFichierAvatar(webRoot, nameDirectory, userId, nomDuDossier, form);
                  utilisateur.UrlAvatarImage = avatarURl;
             }
           

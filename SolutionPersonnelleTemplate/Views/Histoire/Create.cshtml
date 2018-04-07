@@ -1,4 +1,4 @@
-﻿@model SolutionPersonnelleTemplate.Models.BO.Histoire
+﻿@model SolutionPersonnelleTemplate.Models.ViewModels.HistoireViewModel
 
 @{
     ViewData["Title"] = "Créer votre histoire";
@@ -10,26 +10,31 @@
 <hr />
 <div class="row">
     <div class="col-md-4">
-        <form asp-action="Create">
+        <form asp-action="Create" enctype="multipart/form-data" method="post">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
-                @{ 
-                    if (ViewBag.error != "")
-                    {
-                        <p class="alert-danger">@ViewBag.error</p>
-                    }
+                @{
+            if (ViewBag.error != "")
+            {
+                <p class="alert-danger">@ViewBag.error</p>
+    }
                 }
-                <label asp-for="Titre" class="control-label"></label>
-                <input asp-for="Titre" class="form-control" />
-                <span asp-validation-for="Titre" class="text-danger"></span>
+                <label asp-for="Histoire.Titre" class="control-label"></label>
+                <input asp-for="Histoire.Titre" class="form-control" />
+                <span asp-validation-for="Histoire.Titre" class="text-danger"></span>
             </div>
- 
- 
+
+            @*Pour l image changer d'image avatar*@
             <div class="form-group">
-                <input type="hidden" asp-for="UtilisateurID" value="@ViewBag.UtilisateurID" />
-                <input type="hidden" asp-for="Createur" value="@ViewBag.Createur" />
-                <input type="hidden" asp-for="NombreDeFoisJouee" value="0" />
-                <input type="hidden" asp-for="Score" value="0" />
+                <label class="control-label">Ajouter une image de présentation</label><br />
+                <input type="file" name="user_image" id="user_image" />
+            </div>
+
+            <div class="form-group">
+                <input type="hidden" asp-for="Histoire.UtilisateurID" value="@ViewBag.UtilisateurID" />
+                <input type="hidden" asp-for="Histoire.Createur" value="@ViewBag.Createur" />
+                <input type="hidden" asp-for="Histoire.NombreDeFoisJouee" value="0" />
+                <input type="hidden" asp-for="Histoire.Score" value="0" />
                 <input type="submit" value="Valider" class="btn btn-success" />
             </div>
         </form>

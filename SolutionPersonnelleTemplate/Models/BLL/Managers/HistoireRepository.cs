@@ -4,6 +4,7 @@ using SolutionPersonnelleTemplate.Models.BLL.Interfaces;
 using SolutionPersonnelleTemplate.Models.BO;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -36,7 +37,8 @@ namespace SolutionPersonnelleTemplate.Models.BLL.Managers
                 NombreDeFoisJouee = 0,
                 Score = 0,
                 UtilisateurID = histoireModele.UtilisateurID,
-                Createur= createur
+                Createur= createur,
+                UrlMedia = "/images/story-media-default.jpg"
             };
 
              _context.Histoires.Add(histoireAAjouter);
@@ -93,11 +95,25 @@ namespace SolutionPersonnelleTemplate.Models.BLL.Managers
         /// <returns></returns>
         public async Task<bool> RemoveHistoireById(int? histoireId)
         {
+            try
+            {
+                //Supprime le dossier qui contient tous les fichiers de l'utilisateur  
+                var dirPath = Path.Combine(
+                               Directory.GetCurrentDirectory(),
+                               "wwwroot" + "/StoryFiles/" + Convert.ToString(histoireId) + "/");
+
+                Directory.Delete(dirPath, true);
+             }
+            catch (Exception ex)
+            {
+                Console.WriteLine("L'histoire n'a pas de dossier image " + ex);
+             }
+
             //L'histoire doit etre supprimé en dernier  !!
             try
             {
-                //suppresion des messages de l histoire
-              IEnumerable<Message> lesMessagesDeLhistoire= await _messageRepository.GetAllMessageOfStoryAsync(histoireId);
+                 //suppresion des messages de l histoire
+                IEnumerable<Message> lesMessagesDeLhistoire= await _messageRepository.GetAllMessageOfStoryAsync(histoireId);
 
                 //Supprime l histoire
                 Histoire histoire = await _context.Histoires
@@ -131,7 +147,7 @@ namespace SolutionPersonnelleTemplate.Models.BLL.Managers
             }
             catch (DbUpdateConcurrencyException ex)
             {
-                Console.WriteLine("La MAJ du message a rencontré un problème :" + ex);
+                Console.WriteLine("La MAJ de l histoire a rencontré un problème :" + ex);
                 return histoireModele;
             }
         }
@@ -145,6 +161,17 @@ namespace SolutionPersonnelleTemplate.Models.BLL.Managers
         {
             Histoire histoire = await _context.Histoires.Where(h => h.HistoireID == histoireID).FirstOrDefaultAsync();
             return histoire;
+        }
+
+        /// <summary>
+        /// renvoie toutes les histoires de l utilisateur
+        /// </summary>
+        /// <param name="userId"></param>
+        /// <returns></returns>
+        public async Task<IEnumerable<Histoire>> GetAllStoryOfUtilisateur(string userId)
+        {
+            IEnumerable<Histoire> lesHistoiresDeLUtilisateur = await _context.Histoires.Where(h => h.UtilisateurID == userId).ToListAsync();
+            return lesHistoiresDeLUtilisateur;
         }
     }
 }

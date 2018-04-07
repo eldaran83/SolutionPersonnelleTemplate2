@@ -11,6 +11,7 @@ namespace SolutionPersonnelleTemplate.Models.BLL.Interfaces
          Task<Histoire> NouvelleHistoire(Histoire histoireModele);
         Task<bool> HistoireExist(string titreHistoire);
          Task<IEnumerable<Histoire>> GetAllHistoiresAsync();
+        Task<IEnumerable<Histoire>> GetAllStoryOfUtilisateur(string userId);
         Task<bool> RemoveHistoireById(int? histoireId);
         Task<Histoire> UpdateHistoire(Histoire histoireModele);
         Task<Histoire> GetHistoireByID(int? histoireID);

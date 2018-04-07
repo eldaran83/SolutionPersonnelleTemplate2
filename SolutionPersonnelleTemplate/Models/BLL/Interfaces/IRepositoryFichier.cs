@@ -8,7 +8,7 @@ namespace SolutionPersonnelleTemplate.Models.BLL.Interfaces
 {
   public  interface IRepositoryFichier
     {
-        string SaveFichierAvatar(string webRoot, string userId, string nomDuDossier, IFormCollection form);
+        string SaveFichierAvatar(string webRoot, string nameDirectory,string userId, string nomDuDossier, IFormCollection form);
         void RemoveFichierAvatar(string path, string fichiersASupprimer);
     }
 }

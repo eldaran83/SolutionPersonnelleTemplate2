@@ -1,7 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -11,6 +14,7 @@ using SolutionPersonnelleTemplate.Data;
 using SolutionPersonnelleTemplate.Models;
 using SolutionPersonnelleTemplate.Models.BLL.Interfaces;
 using SolutionPersonnelleTemplate.Models.BO;
+using SolutionPersonnelleTemplate.Models.ViewModels;
 
 namespace SolutionPersonnelleTemplate.Controllers.LogicWebSite
 {
@@ -20,13 +24,17 @@ namespace SolutionPersonnelleTemplate.Controllers.LogicWebSite
         private readonly ApplicationDbContext _context;
         private readonly IRepositoryHistoire _histoireRepository;
         private readonly IUtilisateurInterface _utilisateurManager;
+        private readonly IHostingEnvironment _env;
+        private readonly IRepositoryFichier _fichierRepository;
 
-        public HistoireController(UserManager<ApplicationUser> userManager,ApplicationDbContext context, IRepositoryHistoire histoireRepository, IUtilisateurInterface utilisateurManager)
+        public HistoireController(UserManager<ApplicationUser> userManager,ApplicationDbContext context, IRepositoryHistoire histoireRepository, IUtilisateurInterface utilisateurManager, IHostingEnvironment env, IRepositoryFichier fichierRepository)
         {
             _userManager = userManager;
             _context = context;
             _histoireRepository = histoireRepository;
             _utilisateurManager = utilisateurManager;
+            _env = env;
+            _fichierRepository = fichierRepository;
         }
 
         // GET: Histoire
@@ -49,6 +57,22 @@ namespace SolutionPersonnelleTemplate.Controllers.LogicWebSite
             {
                 return NotFound();
             }
+
+            //////////////////////////////////////////////////////////////////////////////////////////
+            //      GESTION de la photo
+            //////////////////////////////////////////////////////////////////////////////////////////
+            if (histoire.UrlMedia != null)
+            {
+                string img = histoire.UrlMedia.ToString();
+                ViewBag.ImgPath = img;
+            }
+            else
+            {
+                ViewBag.ImgPath = "/images/story-media-default.jpg";
+            }
+            ///////////////////////////////////////////////////////////////////////
+            //  FIN gestion image
+            ///////////////////////////////////////////////////////////////////////
 
             return View(histoire);
         }
@@ -86,21 +110,62 @@ namespace SolutionPersonnelleTemplate.Controllers.LogicWebSite
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(Histoire histoireModele)
+        public async Task<IActionResult> Create(HistoireViewModel histoireVM, IFormCollection form )
          {
             //vérification pour savoir si le titre de l histoire est libre ou pas 
-             if (await _histoireRepository.HistoireExist(histoireModele.Titre)) //si pas libre on renvoie le formulaire
+             if (await _histoireRepository.HistoireExist(histoireVM.Histoire.Titre)) //si pas libre on renvoie le formulaire
             {
                 ViewBag.error = "Ce titre n'est pas disponible.";
-                ViewBag.Createur = histoireModele.Createur;
-                ViewBag.UtilisateurID = histoireModele.UtilisateurID;
+                ViewBag.Createur = histoireVM.Histoire.Createur;
+                ViewBag.UtilisateurID = histoireVM.Histoire.UtilisateurID;
 
-                return View(histoireModele);
+                return View(histoireVM.Histoire);
             }
+             //si le modele est valide on crée l histoire
             if (ModelState.IsValid)
             {
-               var laNouvelleHistoire = await _histoireRepository.NouvelleHistoire(histoireModele);
+                Histoire laNouvelleHistoire = await _histoireRepository.NouvelleHistoire(histoireVM.Histoire);
+
+                //////////////////////////////////////////////////////////////////////////////////////////
+                //      GESTION de la photo
+                //////////////////////////////////////////////////////////////////////////////////////////
+                if (form.Files[0].FileName != "")
+                {
+                    string webRoot = _env.WebRootPath; // récupère l environnement
+                    string nameDirectory = "/StoryFiles/"; // nomme le dossier dans lequel le média va se retrouver ici StoryFiles pour l image de histoire
+                    string storyId = Convert.ToString(laNouvelleHistoire.HistoireID); // sert à la personnalisation du dossier pour l utilisateur
+                    string nomDuDossier = "/Image/"; // variable qui sert à nommer le dossier dans lequel le fichier sera ajouté, ICI c est le dossier Image
+
+                    //Comme l utilisateur ne peut avoir qu'un seul avatar, on vérifie avant d'ajouter un fichier
+                    //que le dossier n'a pas d autre image en supprimant tous les fichiers qui pourraient s y trouver
+                    try
+                    {
+                        var sourceDir = Path.Combine(
+                                    Directory.GetCurrentDirectory(), "wwwroot" + nameDirectory + storyId + nomDuDossier);
+
+                        string[] listeImage = Directory.GetFiles(sourceDir);
+                        // Copy picture files.          
+                        foreach (string f in listeImage)
+                        {
+                            // Remove path from the file name.
+                            string fName = f.Substring(sourceDir.Length);
+                            _fichierRepository.RemoveFichierAvatar(sourceDir, fName);
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        Console.WriteLine(ex);
+                    }
+
+                    //ajoute le fichier 
+                    var imageURl = _fichierRepository.SaveFichierAvatar(webRoot, nameDirectory, storyId, nomDuDossier, form);
+                    laNouvelleHistoire.UrlMedia = imageURl;
+
+                    //je met à jour l histoire pour quelle est le nouveau lien de son image
+                    await _histoireRepository.UpdateHistoire(laNouvelleHistoire);
+                }
  
+
                 return RedirectToAction("Create", new RouteValueDictionary(new
                 {
                     controller = "Message",
@@ -108,8 +173,16 @@ namespace SolutionPersonnelleTemplate.Controllers.LogicWebSite
                     histoireId = laNouvelleHistoire.HistoireID
                 }));
             }
-            return View(histoireModele);
+            else // sinon on renvoi
+            {
+                return View(histoireVM.Histoire);
+            }
         }
+
+
+
+ 
+
 
         // GET: Message/Delete/5
         public async Task<IActionResult> Delete(int? HistoireID)
@@ -160,8 +233,30 @@ namespace SolutionPersonnelleTemplate.Controllers.LogicWebSite
             {
                 return NotFound();
             }
+            //////////////////////////////////////////////////////////////////////////////////////////
+            //      GESTION de la photo
+            //////////////////////////////////////////////////////////////////////////////////////////
+            if (histoire.UrlMedia != null)
+            {
+                string img = histoire.UrlMedia.ToString();
+                ViewBag.ImgPath = img;
+            }
+            else
+            {
+                ViewBag.ImgPath = "/images/story-media-default.jpg";
+            }
+            ///////////////////////////////////////////////////////////////////////
+            //  FIN gestion image
+            ///////////////////////////////////////////////////////////////////////
+
+            HistoireViewModel histoireVM = new HistoireViewModel
+            {
+                Histoire = histoire,
+                form = null
+            };
+
             ViewData["HistoireID"] = HistoireID;
-            return View(histoire);
+            return View(histoireVM);
         }
 
         // POST: Message/Edit/5
@@ -169,21 +264,68 @@ namespace SolutionPersonnelleTemplate.Controllers.LogicWebSite
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(Histoire histoireModele)
+        public async Task<IActionResult> Edit(HistoireViewModel histoireVM)
         {
 
-            if (await _histoireRepository.HistoireExist(histoireModele.Titre))
-            {
-                ViewBag.error = "Ce titre de message est déjà utilisé dans cette histoire";
-                ViewData["HistoireID"] = histoireModele.HistoireID;
-                return View(histoireModele);
-            }
+            //if (await _histoireRepository.HistoireExist(histoireVM.Histoire.Titre))
+            //{
+            //    ViewBag.error = "Ce titre de message est déjà utilisé dans cette histoire";
+            //    ViewData["HistoireID"] = histoireVM.Histoire.HistoireID;
+            //    return View(histoireVM);
+            //}
 
             if (ModelState.IsValid)
             {
-                await _histoireRepository.UpdateHistoire(histoireModele);
+                //////////////////////////////////////////////////////////////////////////////////////////
+                //      GESTION de la photo
+                //////////////////////////////////////////////////////////////////////////////////////////
+                if (histoireVM.form.Files[0].FileName != "")
+                {
+                    string webRoot = _env.WebRootPath; // récupère l environnement
+                    string nameDirectory = "/StoryFiles/"; // nomme le dossier dans lequel le média va se retrouver ici StoryFiles pour l image de histoire
+                    string storyId = Convert.ToString(histoireVM.Histoire.HistoireID); // sert à la personnalisation du dossier pour l utilisateur
+                    string nomDuDossier = "/Image/"; // variable qui sert à nommer le dossier dans lequel le fichier sera ajouté, ICI c est le dossier Image
 
-                ViewData["HistoireID"] = histoireModele.HistoireID;
+                    //Comme l utilisateur ne peut avoir qu'un seul avatar, on vérifie avant d'ajouter un fichier
+                    //que le dossier n'a pas d autre image en supprimant tous les fichiers qui pourraient s y trouver
+                    try
+                    {
+                        var sourceDir = Path.Combine(
+                                    Directory.GetCurrentDirectory(), "wwwroot" + nameDirectory + storyId + nomDuDossier);
+
+                        string[] listeImage = Directory.GetFiles(sourceDir);
+                        // Copy picture files.          
+                        foreach (string f in listeImage)
+                        {
+                            // Remove path from the file name.
+                            string fName = f.Substring(sourceDir.Length);
+                            _fichierRepository.RemoveFichierAvatar(sourceDir, fName);
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        Console.WriteLine(ex);
+                    }
+
+                    //ajoute le fichier 
+                    var imageURl = _fichierRepository.SaveFichierAvatar(webRoot, nameDirectory, storyId, nomDuDossier, histoireVM.form);
+                    histoireVM.Histoire.UrlMedia = imageURl;
+
+                    //je met à jour l histoire pour quelle est le nouveau lien de son image
+                    await _histoireRepository.UpdateHistoire(histoireVM.Histoire);
+
+                    ViewData["HistoireID"] = histoireVM.Histoire.HistoireID;
+                    return RedirectToAction("Index", new RouteValueDictionary(new
+                    {
+                        controller = "Histoire",
+                        action = "Index",
+
+                    }));
+                }
+ 
+              await _histoireRepository.UpdateHistoire(histoireVM.Histoire);
+
+                ViewData["HistoireID"] = histoireVM.Histoire.HistoireID;
                 return RedirectToAction("Index", new RouteValueDictionary(new
                 {
                     controller = "Histoire",
@@ -192,8 +334,8 @@ namespace SolutionPersonnelleTemplate.Controllers.LogicWebSite
                 }));
             }
 
-            ViewData["HistoireID"] = histoireModele.HistoireID;
-            return View(histoireModele);
+            ViewData["HistoireID"] = histoireVM.Histoire.HistoireID;
+            return View(histoireVM);
         }
 
     }

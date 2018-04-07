@@ -16,16 +16,18 @@ namespace SolutionPersonnelleTemplate.Models.BLL.Managers
     {
         private readonly ApplicationDbContext _context;
         private readonly UserManager<ApplicationUser> _userManager;
+        private readonly IRepositoryHistoire _histoireRepository;
 
         /// <summary>
         /// contructeur 
         /// </summary>
         /// <param name="userManager"></param>
         /// <param name="context"></param>
-        public UtilisateurManager(UserManager<ApplicationUser> userManager, ApplicationDbContext context)
+        public UtilisateurManager(UserManager<ApplicationUser> userManager, ApplicationDbContext context, IRepositoryHistoire histoireRepository)
         {
             _userManager = userManager;
             _context = context;
+            _histoireRepository = histoireRepository;
         }
 
         /// <summary>
@@ -256,6 +258,11 @@ namespace SolutionPersonnelleTemplate.Models.BLL.Managers
             }
         }
 
+        /// <summary>
+        /// supprime le dossier image UserFile de l utilisateur
+        /// </summary>
+        /// <param name="userId"></param>
+        /// <returns></returns>
         public bool RemoveDossierImageUtilisateur(string userId)
         {
             try
@@ -274,6 +281,30 @@ namespace SolutionPersonnelleTemplate.Models.BLL.Managers
                 return false;
             }
         }
+
+        /// <summary>
+        /// supprime tous les dossiers image des histoire de l utilisateur 
+        /// </summary>
+        /// <param name="userId"></param>
+        /// <returns></returns>
+        public bool RemoveStoryFileOfUtilisateur(string histoireId)
+        {
+            try
+            {
+                //Supprime le dossier qui contient tous les fichiers des hsitoires de l'utilisateur  
+                var dirPath = Path.Combine(
+                               Directory.GetCurrentDirectory(),
+                               "wwwroot" + "/StoryFiles/" + Convert.ToString(histoireId) + "/");
+
+                Directory.Delete(dirPath, true);
+                return true;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("L'utilisateur n'a pas de dossier image pour ses histoires" + ex);
+                return false;
+            }
+        }
         /// <summary>
         /// permet de supprimer un utilisateur et tout ce qui s en rapporte :
         /// fichiers,utilisateur, role, applicationUser
@@ -285,11 +316,19 @@ namespace SolutionPersonnelleTemplate.Models.BLL.Managers
         {
             //Supprime le dossier qui contient tous les fichiers de l'utilisateur  
             RemoveDossierImageUtilisateur(userId);
+            RemoveStoryFileOfUtilisateur(userId);
             //Le ApplicationUser est à supprimer en DERNIER !!
             try
-            {   
+            {
+                //Supprime les histoires de l'utilisateur
+                IEnumerable<Histoire> lesHistoiresDeLUtilisateur = await _histoireRepository.GetAllStoryOfUtilisateur(userId);
+                foreach (var item in lesHistoiresDeLUtilisateur)
+                {
+                    RemoveStoryFileOfUtilisateur(item.HistoireID.ToString()); //supprime le dossier image de l'histoire
+                   await _histoireRepository.RemoveHistoireById(item.HistoireID); //supprime l histoire
+                }
                     //Supprime l'utilisateur
-                    var utilisateur = await _context.Utilisateurs.SingleOrDefaultAsync(m => m.ApplicationUserID == userId);
+                    Utilisateur utilisateur = await _context.Utilisateurs.SingleOrDefaultAsync(m => m.ApplicationUserID == userId);
                     _context.Utilisateurs.Remove(utilisateur);
                     await _context.SaveChangesAsync();
 

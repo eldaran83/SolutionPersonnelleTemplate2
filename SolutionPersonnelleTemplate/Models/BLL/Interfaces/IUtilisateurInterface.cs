@@ -21,6 +21,9 @@ namespace SolutionPersonnelleTemplate.Models.BLL.Interfaces
         Task<Utilisateur> UpdateUtilisateurAdmin(Utilisateur utilisateurUpdateAdmin);
         Task<bool> EmailExist(string email);
         Task<bool> PeuplerLaBddAvec3typesUtilisateur();
+
+        //Zone des files
         bool RemoveDossierImageUtilisateur(string userID);
+        bool RemoveStoryFileOfUtilisateur(string userId);
     }
 }

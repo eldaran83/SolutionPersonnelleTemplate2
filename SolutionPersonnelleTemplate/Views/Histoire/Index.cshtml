@@ -35,33 +35,35 @@
     <tbody>
         @foreach (var item in Model)
         {
-            <tr>
-                <td>
-                    @Html.DisplayFor(modelItem => item.HistoireID)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Titre)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.UtilisateurID)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Createur)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Score)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.NombreDeFoisJouee)
-                </td>
-
-                <td>
-                    <a asp-action="Index" asp-controller="Message" asp-route-histoireID="@item.HistoireID" class="btn btn-block btn-success">Les messages</a>
-                    <a asp-action="Edit" asp-route-histoireID="@item.HistoireID" class="btn btn-block btn-warning">MAJ</a>
-                    <a asp-action="Details" asp-route-histoireID="@item.HistoireID" class="btn btn-block btn-info">Détails</a>
-                    <a asp-action="Delete" asp-route-histoireID="@item.HistoireID" class="btn btn-block btn-danger">Supprimer</a>
-                </td>
-            </tr>
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.HistoireID)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Titre)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.UtilisateurID)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Createur)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Score)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.NombreDeFoisJouee)
+            </td>
+            <td>
+                <img src="@item.UrlMedia" alt="@item.Titre" class="img-responsive" />
+            </td>
+            <td>
+                <a asp-action="Index" asp-controller="Message" asp-route-histoireID="@item.HistoireID" class="btn btn-block btn-success">Les messages</a>
+                <a asp-action="Edit" asp-route-histoireID="@item.HistoireID" class="btn btn-block btn-warning">MAJ</a>
+                <a asp-action="Details" asp-route-histoireID="@item.HistoireID" class="btn btn-block btn-info">Détails</a>
+                <a asp-action="Delete" asp-route-histoireID="@item.HistoireID" class="btn btn-block btn-danger">Supprimer</a>
+            </td>
+        </tr>
         }
     </tbody>
 </table>

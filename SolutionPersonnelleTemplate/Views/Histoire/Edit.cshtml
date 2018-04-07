@@ -1,4 +1,4 @@
-﻿@model SolutionPersonnelleTemplate.Models.BO.Histoire
+﻿@model SolutionPersonnelleTemplate.Models.ViewModels.HistoireViewModel
 
 @{
     ViewData["Title"] = "Edit";
@@ -10,21 +10,31 @@
 <hr />
 <div class="row">
     <div class="col-md-4">
-        <form asp-action="Edit">
+        <form asp-action="Edit" method="post" enctype="multipart/form-data">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <input type="hidden" asp-for="HistoireID" />
+            <input type="hidden" asp-for="Histoire.HistoireID" />
             <div class="form-group">
-                <label asp-for="Titre" class="control-label"></label>
-                <input asp-for="Titre" class="form-control" />
-                <span asp-validation-for="Titre" class="text-danger"></span>
+                <label asp-for="Histoire.Titre " class="control-label"></label>
+                <input asp-for="Histoire.Titre" class="form-control" />
+                <span asp-validation-for="Histoire.Titre" class="text-danger"></span>
             </div>
- 
-        
 
- 
+
             <div class="form-group">
-                <input asp-for="Score" class="form-control" type="hidden" />
-                <input asp-for="NombreDeFoisJouee" class="form-control" type="hidden" />
+                @*Pour l image*@
+                <label class="control-label">Image de garde</label><br />
+                <input id="Histoire.UrlMedia" name="Histoire.UrlMedia" value="@ViewBag.ImgPath" type="hidden" />
+                <img src="@ViewBag.ImgPath" class="img-responsive" /><br />
+            </div>
+            @*Pour l image changer d'image avatar*@
+            <div class="form-group">
+                <label class="control-label">Changer son Image de garde</label><br />
+                <input type="file" name="user_image" id="user_image" />
+            </div>
+
+            <div class="form-group">
+                <input asp-for="Histoire.Score" class="form-control" type="hidden" />
+                <input asp-for="Histoire.NombreDeFoisJouee" class="form-control" type="hidden" />
                 <input type="submit" value="Sayvegarder" class="btn btn-info" />
             </div>
         </form>
