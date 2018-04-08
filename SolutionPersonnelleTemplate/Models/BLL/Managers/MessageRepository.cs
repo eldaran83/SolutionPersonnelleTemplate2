@@ -1,9 +1,11 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Hosting;
+using Microsoft.EntityFrameworkCore;
 using SolutionPersonnelleTemplate.Data;
 using SolutionPersonnelleTemplate.Models.BLL.Interfaces;
 using SolutionPersonnelleTemplate.Models.BO;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -12,13 +14,17 @@ namespace SolutionPersonnelleTemplate.Models.BLL.Managers
     public class MessageRepository : IRepositoryMessage
     {
         private readonly ApplicationDbContext _context;
-         /// <summary>
+        private readonly IRepositoryFichier _fichierRepository;
+        private readonly IHostingEnvironment _env;
+        /// <summary>
         /// contructeur 
         /// </summary>
         /// <param name="context"></param>
-        public MessageRepository(ApplicationDbContext context)
+        public MessageRepository(ApplicationDbContext context, IRepositoryFichier fichierRepository, IHostingEnvironment env)
         {
             _context = context;
+            _fichierRepository = fichierRepository;
+            _env = env;
         }
 
         /// <summary>
@@ -105,11 +111,36 @@ namespace SolutionPersonnelleTemplate.Models.BLL.Managers
             try
             {
                 //Il faut supprimer ici les médias de ce message par la suite 
+                string webRoot = _env.WebRootPath; // récupère l environnement
+                string nameDirectory = "/StoryFiles/"; // nomme le dossier dans lequel le média va se retrouver ici MessageFiles pour l image de histoire
+                string lemessageId = Convert.ToString(messageId); // sert à la personnalisation du dossier pour l utilisateur
+                string nomDuDossier = Convert.ToString(histoireId) + "/Message/"; // variable qui sert à nommer le dossier dans lequel le fichier sera ajouté, ICI c est le dossier Image
 
+                //Comme l utilisateur ne peut avoir qu'un seul avatar, on vérifie avant d'ajouter un fichier
+                //que le dossier n'a pas d autre image en supprimant tous les fichiers qui pourraient s y trouver
+
+                var sourceDir = Path.Combine(
+                                     Directory.GetCurrentDirectory(), "wwwroot" + nameDirectory + nomDuDossier + lemessageId);
+
+                string[] listeImage = Directory.GetFiles(sourceDir);
+                // Copy picture files.          
+                foreach (string f in listeImage)
+                {
+                    // Remove path from the file name.
+                    string fName = f.Substring(sourceDir.Length);
+                    _fichierRepository.RemoveFichier(sourceDir, fName);
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex);
+            }
+
+            try {
                 //Supprime le message 
-                Message leMessage  = await _context.Messages
-                                         .Where(m=>m.MessageID == messageId)
-                                        .Where(m=>m.HistoireID == histoireId)
+                Message leMessage = await _context.Messages
+                                         .Where(m => m.MessageID == messageId)
+                                        .Where(m => m.HistoireID == histoireId)
                                         .FirstOrDefaultAsync();
 
                 _context.Messages.Remove(leMessage);
@@ -123,6 +154,7 @@ namespace SolutionPersonnelleTemplate.Models.BLL.Managers
                 return false;
             }
         }
+    
 
         /// <summary>
         /// met a jour un message en BDD

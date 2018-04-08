@@ -29,6 +29,17 @@
         <dd>
             @Html.DisplayFor(model => model.Histoire.HistoireID)
         </dd>
+        <dt>
+            Image
+        </dt>
+        <dd>
+            <div class="form-group">
+                @*Pour l image*@
+                <label class="control-label">Image de garde</label><br />
+                <input id="Message.UrlMedia" name="Message.UrlMedia" value="@ViewBag.ImgPath" type="hidden" />
+                <img src="@ViewBag.ImgPath" class="img-responsive" /><br />
+            </div>
+        </dd>
     </dl>
     
     <form asp-action="Delete">

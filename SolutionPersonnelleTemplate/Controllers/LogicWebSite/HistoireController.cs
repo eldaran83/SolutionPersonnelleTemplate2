@@ -141,7 +141,7 @@ namespace SolutionPersonnelleTemplate.Controllers.LogicWebSite
                     try
                     {
                         var sourceDir = Path.Combine(
-                                    Directory.GetCurrentDirectory(), "wwwroot" + nameDirectory + storyId + nomDuDossier);
+                                    Directory.GetCurrentDirectory(), "wwwroot" + nameDirectory  + nomDuDossier + storyId);
 
                         string[] listeImage = Directory.GetFiles(sourceDir);
                         // Copy picture files.          
@@ -149,7 +149,7 @@ namespace SolutionPersonnelleTemplate.Controllers.LogicWebSite
                         {
                             // Remove path from the file name.
                             string fName = f.Substring(sourceDir.Length);
-                            _fichierRepository.RemoveFichierAvatar(sourceDir, fName);
+                            _fichierRepository.RemoveFichier(sourceDir, fName);
                         }
                     }
                     catch (Exception ex)
@@ -158,15 +158,14 @@ namespace SolutionPersonnelleTemplate.Controllers.LogicWebSite
                     }
 
                     //ajoute le fichier 
-                    var imageURl = _fichierRepository.SaveFichierAvatar(webRoot, nameDirectory, storyId, nomDuDossier, form);
+                    var imageURl = _fichierRepository.SaveFichier(webRoot, nameDirectory, nomDuDossier, storyId, form);
                     laNouvelleHistoire.UrlMedia = imageURl;
 
                     //je met à jour l histoire pour quelle est le nouveau lien de son image
                     await _histoireRepository.UpdateHistoire(laNouvelleHistoire);
                 }
  
-
-                return RedirectToAction("Create", new RouteValueDictionary(new
+                 return RedirectToAction("Create", new RouteValueDictionary(new
                 {
                     controller = "Message",
                     action = "Create",
@@ -178,12 +177,7 @@ namespace SolutionPersonnelleTemplate.Controllers.LogicWebSite
                 return View(histoireVM.Histoire);
             }
         }
-
-
-
  
-
-
         // GET: Message/Delete/5
         public async Task<IActionResult> Delete(int? HistoireID)
         {
@@ -212,6 +206,7 @@ namespace SolutionPersonnelleTemplate.Controllers.LogicWebSite
                 return NotFound();
             }
             await _histoireRepository.RemoveHistoireById(HistoireID);
+
             return RedirectToAction("Index", new RouteValueDictionary(new
             {
                 controller = "Histoire",
@@ -285,13 +280,13 @@ namespace SolutionPersonnelleTemplate.Controllers.LogicWebSite
                     string nameDirectory = "/StoryFiles/"; // nomme le dossier dans lequel le média va se retrouver ici StoryFiles pour l image de histoire
                     string storyId = Convert.ToString(histoireVM.Histoire.HistoireID); // sert à la personnalisation du dossier pour l utilisateur
                     string nomDuDossier = "/Image/"; // variable qui sert à nommer le dossier dans lequel le fichier sera ajouté, ICI c est le dossier Image
-
+                   
                     //Comme l utilisateur ne peut avoir qu'un seul avatar, on vérifie avant d'ajouter un fichier
                     //que le dossier n'a pas d autre image en supprimant tous les fichiers qui pourraient s y trouver
                     try
                     {
                         var sourceDir = Path.Combine(
-                                    Directory.GetCurrentDirectory(), "wwwroot" + nameDirectory + storyId + nomDuDossier);
+                                    Directory.GetCurrentDirectory(), "wwwroot" + nameDirectory  + nomDuDossier + storyId);
 
                         string[] listeImage = Directory.GetFiles(sourceDir);
                         // Copy picture files.          
@@ -299,7 +294,7 @@ namespace SolutionPersonnelleTemplate.Controllers.LogicWebSite
                         {
                             // Remove path from the file name.
                             string fName = f.Substring(sourceDir.Length);
-                            _fichierRepository.RemoveFichierAvatar(sourceDir, fName);
+                            _fichierRepository.RemoveFichier(sourceDir, fName);
                         }
                     }
                     catch (Exception ex)
@@ -308,7 +303,7 @@ namespace SolutionPersonnelleTemplate.Controllers.LogicWebSite
                     }
 
                     //ajoute le fichier 
-                    var imageURl = _fichierRepository.SaveFichierAvatar(webRoot, nameDirectory, storyId, nomDuDossier, histoireVM.form);
+                    var imageURl = _fichierRepository.SaveFichier(webRoot, nameDirectory, nomDuDossier, storyId, histoireVM.form);
                     histoireVM.Histoire.UrlMedia = imageURl;
 
                     //je met à jour l histoire pour quelle est le nouveau lien de son image

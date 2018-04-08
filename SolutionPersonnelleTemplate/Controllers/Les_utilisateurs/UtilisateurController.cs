@@ -372,7 +372,7 @@ namespace SolutionPersonnelleTemplate.Controllers.Les_utilisateurs
                 {
                     // Remove path from the file name.
                     string fName = f.Substring(sourceDir.Length);
-                    _fichierRepository.RemoveFichierAvatar(sourceDir, fName);
+                    _fichierRepository.RemoveFichier(sourceDir, fName);
                 }
             }
             catch (Exception ex)
@@ -381,7 +381,7 @@ namespace SolutionPersonnelleTemplate.Controllers.Les_utilisateurs
             }
 
             //ajoute le fichier 
-            var avatarURl = _fichierRepository.SaveFichierAvatar(webRoot, nameDirectory, userId, nomDuDossier, form);
+            var avatarURl = _fichierRepository.SaveFichier(webRoot, nameDirectory, userId, nomDuDossier, form);
             //cherche le user dans la base 
             Utilisateur utilisateur = await _utilisateurManager.GetUtilisateurByIdAsync(userId);
             utilisateur.UrlAvatarImage = avatarURl;
@@ -468,7 +468,7 @@ namespace SolutionPersonnelleTemplate.Controllers.Les_utilisateurs
                     {
                         // Remove path from the file name.
                         string fName = f.Substring(sourceDir.Length);
-                        _fichierRepository.RemoveFichierAvatar(sourceDir, fName);
+                        _fichierRepository.RemoveFichier(sourceDir, fName);
                     }
                 }
                 catch (Exception ex)
@@ -477,7 +477,7 @@ namespace SolutionPersonnelleTemplate.Controllers.Les_utilisateurs
                 }
 
                 //ajoute le fichier 
-                var avatarURl = _fichierRepository.SaveFichierAvatar(webRoot, nameDirectory, userId, nomDuDossier, form);
+                var avatarURl = _fichierRepository.SaveFichier(webRoot, nameDirectory, userId, nomDuDossier, form);
                  utilisateur.UrlAvatarImage = avatarURl;
             }
           

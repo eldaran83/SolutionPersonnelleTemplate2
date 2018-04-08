@@ -55,6 +55,21 @@ namespace SolutionPersonnelleTemplate.Controllers.LogicWebSite
             {
                 return NotFound();
             }
+            //////////////////////////////////////////////////////////////////////////////////////////
+            //      GESTION de la photo
+            //////////////////////////////////////////////////////////////////////////////////////////
+            if (message.UrlMedia != null)
+            {
+                string img = message.UrlMedia.ToString();
+                ViewBag.ImgPath = img;
+            }
+            else
+            {
+                ViewBag.ImgPath = "/images/story-media-default.jpg";
+            }
+            ///////////////////////////////////////////////////////////////////////
+            //  FIN gestion image
+            ///////////////////////////////////////////////////////////////////////
             ViewData["HistoireID"] = message.HistoireID;
             return View(message);
         }
@@ -89,16 +104,16 @@ namespace SolutionPersonnelleTemplate.Controllers.LogicWebSite
                 if (messageVM_Modele.Form.Files[0].FileName != "")
                 {
                     string webRoot = _env.WebRootPath; // récupère l environnement
-                    string nameDirectory = "/MessageFiles/"; // nomme le dossier dans lequel le média va se retrouver ici MessageFiles pour l image de histoire
+                     string nameDirectory = "/StoryFiles/"; // nomme le dossier dans lequel le média va se retrouver ici MessageFiles pour l image de histoire
                     string messageId = Convert.ToString(leNouveauMessage.MessageID); // sert à la personnalisation du dossier pour l utilisateur
-                    string nomDuDossier = "/Image/"; // variable qui sert à nommer le dossier dans lequel le fichier sera ajouté, ICI c est le dossier Image
+                     string nomDuDossier = messageVM_Modele.Message.HistoireID+"/Message/" ; // variable qui sert à nommer le dossier dans lequel le fichier sera ajouté, ICI c est le dossier Image
 
                     //Comme l utilisateur ne peut avoir qu'un seul avatar, on vérifie avant d'ajouter un fichier
                     //que le dossier n'a pas d autre image en supprimant tous les fichiers qui pourraient s y trouver
                     try
                     {
                         var sourceDir = Path.Combine(
-                                    Directory.GetCurrentDirectory(), "wwwroot" + nameDirectory + messageId + nomDuDossier);
+                                    Directory.GetCurrentDirectory(), "wwwroot" + nameDirectory + nomDuDossier +  messageId);
 
                         string[] listeImage = Directory.GetFiles(sourceDir);
                         // Copy picture files.          
@@ -106,7 +121,7 @@ namespace SolutionPersonnelleTemplate.Controllers.LogicWebSite
                         {
                             // Remove path from the file name.
                             string fName = f.Substring(sourceDir.Length);
-                            _fichierRepository.RemoveFichierAvatar(sourceDir, fName);
+                            _fichierRepository.RemoveFichier(sourceDir, fName);
                         }
                     }
                     catch (Exception ex)
@@ -115,7 +130,7 @@ namespace SolutionPersonnelleTemplate.Controllers.LogicWebSite
                     }
 
                     //ajoute le fichier 
-                    var imageURl = _fichierRepository.SaveFichierAvatar(webRoot, nameDirectory, messageId, nomDuDossier, messageVM_Modele.Form);
+                    var imageURl = _fichierRepository.SaveFichier(webRoot, nameDirectory, nomDuDossier, messageId, messageVM_Modele.Form);
                     leNouveauMessage.UrlMedia = imageURl;
 
                     //je met à jour l message pour quelle est le nouveau lien de son image
@@ -131,8 +146,6 @@ namespace SolutionPersonnelleTemplate.Controllers.LogicWebSite
                     }));
                 }
 
-                //await _messageRepository.NouveauMessage(messageVM_Modele.Message);
-
                 ViewData["HistoireID"] = messageVM_Modele.Message.HistoireID;
                 return RedirectToAction("Index", new RouteValueDictionary(new
                 {
@@ -145,18 +158,7 @@ namespace SolutionPersonnelleTemplate.Controllers.LogicWebSite
 
             ViewData["HistoireID"] = messageVM_Modele.Message.HistoireID;
             return View(messageVM_Modele);
-            //    await _messageRepository.NouveauMessage(messageVM_Modele.Message);
-
-            //    ViewData["HistoireID"] = messageVM_Modele.Message.HistoireID;
-            //    return RedirectToAction("Index", new RouteValueDictionary(new
-            //    {
-            //        controller = "Message",
-            //        action = "Index",
-            //        histoireID = messageVM_Modele.Message.HistoireID
-            //    }));
-            //}
-            //ViewData["HistoireID"] = messageVM_Modele.Message.HistoireID;
-            //return View(messageVM_Modele);
+ 
         }
 
         // GET: Message/Edit/5
@@ -216,17 +218,18 @@ namespace SolutionPersonnelleTemplate.Controllers.LogicWebSite
                 //////////////////////////////////////////////////////////////////////////////////////////
                 if (messageVM_Modele.Form.Files[0].FileName != "")
                 {
+
                     string webRoot = _env.WebRootPath; // récupère l environnement
-                    string nameDirectory = "/MessageFiles/"; // nomme le dossier dans lequel le média va se retrouver ici MessageFiles pour l image de histoire
+                    string nameDirectory = "/StoryFiles/"; // nomme le dossier dans lequel le média va se retrouver ici MessageFiles pour l image de histoire
                     string messageId = Convert.ToString(messageVM_Modele.Message.MessageID); // sert à la personnalisation du dossier pour l utilisateur
-                    string nomDuDossier = "/Image/"; // variable qui sert à nommer le dossier dans lequel le fichier sera ajouté, ICI c est le dossier Image
+                    string nomDuDossier = messageVM_Modele.Message.HistoireID + "/Message/"; // variable qui sert à nommer le dossier dans lequel le fichier sera ajouté, ICI c est le dossier Image
 
                     //Comme l utilisateur ne peut avoir qu'un seul avatar, on vérifie avant d'ajouter un fichier
                     //que le dossier n'a pas d autre image en supprimant tous les fichiers qui pourraient s y trouver
                     try
                     {
                         var sourceDir = Path.Combine(
-                                    Directory.GetCurrentDirectory(), "wwwroot" + nameDirectory + messageId + nomDuDossier);
+                                    Directory.GetCurrentDirectory(), "wwwroot" + nameDirectory + nomDuDossier + messageId);
 
                         string[] listeImage = Directory.GetFiles(sourceDir);
                         // Copy picture files.          
@@ -234,7 +237,7 @@ namespace SolutionPersonnelleTemplate.Controllers.LogicWebSite
                         {
                             // Remove path from the file name.
                             string fName = f.Substring(sourceDir.Length);
-                            _fichierRepository.RemoveFichierAvatar(sourceDir, fName);
+                            _fichierRepository.RemoveFichier(sourceDir, fName);
                         }
                     }
                     catch (Exception ex)
@@ -243,7 +246,7 @@ namespace SolutionPersonnelleTemplate.Controllers.LogicWebSite
                     }
 
                     //ajoute le fichier 
-                    var imageURl = _fichierRepository.SaveFichierAvatar(webRoot, nameDirectory, messageId, nomDuDossier, messageVM_Modele.Form);
+                    var imageURl = _fichierRepository.SaveFichier(webRoot, nameDirectory, nomDuDossier , messageId, messageVM_Modele.Form);
                     messageVM_Modele.Message.UrlMedia = imageURl;
 
                     //je met à jour l histoire pour quelle est le nouveau lien de son image
@@ -293,7 +296,21 @@ namespace SolutionPersonnelleTemplate.Controllers.LogicWebSite
             {
                 return NotFound();
             }
-
+            //////////////////////////////////////////////////////////////////////////////////////////
+            //      GESTION de la photo
+            //////////////////////////////////////////////////////////////////////////////////////////
+            if (leMessage.UrlMedia != null)
+            {
+                string img = leMessage.UrlMedia.ToString();
+                ViewBag.ImgPath = img;
+            }
+            else
+            {
+                ViewBag.ImgPath = "/images/story-media-default.jpg";
+            }
+            ///////////////////////////////////////////////////////////////////////
+            //  FIN gestion image
+            ///////////////////////////////////////////////////////////////////////
             ViewData["HistoireID"] = HistoireID;
             return View(leMessage);
         }

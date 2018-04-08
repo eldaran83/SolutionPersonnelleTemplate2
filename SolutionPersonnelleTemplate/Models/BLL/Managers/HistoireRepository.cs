@@ -116,6 +116,11 @@ namespace SolutionPersonnelleTemplate.Models.BLL.Managers
                  //suppresion des messages de l histoire
                 IEnumerable<Message> lesMessagesDeLhistoire= await _messageRepository.GetAllMessageOfStoryAsync(histoireId);
 
+                //supression des médias des messages 
+                foreach (var item in lesMessagesDeLhistoire)
+                {
+                    await _messageRepository.RemoveMessageOfStoryById(item.MessageID, item.HistoireID);
+                }
                 //Supprime l histoire
                 Histoire histoire = await _context.Histoires
                                          .Where(m => m.HistoireID == histoireId)
