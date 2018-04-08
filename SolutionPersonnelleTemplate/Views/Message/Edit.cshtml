@@ -1,4 +1,4 @@
-﻿@model SolutionPersonnelleTemplate.Models.BO.Message
+﻿@model SolutionPersonnelleTemplate.Models.ViewModels.MessageViewModel
 
 @{
     ViewData["Title"] = "Edit";
@@ -10,22 +10,33 @@
 <hr />
 <div class="row">
     <div class="col-md-4">
-        <form asp-action="Edit">
+        <form asp-action="Edit" method="post" enctype="multipart/form-data">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <input type="hidden" asp-for="MessageID" />
+            <input type="hidden" asp-for="Message.MessageID" />
             <div class="form-group">
-                <label asp-for="Titre" class="control-label"></label>
-                <input asp-for="Titre" class="form-control" />
-                <span asp-validation-for="Titre" class="text-danger"></span>
+                <label asp-for="Message.Titre" class="control-label"></label>
+                <input asp-for="Message.Titre" class="form-control" />
+                <span asp-validation-for="Message.Titre" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="Contenu" class="control-label"></label>
-                <textarea asp-for="Contenu" cols="80" rows="10" class="form-control"></textarea>
-                 <span asp-validation-for="Contenu" class="text-danger"></span>
+                <label asp-for="Message.Contenu" class="control-label"></label>
+                <textarea asp-for="Message.Contenu" cols="80" rows="10" class="form-control"></textarea>
+                <span asp-validation-for="Message.Contenu" class="text-danger"></span>
             </div>
- 
             <div class="form-group">
-               <input  asp-for="HistoireID" type="hidden"/>
+                @*Pour l image*@
+                <label class="control-label">Image de garde</label><br />
+                <input id="Message.UrlMedia" name="Message.UrlMedia" value="@ViewBag.ImgPath" type="hidden" />
+                <img src="@ViewBag.ImgPath" class="img-responsive" /><br />
+            </div>
+            @*Pour l image changer d'image avatar*@
+            <div class="form-group">
+                <label class="control-label">Changer son Image de garde</label><br />
+                <input type="file" name="user_image" id="user_image" />
+            </div>
+
+            <div class="form-group">
+                <input asp-for="Message.HistoireID" type="hidden" />
                 <input type="submit" value="Mettre à jour" class="btn btn-info" />
             </div>
         </form>

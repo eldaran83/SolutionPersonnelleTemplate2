@@ -2,11 +2,55 @@
 @{
     ViewData["Title"] = "Index";
 }
-<h2>Le recueil des Codex</h2>
-<p>
-    <a asp-action="Create">Créer une nouvelle histoire</a>
-</p>
 
+<div class="container-fluid">
+    <h2>Le recueil des Codex</h2>
+    <p>
+        <a asp-action="Create" asp-controller="Histoire" class="btn  btn-info">Devenez un scribe</a>
+    </p>
+
+</div>
+
+    <div class="container">
+
+        <div class="row">
+            @{ foreach (var item in Model)
+        {
+            <div class="col-sm-4">
+                <h2>@item.Titre</h2>
+                <h3>Scribe : @item.Createur</h3>
+                @{
+                    string idResumeHistoireBlinding = "#resume" + item.HistoireID;
+                    string idResumeHistoire = "resume" + item.HistoireID;
+                }
+                <h4>Codex <span class="badge">@item.HistoireID</span> Vote <span class="badge">@item.Score</span> Partie <span class="badge">@item.NombreDeFoisJouee</span> <button type="button" class="btn btn-default" data-toggle="collapse" data-target="@idResumeHistoireBlinding">Synopsis</button></h4>
+                 <div class="center-block">
+                     <div id="@idResumeHistoire" class="collapse text-justify">
+                        @item.Synopsis
+                    </div>
+                </div>
+                <div class="jumbotron">
+                    <img src="@item.UrlMedia" alt="@item.Titre" class="img-responsive" style="height:165px;" />
+                </div>
+                <a asp-action="Details" asp-route-histoireID="@item.HistoireID" class="btn btn-info btn-block">Jouer à cette aventure</a>
+            </div>
+ 
+    }
+
+        }
+    </div>
+
+
+</div>
+
+
+
+
+
+
+<div>
+
+</div>
 <table class="table">
     <thead>
         <tr>
@@ -35,35 +79,40 @@
     <tbody>
         @foreach (var item in Model)
         {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.HistoireID)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Titre)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.UtilisateurID)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Createur)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Score)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.NombreDeFoisJouee)
-            </td>
-            <td>
-                <img src="@item.UrlMedia" alt="@item.Titre" class="img-responsive" />
-            </td>
-            <td>
-                <a asp-action="Index" asp-controller="Message" asp-route-histoireID="@item.HistoireID" class="btn btn-block btn-success">Les messages</a>
-                <a asp-action="Edit" asp-route-histoireID="@item.HistoireID" class="btn btn-block btn-warning">MAJ</a>
-                <a asp-action="Details" asp-route-histoireID="@item.HistoireID" class="btn btn-block btn-info">Détails</a>
-                <a asp-action="Delete" asp-route-histoireID="@item.HistoireID" class="btn btn-block btn-danger">Supprimer</a>
-            </td>
-        </tr>
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.HistoireID)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Titre)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.UtilisateurID)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Createur)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Score)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.NombreDeFoisJouee)
+                </td>
+                <td>
+                    <img src="@item.UrlMedia" alt="@item.Titre" class="img-responsive" />
+                </td>
+                <td>
+                    <a asp-action="Index" asp-controller="Message" asp-route-histoireID="@item.HistoireID" class="btn btn-block btn-success">Les messages</a>
+                    <a asp-action="Edit" asp-route-histoireID="@item.HistoireID" class="btn btn-block btn-warning">MAJ</a>
+                    <a asp-action="Details" asp-route-histoireID="@item.HistoireID" class="btn btn-block btn-info">Détails</a>
+                    <a asp-action="Delete" asp-route-histoireID="@item.HistoireID" class="btn btn-block btn-danger">Supprimer</a>
+                </td>
+            </tr>
         }
     </tbody>
 </table>
+
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

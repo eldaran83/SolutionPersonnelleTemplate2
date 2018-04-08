@@ -79,9 +79,18 @@ namespace SolutionPersonnelleTemplate.Models.BLL.Managers
         /// <returns></returns>
         public async Task<Message> NouveauMessage(Message messageModele)
         {
-            _context.Add(messageModele);
+            Message messageAAjouter = new Message
+            {
+                Titre = messageModele.Titre,
+                Contenu = messageModele.Contenu,
+                HistoireID = messageModele.HistoireID,
+                UrlMedia = "/images/message-media-default.jpg"
+            };
+            _context.Messages.Add(messageAAjouter);
             await _context.SaveChangesAsync();
-            return messageModele;
+
+            return messageAAjouter;
+ 
         }
 
         /// <summary>

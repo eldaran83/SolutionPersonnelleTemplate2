@@ -1,4 +1,4 @@
-﻿@model SolutionPersonnelleTemplate.Models.BO.Message
+﻿@model SolutionPersonnelleTemplate.Models.ViewModels.MessageViewModel
 
 @{
     ViewData["Title"] = "Create";
@@ -10,25 +10,31 @@
 <hr />
 <div class="row">
     <div class="col-md-12">
-        <form asp-action="Create">
+        <form asp-action="Create" enctype="multipart/form-data" method="post">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
                 @if (ViewBag.error != null)
-                {
-                <p class="alert-danger">@ViewBag.error</p>
-                }
-                <label asp-for="Titre" class="control-label"></label>
-                <input asp-for="Titre" class="form-control" />
-                <span asp-validation-for="Titre" class="text-danger"></span>
+        {
+            <p class="alert-danger">@ViewBag.error</p>
+}
+                <label asp-for="Message.Titre" class="control-label"></label>
+                <input asp-for="Message.Titre" class="form-control" />
+                <span asp-validation-for="Message.Titre" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="Contenu" class="control-label"></label>
-                <textarea asp-for="Contenu" cols="80" rows="10" class="form-control"></textarea>
-                 <span asp-validation-for="Contenu" class="text-danger"></span>
+                <label asp-for="Message.Contenu" class="control-label"></label>
+                <textarea asp-for="Message.Contenu" cols="80" rows="10" class="form-control"></textarea>
+                <span asp-validation-for="Message.Contenu" class="text-danger"></span>
             </div>
- 
+
+            @*Pour l image changer d'image avatar*@
             <div class="form-group">
-                <input type="hidden" asp-for="HistoireID" value="@ViewData["HistoireID"]" />
+                <label class="control-label">Ajouter une image de présentation</label><br />
+                <input type="file" name="user_image" id="user_image" />
+            </div>
+
+            <div class="form-group">
+                <input type="hidden" asp-for="Message.HistoireID" value="@ViewData["HistoireID"]" />
                 <input type="submit" value="Valider" class="btn btn-success" />
             </div>
         </form>

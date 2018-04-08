@@ -38,6 +38,7 @@ namespace SolutionPersonnelleTemplate.Models.BLL.Managers
                 Score = 0,
                 UtilisateurID = histoireModele.UtilisateurID,
                 Createur= createur,
+                Synopsis = histoireModele.Synopsis,
                 UrlMedia = "/images/story-media-default.jpg"
             };
 

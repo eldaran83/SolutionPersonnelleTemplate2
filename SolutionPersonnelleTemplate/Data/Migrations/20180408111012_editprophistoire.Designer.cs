@@ -11,9 +11,10 @@ using System;
 namespace SolutionPersonnelleTemplate.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20180408111012_editprophistoire")]
+    partial class editprophistoire
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -188,15 +189,12 @@ namespace SolutionPersonnelleTemplate.Data.Migrations
 
                     b.Property<int>("NombreDeFoisJouee");
 
-                    b.Property<int>("Score");
-
-                    b.Property<string>("Synopsis")
-                        .IsRequired()
+                    b.Property<string>("Resume")
                         .HasMaxLength(600);
 
-                    b.Property<string>("Titre")
-                        .IsRequired()
-                        .HasMaxLength(80);
+                    b.Property<int>("Score");
+
+                    b.Property<string>("Titre");
 
                     b.Property<string>("UrlMedia");
 
@@ -214,16 +212,11 @@ namespace SolutionPersonnelleTemplate.Data.Migrations
                     b.Property<int>("MessageID")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<string>("Contenu")
-                        .IsRequired();
+                    b.Property<string>("Contenu");
 
                     b.Property<int>("HistoireID");
 
-                    b.Property<string>("Titre")
-                        .IsRequired()
-                        .HasMaxLength(80);
-
-                    b.Property<string>("UrlMedia");
+                    b.Property<string>("Titre");
 
                     b.HasKey("MessageID");
 
