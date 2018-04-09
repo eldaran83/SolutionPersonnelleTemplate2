@@ -95,16 +95,22 @@ namespace SolutionPersonnelleTemplate.Models.BLL.Managers
         /// <param name="histoireId"></param>
         /// <returns></returns>
         public async Task<bool> RemoveHistoireById(int? histoireId)
-        {
-            try
+        {            try
             {
-                //Supprime le dossier qui contient tous les fichiers de l'utilisateur  
+               // Supprime le dossier qui contient tous les fichiers de l'utilisateur  
                 var dirPath = Path.Combine(
                                Directory.GetCurrentDirectory(),
-                               "wwwroot" + "/StoryFiles/" + Convert.ToString(histoireId) + "/");
+                               "wwwroot" + "/StoryFiles/ImageHistoire/" + Convert.ToString(histoireId) + "_Histoire" + "/");
 
                 Directory.Delete(dirPath, true);
-             }
+
+
+                // var dirPath2 = Path.Combine(
+                //Directory.GetCurrentDirectory(),
+                //"wwwroot" + "/StoryFiles/" + Convert.ToString(histoireId) + "_Histoire");
+
+                // Directory.Delete(dirPath2, true);
+            }
             catch (Exception ex)
             {
                 Console.WriteLine("L'histoire n'a pas de dossier image " + ex);

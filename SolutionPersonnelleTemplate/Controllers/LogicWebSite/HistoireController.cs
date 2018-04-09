@@ -131,10 +131,15 @@ namespace SolutionPersonnelleTemplate.Controllers.LogicWebSite
                 //////////////////////////////////////////////////////////////////////////////////////////
                 if (form.Files[0].FileName != "")
                 {
+                    if (histoireVM.form.Files[0].Length >= 5242880) //Maxi 5 mo pour l image
+                    {
+                        ViewBag.errorFichier = "L'image doit avoir une taille inférieure à 5 Mo.";
+                    }
                     string webRoot = _env.WebRootPath; // récupère l environnement
                     string nameDirectory = "/StoryFiles/"; // nomme le dossier dans lequel le média va se retrouver ici StoryFiles pour l image de histoire
-                    string storyId = Convert.ToString(laNouvelleHistoire.HistoireID); // sert à la personnalisation du dossier pour l utilisateur
-                    string nomDuDossier = "/Image/"; // variable qui sert à nommer le dossier dans lequel le fichier sera ajouté, ICI c est le dossier Image
+                    //ATTENTION Cest une nouvelle histoire donc leNouvelleHistoire
+                    string storyId = Convert.ToString(laNouvelleHistoire.HistoireID) + "_Histoire"; // sert à la personnalisation du dossier pour l utilisateur
+                    string nomDuDossier = "/ImageHistoire/"; // variable qui sert à nommer le dossier dans lequel le fichier sera ajouté, ICI c est le dossier Image
 
                     //Comme l utilisateur ne peut avoir qu'un seul avatar, on vérifie avant d'ajouter un fichier
                     //que le dossier n'a pas d autre image en supprimant tous les fichiers qui pourraient s y trouver
@@ -276,10 +281,14 @@ namespace SolutionPersonnelleTemplate.Controllers.LogicWebSite
                 //////////////////////////////////////////////////////////////////////////////////////////
                 if (histoireVM.form.Files[0].FileName != "")
                 {
+                    if (histoireVM.form.Files[0].Length >= 5242880) //Maxi 5 mo pour l image
+                    {
+                        ViewBag.errorFichier = "L'image doit avoir une taille inférieure à 5 Mo.";
+                    }
                     string webRoot = _env.WebRootPath; // récupère l environnement
                     string nameDirectory = "/StoryFiles/"; // nomme le dossier dans lequel le média va se retrouver ici StoryFiles pour l image de histoire
-                    string storyId = Convert.ToString(histoireVM.Histoire.HistoireID); // sert à la personnalisation du dossier pour l utilisateur
-                    string nomDuDossier = "/Image/"; // variable qui sert à nommer le dossier dans lequel le fichier sera ajouté, ICI c est le dossier Image
+                    string storyId = Convert.ToString(histoireVM.Histoire.HistoireID)+"_Histoire"; // sert à la personnalisation du dossier pour l utilisateur
+                    string nomDuDossier = "/ImageHistoire/"; // variable qui sert à nommer le dossier dans lequel le fichier sera ajouté, ICI c est le dossier Image
                    
                     //Comme l utilisateur ne peut avoir qu'un seul avatar, on vérifie avant d'ajouter un fichier
                     //que le dossier n'a pas d autre image en supprimant tous les fichiers qui pourraient s y trouver

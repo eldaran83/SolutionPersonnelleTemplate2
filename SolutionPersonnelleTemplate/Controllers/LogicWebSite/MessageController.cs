@@ -103,10 +103,16 @@ namespace SolutionPersonnelleTemplate.Controllers.LogicWebSite
                 //////////////////////////////////////////////////////////////////////////////////////////
                 if (messageVM_Modele.Form.Files[0].FileName != "")
                 {
+                    if (messageVM_Modele.Form.Files[0].Length >= 5242880) //Maxi 5 mo pour l image
+                    {
+                        ViewBag.errorFichier = "L'image doit avoir une taille inférieure à 5 Mo.";
+                    }
+
                     string webRoot = _env.WebRootPath; // récupère l environnement
-                     string nameDirectory = "/StoryFiles/"; // nomme le dossier dans lequel le média va se retrouver ici MessageFiles pour l image de histoire
+                    string nameDirectory = "/StoryFiles/"; // nomme le dossier dans lequel le média va se retrouver ici MessageFiles pour l image de histoire
+                    //  //ATTENTION Cest une nouvelle histoire donc leNouveauMessage
                     string messageId = Convert.ToString(leNouveauMessage.MessageID); // sert à la personnalisation du dossier pour l utilisateur
-                     string nomDuDossier = messageVM_Modele.Message.HistoireID+"/Message/" ; // variable qui sert à nommer le dossier dans lequel le fichier sera ajouté, ICI c est le dossier Image
+                    string nomDuDossier = "/ImageHistoire/" + messageVM_Modele.Message.HistoireID + "_Histoire/Messages/"; // variable qui sert à nommer le dossier dans lequel le fichier sera ajouté, ICI c est le dossier Image
 
                     //Comme l utilisateur ne peut avoir qu'un seul avatar, on vérifie avant d'ajouter un fichier
                     //que le dossier n'a pas d autre image en supprimant tous les fichiers qui pourraient s y trouver
@@ -218,12 +224,15 @@ namespace SolutionPersonnelleTemplate.Controllers.LogicWebSite
                 //////////////////////////////////////////////////////////////////////////////////////////
                 if (messageVM_Modele.Form.Files[0].FileName != "")
                 {
-
+                    if (messageVM_Modele.Form.Files[0].Length >= 5242880) //Maxi 5 mo pour l image
+                    {
+                        ViewBag.error = "L'image doit avoir une taille inférieure à 5 Mo.";
+                    }
                     string webRoot = _env.WebRootPath; // récupère l environnement
                     string nameDirectory = "/StoryFiles/"; // nomme le dossier dans lequel le média va se retrouver ici MessageFiles pour l image de histoire
                     string messageId = Convert.ToString(messageVM_Modele.Message.MessageID); // sert à la personnalisation du dossier pour l utilisateur
-                    string nomDuDossier = messageVM_Modele.Message.HistoireID + "/Message/"; // variable qui sert à nommer le dossier dans lequel le fichier sera ajouté, ICI c est le dossier Image
-
+                    string nomDuDossier = "/ImageHistoire/" + messageVM_Modele.Message.HistoireID + "_Histoire/Messages/"; // variable qui sert à nommer le dossier dans lequel le fichier sera ajouté, ICI c est le dossier Image
+                    
                     //Comme l utilisateur ne peut avoir qu'un seul avatar, on vérifie avant d'ajouter un fichier
                     //que le dossier n'a pas d autre image en supprimant tous les fichiers qui pourraient s y trouver
                     try

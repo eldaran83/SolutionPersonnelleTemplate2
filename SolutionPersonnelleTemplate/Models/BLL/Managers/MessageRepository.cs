@@ -108,21 +108,21 @@ namespace SolutionPersonnelleTemplate.Models.BLL.Managers
         public async Task<bool> RemoveMessageOfStoryById(int? messageId, int? histoireId)
         {
             //Le message doit etre supprimé en dernier  !!
-            try
-            {
+
                 //Il faut supprimer ici les médias de ce message par la suite 
-                string webRoot = _env.WebRootPath; // récupère l environnement
+                 string webRoot = _env.WebRootPath; // récupère l environnement
                 string nameDirectory = "/StoryFiles/"; // nomme le dossier dans lequel le média va se retrouver ici MessageFiles pour l image de histoire
                 string lemessageId = Convert.ToString(messageId); // sert à la personnalisation du dossier pour l utilisateur
-                string nomDuDossier = Convert.ToString(histoireId) + "/Message/"; // variable qui sert à nommer le dossier dans lequel le fichier sera ajouté, ICI c est le dossier Image
+                string nomDuDossier = "/ImageHistoire/" + Convert.ToString(histoireId) + "_Histoire/Messages/"; // variable qui sert à nommer le dossier dans lequel le fichier sera ajouté, ICI c est le dossier Image
 
                 //Comme l utilisateur ne peut avoir qu'un seul avatar, on vérifie avant d'ajouter un fichier
                 //que le dossier n'a pas d autre image en supprimant tous les fichiers qui pourraient s y trouver
+                try
+                {
+                    var sourceDir = Path.Combine(
+                                Directory.GetCurrentDirectory(), "wwwroot" + nameDirectory + nomDuDossier + lemessageId);
 
-                var sourceDir = Path.Combine(
-                                     Directory.GetCurrentDirectory(), "wwwroot" + nameDirectory + nomDuDossier + lemessageId);
-
-                string[] listeImage = Directory.GetFiles(sourceDir);
+                    string[] listeImage = Directory.GetFiles(sourceDir);
                 // Copy picture files.          
                 foreach (string f in listeImage)
                 {

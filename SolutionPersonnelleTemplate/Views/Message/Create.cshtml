@@ -29,6 +29,10 @@
 
             @*Pour l image changer d'image avatar*@
             <div class="form-group">
+                @if (@ViewBag.errorFichier != "")
+    {
+            <p class="alert-danger">@ViewBag.errorFichier</p>
+}
                 <label class="control-label">Ajouter une image de présentation</label><br />
                 <input type="file" name="user_image" id="user_image" />
             </div>
