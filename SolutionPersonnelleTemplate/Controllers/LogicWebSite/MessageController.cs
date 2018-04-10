@@ -94,6 +94,73 @@ namespace SolutionPersonnelleTemplate.Controllers.LogicWebSite
                 ViewData["HistoireID"] = messageVM_Modele.Message.HistoireID;
                 return View(messageVM_Modele);
             }
+
+            //logic des liens vers les autres messages 
+
+            //pour le lien1
+            if (messageVM_Modele.Message.NumeroMessageEnfant1 != null && messageVM_Modele.Message.NumeroMessageEnfant1 >0)
+            {
+                if (messageVM_Modele.Message.MessageEnfant1 == null)
+                {
+                    ViewBag.MessageEnfant1 = "vous avez renseigné un N° de destination sans renseigner un titre pour celui-ci";
+                    ViewData["HistoireID"] = messageVM_Modele.Message.HistoireID;
+                    return View(messageVM_Modele);
+                }
+            }
+
+            if (messageVM_Modele.Message.MessageEnfant1 != null)
+            {
+                if (messageVM_Modele.Message.NumeroMessageEnfant1 == null )
+                {
+                    ViewBag.NumeroMessageEnfant1 = "vous avez renseigné un libellé sans renseigner un N° pour celui-ci";
+                    ViewData["HistoireID"] = messageVM_Modele.Message.HistoireID;
+                    return View(messageVM_Modele);
+                }
+            }
+
+            //pour le lien2
+            if (messageVM_Modele.Message.NumeroMessageEnfant2 != null && messageVM_Modele.Message.NumeroMessageEnfant2 > 0)
+            {
+                if (messageVM_Modele.Message.MessageEnfant2 == null)
+                {
+                    ViewBag.MessageEnfant2 = "vous avez renseigné un N° de destination sans renseigner un titre pour celui-ci";
+                    ViewData["HistoireID"] = messageVM_Modele.Message.HistoireID;
+                    return View(messageVM_Modele);
+                }
+            }
+
+            if (messageVM_Modele.Message.MessageEnfant2 != null)
+            {
+                if (messageVM_Modele.Message.NumeroMessageEnfant2 == null )
+                {
+                    ViewBag.NumeroMessageEnfant2 = "vous avez renseigné un libellé sans renseigner un N° pour celui-ci";
+                    ViewData["HistoireID"] = messageVM_Modele.Message.HistoireID;
+                    return View(messageVM_Modele);
+                }
+            }
+
+
+            //pour le lien3
+            if (messageVM_Modele.Message.NumeroMessageEnfant3 != null && messageVM_Modele.Message.NumeroMessageEnfant3 > 0)
+            {
+                if (messageVM_Modele.Message.MessageEnfant3 == null)
+                {
+                    ViewBag.MessageEnfant3 = "vous avez renseigné un N° de destination sans renseigner un titre pour celui-ci";
+                    ViewData["HistoireID"] = messageVM_Modele.Message.HistoireID;
+                    return View(messageVM_Modele);
+                }
+            }
+
+            if (messageVM_Modele.Message.MessageEnfant3 != null)
+            {
+                if (messageVM_Modele.Message.NumeroMessageEnfant3 == null)
+                {
+                    ViewBag.NumeroMessageEnfant3 = "vous avez renseigné un libellé sans renseigner un N° pour celui-ci";
+                    ViewData["HistoireID"] = messageVM_Modele.Message.HistoireID;
+                    return View(messageVM_Modele);
+                }
+            }
+
             if (ModelState.IsValid)
             {
                 Message leNouveauMessage = await _messageRepository.NouveauMessage(messageVM_Modele.Message);
@@ -216,6 +283,71 @@ namespace SolutionPersonnelleTemplate.Controllers.LogicWebSite
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(MessageViewModel messageVM_Modele)
         {
+            //logic des liens vers les autres messages 
+
+            //pour le lien1
+            if (messageVM_Modele.Message.NumeroMessageEnfant1 != null && messageVM_Modele.Message.NumeroMessageEnfant1 > 0)
+            {
+                if (messageVM_Modele.Message.MessageEnfant1 == null)
+                {
+                    ViewBag.MessageEnfant1 = "vous avez renseigné un N° de destination sans renseigner un titre pour celui-ci";
+                    ViewData["HistoireID"] = messageVM_Modele.Message.HistoireID;
+                    return View(messageVM_Modele);
+                }
+            }
+
+            if (messageVM_Modele.Message.MessageEnfant1 != null)
+            {
+                if (messageVM_Modele.Message.NumeroMessageEnfant1 == null)
+                {
+                    ViewBag.NumeroMessageEnfant1 = "vous avez renseigné un libellé sans renseigner un N° pour celui-ci";
+                    ViewData["HistoireID"] = messageVM_Modele.Message.HistoireID;
+                    return View(messageVM_Modele);
+                }
+            }
+
+            //pour le lien2
+            if (messageVM_Modele.Message.NumeroMessageEnfant2 != null && messageVM_Modele.Message.NumeroMessageEnfant2 > 0)
+            {
+                if (messageVM_Modele.Message.MessageEnfant2 == null)
+                {
+                    ViewBag.MessageEnfant2 = "vous avez renseigné un N° de destination sans renseigner un titre pour celui-ci";
+                    ViewData["HistoireID"] = messageVM_Modele.Message.HistoireID;
+                    return View(messageVM_Modele);
+                }
+            }
+
+            if (messageVM_Modele.Message.MessageEnfant2 != null)
+            {
+                if (messageVM_Modele.Message.NumeroMessageEnfant2 == null)
+                {
+                    ViewBag.NumeroMessageEnfant2 = "vous avez renseigné un libellé sans renseigner un N° pour celui-ci";
+                    ViewData["HistoireID"] = messageVM_Modele.Message.HistoireID;
+                    return View(messageVM_Modele);
+                }
+            }
+
+
+            //pour le lien3
+            if (messageVM_Modele.Message.NumeroMessageEnfant3 != null && messageVM_Modele.Message.NumeroMessageEnfant3 > 0)
+            {
+                if (messageVM_Modele.Message.MessageEnfant3 == null)
+                {
+                    ViewBag.MessageEnfant3 = "vous avez renseigné un N° de destination sans renseigner un titre pour celui-ci";
+                    ViewData["HistoireID"] = messageVM_Modele.Message.HistoireID;
+                    return View(messageVM_Modele);
+                }
+            }
+
+            if (messageVM_Modele.Message.MessageEnfant3 != null)
+            {
+                if (messageVM_Modele.Message.NumeroMessageEnfant3 == null)
+                {
+                    ViewBag.NumeroMessageEnfant3 = "vous avez renseigné un libellé sans renseigner un N° pour celui-ci";
+                    ViewData["HistoireID"] = messageVM_Modele.Message.HistoireID;
+                    return View(messageVM_Modele);
+                }
+            }
 
             if (ModelState.IsValid)
             {

@@ -90,6 +90,12 @@ namespace SolutionPersonnelleTemplate.Models.BLL.Managers
                 Titre = messageModele.Titre,
                 Contenu = messageModele.Contenu,
                 HistoireID = messageModele.HistoireID,
+                NumeroMessageEnfant1 = messageModele.NumeroMessageEnfant1,
+                MessageEnfant1 = messageModele.MessageEnfant1,
+                NumeroMessageEnfant2 = messageModele.NumeroMessageEnfant2,
+                MessageEnfant2 = messageModele.MessageEnfant2,
+                NumeroMessageEnfant3 = messageModele.NumeroMessageEnfant3,
+                MessageEnfant3 = messageModele.MessageEnfant3,
                 UrlMedia = "/images/message-media-default.jpg"
             };
             _context.Messages.Add(messageAAjouter);

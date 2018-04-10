@@ -32,13 +32,82 @@
             @*Pour l image changer d'image avatar*@
             <div class="form-group">
                 @if (@ViewBag.errorFichier != "")
-                {
-                <p class="alert-danger">@ViewBag.errorFichier</p>
-                }
+        {
+            <p class="alert-danger">@ViewBag.errorFichier</p>
+}
                 <label class="control-label">Changer son Image de garde</label><br />
                 <input type="file" name="user_image" id="user_image" />
             </div>
+            <div class="form-group">
+                @{
+            if (ViewBag.NumeroMessageEnfant1 != "")
+            {
+                <p class="alert-danger">@ViewBag.NumeroMessageEnfant1</p>
+    }
+                }
+                <label asp-for="Message.NumeroMessageEnfant1" class="control-label"></label>
+                <input asp-for="Message.NumeroMessageEnfant1" class="form-control" />
+                <span asp-validation-for="Message.NumeroMessageEnfant1" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                @{
+            if (ViewBag.MessageEnfant1 != "")
+            {
+                <p class="alert-danger">@ViewBag.MessageEnfant1</p>
+    }
+                }
+                <label asp-for="Message.MessageEnfant1" class="control-label"></label>
+                <input asp-for="Message.MessageEnfant1" class="form-control" />
+                <span asp-validation-for="Message.MessageEnfant1" class="text-danger"></span>
+            </div>
 
+
+            <div class="form-group">
+                @{
+            if (ViewBag.NumeroMessageEnfant2 != "")
+            {
+                <p class="alert-danger">@ViewBag.NumeroMessageEnfant2</p>
+    }
+                }
+                <label asp-for="Message.NumeroMessageEnfant2" class="control-label"></label>
+                <input asp-for="Message.NumeroMessageEnfant2" class="form-control" />
+                <span asp-validation-for="Message.NumeroMessageEnfant2" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                @{
+            if (ViewBag.MessageEnfant2 != "")
+            {
+                <p class="alert-danger">@ViewBag.MessageEnfant2</p>
+    }
+                }
+                <label asp-for="Message.MessageEnfant2" class="control-label"></label>
+                <input asp-for="Message.MessageEnfant2" class="form-control" />
+                <span asp-validation-for="Message.MessageEnfant2" class="text-danger"></span>
+            </div>
+
+
+            <div class="form-group">
+                @{
+            if (ViewBag.NumeroMessageEnfant3 != "")
+            {
+                <p class="alert-danger">@ViewBag.NumeroMessageEnfant3</p>
+    }
+                }
+                <label asp-for="Message.NumeroMessageEnfant3" class="control-label"></label>
+                <input asp-for="Message.NumeroMessageEnfant3" class="form-control" />
+                <span asp-validation-for="Message.NumeroMessageEnfant3" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                @{
+            if (ViewBag.MessageEnfant3 != "")
+            {
+                <p class="alert-danger">@ViewBag.MessageEnfant3</p>
+    }
+                }
+                <label asp-for="Message.MessageEnfant3" class="control-label"></label>
+                <input asp-for="Message.MessageEnfant3" class="form-control" />
+                <span asp-validation-for="Message.MessageEnfant3" class="text-danger"></span>
+            </div>
             <div class="form-group">
                 <input asp-for="Message.HistoireID" type="hidden" />
                 <input type="submit" value="Mettre à jour" class="btn btn-info" />

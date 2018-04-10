@@ -11,9 +11,10 @@ using System;
 namespace SolutionPersonnelleTemplate.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20180410184417_AddLienMessageEnfants")]
+    partial class AddLienMessageEnfants
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -211,25 +212,26 @@ namespace SolutionPersonnelleTemplate.Data.Migrations
 
             modelBuilder.Entity("SolutionPersonnelleTemplate.Models.BO.Message", b =>
                 {
-                    b.Property<int>("MessageID")
-                        .ValueGeneratedOnAdd();
+                    b.Property<int>("MessageID");
 
                     b.Property<string>("Contenu")
                         .IsRequired();
 
                     b.Property<int>("HistoireID");
 
-                    b.Property<string>("MessageEnfant1");
+                    b.Property<int>("MessageEnfant1");
 
-                    b.Property<string>("MessageEnfant2");
+                    b.Property<int>("MessageEnfant2");
 
-                    b.Property<string>("MessageEnfant3");
+                    b.Property<int>("MessageEnfant3");
 
-                    b.Property<int?>("NumeroMessageEnfant1");
+                    b.Property<int>("NumeroMessageEnfant1");
 
-                    b.Property<int?>("NumeroMessageEnfant2");
+                    b.Property<int>("NumeroMessageEnfant2");
 
-                    b.Property<int?>("NumeroMessageEnfant3");
+                    b.Property<int>("NumeroMessageEnfant3");
+
+                    b.Property<int>("NumeroMessageParent");
 
                     b.Property<string>("Titre")
                         .IsRequired()

@@ -11,9 +11,10 @@ using System;
 namespace SolutionPersonnelleTemplate.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20180410185251_initmessage2")]
+    partial class initmessage2
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -219,17 +220,17 @@ namespace SolutionPersonnelleTemplate.Data.Migrations
 
                     b.Property<int>("HistoireID");
 
-                    b.Property<string>("MessageEnfant1");
+                    b.Property<int>("MessageEnfant1");
 
-                    b.Property<string>("MessageEnfant2");
+                    b.Property<int>("MessageEnfant2");
 
-                    b.Property<string>("MessageEnfant3");
+                    b.Property<int>("MessageEnfant3");
 
-                    b.Property<int?>("NumeroMessageEnfant1");
+                    b.Property<int>("NumeroMessageEnfant1");
 
-                    b.Property<int?>("NumeroMessageEnfant2");
+                    b.Property<int>("NumeroMessageEnfant2");
 
-                    b.Property<int?>("NumeroMessageEnfant3");
+                    b.Property<int>("NumeroMessageEnfant3");
 
                     b.Property<string>("Titre")
                         .IsRequired()
