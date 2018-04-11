@@ -48,8 +48,8 @@ namespace SolutionPersonnelleTemplate.Controllers
         // GET: toto/Create
         public IActionResult Create()
         {
-            // ViewData["HistoireID"] = new SelectList(_context.Histoires, "HistoireID", "Titre");
-            ViewBag.JobTitle = new SelectList(_context.Histoires, "HistoireID", "Titre");
+             ViewData["HistoireID"] = new SelectList(_context.Histoires, "HistoireID", "Titre");
+           // ViewBag.JobTitle = new SelectList(_context.Histoires, "HistoireID", "Titre");
 
             return View();
         }
