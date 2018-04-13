@@ -19,20 +19,23 @@ namespace SolutionPersonnelleTemplate.Models.BO
         public string UrlMedia { get; internal set; }
 
         //liens vers les 3 actions messages possibles
-        [Display(Name = "Libellé du message")]
-        public string MessageEnfant1 { get; set; }
-        [Display(Name = "N° du message")]
+        //1
+        [Display(Name = "N° du message 1")]
         public int? NumeroMessageEnfant1 { get; set; }
+        [Display(Name = "Nom de l'action 1")]
+        public string NomAction1 { get; set; }
 
-        [Display(Name = "Libellé du message")]
-        public string MessageEnfant2 { get; set; }
-        [Display(Name = "N° du message")]
+        //2
+        [Display(Name = "N° du message 2")]
         public int? NumeroMessageEnfant2 { get; set; }
+        [Display(Name = "Nom de l'action 2")]
+        public string NomAction2 { get; set; }
 
-        [Display(Name = "Libellé du message")]
-        public string MessageEnfant3 { get; set; }
-        [Display(Name = "N° du message")]
+        //3
+        [Display(Name = "N° du message 3")]
         public int? NumeroMessageEnfant3 { get; set; }
+        [Display(Name = "Nom de l'action 3")]
+        public string NomAction3 { get; set; }
 
         //fk
         public int HistoireID { get; set; }

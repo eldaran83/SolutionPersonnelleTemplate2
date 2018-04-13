@@ -8,11 +8,11 @@ using Microsoft.EntityFrameworkCore.Storage.Internal;
 using SolutionPersonnelleTemplate.Data;
 using System;
 
-namespace SolutionPersonnelleTemplate.Data.Migrations
+namespace SolutionPersonnelleTemplate.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20180408132921_addMediaMessage")]
-    partial class addMediaMessage
+    [Migration("20180413191803_NewInitBDD")]
+    partial class NewInitBDD
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -219,6 +219,12 @@ namespace SolutionPersonnelleTemplate.Data.Migrations
                         .IsRequired();
 
                     b.Property<int>("HistoireID");
+
+                    b.Property<int?>("NumeroMessageEnfant1");
+
+                    b.Property<int?>("NumeroMessageEnfant2");
+
+                    b.Property<int?>("NumeroMessageEnfant3");
 
                     b.Property<string>("Titre")
                         .IsRequired()

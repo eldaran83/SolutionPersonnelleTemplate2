@@ -8,11 +8,11 @@ using Microsoft.EntityFrameworkCore.Storage.Internal;
 using SolutionPersonnelleTemplate.Data;
 using System;
 
-namespace SolutionPersonnelleTemplate.Data.Migrations
+namespace SolutionPersonnelleTemplate.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20180408110354_AddPropHistoire")]
-    partial class AddPropHistoire
+    [Migration("20180413195509_ADDPropMessage")]
+    partial class ADDPropMessage
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -189,11 +189,15 @@ namespace SolutionPersonnelleTemplate.Data.Migrations
 
                     b.Property<int>("NombreDeFoisJouee");
 
-                    b.Property<string>("Resume");
-
                     b.Property<int>("Score");
 
-                    b.Property<string>("Titre");
+                    b.Property<string>("Synopsis")
+                        .IsRequired()
+                        .HasMaxLength(600);
+
+                    b.Property<string>("Titre")
+                        .IsRequired()
+                        .HasMaxLength(80);
 
                     b.Property<string>("UrlMedia");
 
@@ -211,11 +215,28 @@ namespace SolutionPersonnelleTemplate.Data.Migrations
                     b.Property<int>("MessageID")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<string>("Contenu");
+                    b.Property<string>("Contenu")
+                        .IsRequired();
 
                     b.Property<int>("HistoireID");
 
-                    b.Property<string>("Titre");
+                    b.Property<string>("NomAction1");
+
+                    b.Property<string>("NomAction2");
+
+                    b.Property<string>("NomAction3");
+
+                    b.Property<int?>("NumeroMessageEnfant1");
+
+                    b.Property<int?>("NumeroMessageEnfant2");
+
+                    b.Property<int?>("NumeroMessageEnfant3");
+
+                    b.Property<string>("Titre")
+                        .IsRequired()
+                        .HasMaxLength(80);
+
+                    b.Property<string>("UrlMedia");
 
                     b.HasKey("MessageID");
 

@@ -11,8 +11,8 @@ using System;
 namespace SolutionPersonnelleTemplate.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20180402124228_changehistoire")]
-    partial class changehistoire
+    [Migration("20180412194433_deleteMessageALL")]
+    partial class deleteMessageALL
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -185,35 +185,29 @@ namespace SolutionPersonnelleTemplate.Data.Migrations
                     b.Property<int>("HistoireID")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<string>("ApplicationUserID");
+                    b.Property<string>("Createur");
 
                     b.Property<int>("NombreDeFoisJouee");
 
                     b.Property<int>("Score");
 
-                    b.Property<string>("Titre");
+                    b.Property<string>("Synopsis")
+                        .IsRequired()
+                        .HasMaxLength(600);
+
+                    b.Property<string>("Titre")
+                        .IsRequired()
+                        .HasMaxLength(80);
+
+                    b.Property<string>("UrlMedia");
+
+                    b.Property<string>("UtilisateurID");
 
                     b.HasKey("HistoireID");
 
+                    b.HasIndex("UtilisateurID");
+
                     b.ToTable("Histoires");
-                });
-
-            modelBuilder.Entity("SolutionPersonnelleTemplate.Models.BO.Message", b =>
-                {
-                    b.Property<int>("MessageID")
-                        .ValueGeneratedOnAdd();
-
-                    b.Property<string>("Contenu");
-
-                    b.Property<int>("HistoireID");
-
-                    b.Property<string>("Titre");
-
-                    b.HasKey("MessageID");
-
-                    b.HasIndex("HistoireID");
-
-                    b.ToTable("Messages");
                 });
 
             modelBuilder.Entity("SolutionPersonnelleTemplate.Models.BO.Partie", b =>
@@ -248,8 +242,6 @@ namespace SolutionPersonnelleTemplate.Data.Migrations
 
                     b.Property<string>("Email");
 
-                    b.Property<int?>("HistoireID");
-
                     b.Property<bool>("ProfilUtilisateurComplet");
 
                     b.Property<string>("Pseudo");
@@ -259,8 +251,6 @@ namespace SolutionPersonnelleTemplate.Data.Migrations
                     b.Property<string>("UrlAvatarImage");
 
                     b.HasKey("ApplicationUserID");
-
-                    b.HasIndex("HistoireID");
 
                     b.ToTable("Utilisateurs");
                 });
@@ -310,12 +300,11 @@ namespace SolutionPersonnelleTemplate.Data.Migrations
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 
-            modelBuilder.Entity("SolutionPersonnelleTemplate.Models.BO.Message", b =>
+            modelBuilder.Entity("SolutionPersonnelleTemplate.Models.BO.Histoire", b =>
                 {
-                    b.HasOne("SolutionPersonnelleTemplate.Models.BO.Histoire", "Histoire")
-                        .WithMany("Messages")
-                        .HasForeignKey("HistoireID")
-                        .OnDelete(DeleteBehavior.Cascade);
+                    b.HasOne("SolutionPersonnelleTemplate.Models.BO.Utilisateur", "Utilisateur")
+                        .WithMany()
+                        .HasForeignKey("UtilisateurID");
                 });
 
             modelBuilder.Entity("SolutionPersonnelleTemplate.Models.BO.Partie", b =>
@@ -336,10 +325,6 @@ namespace SolutionPersonnelleTemplate.Data.Migrations
                         .WithOne("Utilisateur")
                         .HasForeignKey("SolutionPersonnelleTemplate.Models.BO.Utilisateur", "ApplicationUserID")
                         .OnDelete(DeleteBehavior.Cascade);
-
-                    b.HasOne("SolutionPersonnelleTemplate.Models.BO.Histoire")
-                        .WithMany("Utilisateurs")
-                        .HasForeignKey("HistoireID");
                 });
 #pragma warning restore 612, 618
         }

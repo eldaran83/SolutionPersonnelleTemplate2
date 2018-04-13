@@ -8,13 +8,12 @@ using Microsoft.EntityFrameworkCore.Storage.Internal;
 using SolutionPersonnelleTemplate.Data;
 using System;
 
-namespace SolutionPersonnelleTemplate.Data.Migrations
+namespace SolutionPersonnelleTemplate.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20180410185251_initmessage2")]
-    partial class initmessage2
+    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
     {
-        protected override void BuildTargetModel(ModelBuilder modelBuilder)
+        protected override void BuildModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -220,17 +219,17 @@ namespace SolutionPersonnelleTemplate.Data.Migrations
 
                     b.Property<int>("HistoireID");
 
-                    b.Property<int>("MessageEnfant1");
+                    b.Property<string>("NomAction1");
 
-                    b.Property<int>("MessageEnfant2");
+                    b.Property<string>("NomAction2");
 
-                    b.Property<int>("MessageEnfant3");
+                    b.Property<string>("NomAction3");
 
-                    b.Property<int>("NumeroMessageEnfant1");
+                    b.Property<int?>("NumeroMessageEnfant1");
 
-                    b.Property<int>("NumeroMessageEnfant2");
+                    b.Property<int?>("NumeroMessageEnfant2");
 
-                    b.Property<int>("NumeroMessageEnfant3");
+                    b.Property<int?>("NumeroMessageEnfant3");
 
                     b.Property<string>("Titre")
                         .IsRequired()

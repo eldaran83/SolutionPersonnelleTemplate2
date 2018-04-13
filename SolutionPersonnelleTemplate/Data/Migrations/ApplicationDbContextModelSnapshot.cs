@@ -209,41 +209,6 @@ namespace SolutionPersonnelleTemplate.Data.Migrations
                     b.ToTable("Histoires");
                 });
 
-            modelBuilder.Entity("SolutionPersonnelleTemplate.Models.BO.Message", b =>
-                {
-                    b.Property<int>("MessageID")
-                        .ValueGeneratedOnAdd();
-
-                    b.Property<string>("Contenu")
-                        .IsRequired();
-
-                    b.Property<int>("HistoireID");
-
-                    b.Property<string>("MessageEnfant1");
-
-                    b.Property<string>("MessageEnfant2");
-
-                    b.Property<string>("MessageEnfant3");
-
-                    b.Property<int?>("NumeroMessageEnfant1");
-
-                    b.Property<int?>("NumeroMessageEnfant2");
-
-                    b.Property<int?>("NumeroMessageEnfant3");
-
-                    b.Property<string>("Titre")
-                        .IsRequired()
-                        .HasMaxLength(80);
-
-                    b.Property<string>("UrlMedia");
-
-                    b.HasKey("MessageID");
-
-                    b.HasIndex("HistoireID");
-
-                    b.ToTable("Messages");
-                });
-
             modelBuilder.Entity("SolutionPersonnelleTemplate.Models.BO.Partie", b =>
                 {
                     b.Property<int>("PartieID")
@@ -339,14 +304,6 @@ namespace SolutionPersonnelleTemplate.Data.Migrations
                     b.HasOne("SolutionPersonnelleTemplate.Models.BO.Utilisateur", "Utilisateur")
                         .WithMany()
                         .HasForeignKey("UtilisateurID");
-                });
-
-            modelBuilder.Entity("SolutionPersonnelleTemplate.Models.BO.Message", b =>
-                {
-                    b.HasOne("SolutionPersonnelleTemplate.Models.BO.Histoire", "Histoire")
-                        .WithMany("Messages")
-                        .HasForeignKey("HistoireID")
-                        .OnDelete(DeleteBehavior.Cascade);
                 });
 
             modelBuilder.Entity("SolutionPersonnelleTemplate.Models.BO.Partie", b =>

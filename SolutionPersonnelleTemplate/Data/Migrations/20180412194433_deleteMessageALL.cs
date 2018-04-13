@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 namespace SolutionPersonnelleTemplate.Data.Migrations
 {
-    public partial class AddBOLogic : Migration
+    public partial class deleteMessageALL : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {

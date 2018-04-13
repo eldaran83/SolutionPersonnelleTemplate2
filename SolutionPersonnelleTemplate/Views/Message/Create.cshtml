@@ -13,11 +13,11 @@
         <form asp-action="Create" enctype="multipart/form-data" method="post">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
+                <label asp-for="Message.Titre" class="control-label"></label>
                 @if (ViewBag.error != null)
-        {
+    {
             <p class="alert-danger">@ViewBag.error</p>
 }
-                <label asp-for="Message.Titre" class="control-label"></label>
                 <input asp-for="Message.Titre" class="form-control" />
                 <span asp-validation-for="Message.Titre" class="text-danger"></span>
             </div>
@@ -26,76 +26,62 @@
                 <textarea asp-for="Message.Contenu" cols="80" rows="10" class="form-control"></textarea>
                 <span asp-validation-for="Message.Contenu" class="text-danger"></span>
             </div>
+
             <div class="form-group">
-                @{ 
-                    if (ViewBag.NumeroMessageEnfant1 != "")
-                    {
-                        <p class="alert-danger">@ViewBag.NumeroMessageEnfant1</p>
-                    }
-                }
                 <label asp-for="Message.NumeroMessageEnfant1" class="control-label"></label>
-                <input asp-for="Message.NumeroMessageEnfant1" class="form-control" />
-                <span asp-validation-for="Message.NumeroMessageEnfant1" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                @{
-        if (ViewBag.MessageEnfant1 != "")
-        {
-            <p class="alert-danger">@ViewBag.MessageEnfant1</p>
+                @if (ViewBag.errorNumeroAction1 != null)
+    {
+            <p class="alert-danger">@ViewBag.errorNumeroAction1</p>
 }
-                }
-                <label asp-for="Message.MessageEnfant1" class="control-label"></label>
-                <input asp-for="Message.MessageEnfant1" class="form-control" />
-                <span asp-validation-for="Message.MessageEnfant1" class="text-danger"></span>
+                <select asp-for="Message.NumeroMessageEnfant1" class="form-control" asp-items="ViewBag.NumeroMessageEnfant1"></select>
             </div>
 
-
             <div class="form-group">
-                @{
-        if (ViewBag.NumeroMessageEnfant2 != "")
-        {
-            <p class="alert-danger">@ViewBag.NumeroMessageEnfant2</p>
+                <label asp-for="Message.NomAction1" class="control-label"></label>
+                @if (ViewBag.errorNomAction1 != null)
+    {
+            <p class="alert-danger">@ViewBag.errorNomAction1</p>
 }
-                }
+                <input asp-for="Message.NomAction1" class="form-control" />
+                <span asp-validation-for="Message.NomAction1" class="text-danger"></span>
+            </div>
+            <div class="form-group">
                 <label asp-for="Message.NumeroMessageEnfant2" class="control-label"></label>
-                <input asp-for="Message.NumeroMessageEnfant2" class="form-control" />
-                <span asp-validation-for="Message.NumeroMessageEnfant2" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                @{
-        if (ViewBag.MessageEnfant2 != "")
-        {
-            <p class="alert-danger">@ViewBag.MessageEnfant2</p>
+                @if (ViewBag.errorNumeroAction2 != null)
+    {
+            <p class="alert-danger">@ViewBag.errorNumeroAction2</p>
 }
-                }
-                <label asp-for="Message.MessageEnfant2" class="control-label"></label>
-                <input asp-for="Message.MessageEnfant2" class="form-control" />
-                <span asp-validation-for="Message.MessageEnfant2" class="text-danger"></span>
+                <select asp-for="Message.NumeroMessageEnfant2" class="form-control" asp-items="ViewBag.NumeroMessageEnfant2"></select>
             </div>
 
-
             <div class="form-group">
-                @{
-        if (ViewBag.NumeroMessageEnfant3 != "")
-        {
-            <p class="alert-danger">@ViewBag.NumeroMessageEnfant3</p>
+                <label asp-for="Message.NomAction2" class="control-label"></label>
+                @if (ViewBag.errorNomAction2 != null)
+    {
+            <p class="alert-danger">@ViewBag.errorNomAction2</p>
 }
-                }
+                <input asp-for="Message.NomAction2" class="form-control" />
+                <span asp-validation-for="Message.NomAction2" class="text-danger"></span>
+            </div>
+            <div class="form-group">
                 <label asp-for="Message.NumeroMessageEnfant3" class="control-label"></label>
-                <input asp-for="Message.NumeroMessageEnfant3" class="form-control" />
-                <span asp-validation-for="Message.NumeroMessageEnfant3" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                @{
-        if (ViewBag.MessageEnfant3 != "")
-        {
-            <p class="alert-danger">@ViewBag.MessageEnfant3</p>
+                @if (ViewBag.errorNumeroAction3 != null)
+    {
+            <p class="alert-danger">@ViewBag.errorNumeroAction3</p>
 }
-                }
-                <label asp-for="Message.MessageEnfant3" class="control-label"></label>
-                <input asp-for="Message.MessageEnfant3" class="form-control" />
-                <span asp-validation-for="Message.MessageEnfant3" class="text-danger"></span>
+                <select asp-for="Message.NumeroMessageEnfant3" class="form-control" asp-items="ViewBag.NumeroMessageEnfant3"></select>
             </div>
+
+            <div class="form-group">
+                <label asp-for="Message.NomAction3" class="control-label"></label>
+                @if (ViewBag.errorNomAction3 != null)
+    {
+            <p class="alert-danger">@ViewBag.errorNomAction3</p>
+}
+                <input asp-for="Message.NomAction3" class="form-control" />
+                <span asp-validation-for="Message.NomAction3" class="text-danger"></span>
+            </div>
+
             @*Pour l image changer d'image avatar*@
             <div class="form-group">
                 @if (@ViewBag.errorFichier != "")

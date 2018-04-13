@@ -74,9 +74,27 @@ namespace SolutionPersonnelleTemplate.Controllers.LogicWebSite
             return View(message);
         }
 
+     
         // GET: Message/Create
-        public IActionResult Create(int histoireID)
+        public async Task<IActionResult> Create(int histoireID)
         {
+          var dropDownListActions= await  _messageRepository.GetAllMessageOfStoryAsync(Convert.ToInt16(histoireID));
+
+            if (dropDownListActions == null)
+            {
+                Message leMessageDeSelection = new Message
+                {
+                    MessageID = 1,
+                    Titre = "--Sélectionnez une action--",
+                    Contenu = "Vous avez la possibilité de choisir une action que pourra effectuer le héros au cours de l'aventure",
+                    HistoireID = histoireID
+                };
+               await _messageRepository.NouveauMessage(leMessageDeSelection);
+            }
+            ViewBag.NumeroMessageEnfant1 = new SelectList(dropDownListActions, "MessageID", "Titre");
+            ViewBag.NumeroMessageEnfant2 = new SelectList(dropDownListActions, "MessageID", "Titre");
+            ViewBag.NumeroMessageEnfant3 = new SelectList(dropDownListActions, "MessageID", "Titre");
+
             ViewData["HistoireID"] = histoireID;
             return View();
         }
@@ -88,81 +106,89 @@ namespace SolutionPersonnelleTemplate.Controllers.LogicWebSite
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(MessageViewModel messageVM_Modele)
         {
+            var dropDownListActions = await _messageRepository.GetAllMessageOfStoryAsync(Convert.ToInt16(messageVM_Modele.Message.HistoireID));
+
             if (await _messageRepository.messageTitreExistDansCetteHistoire(messageVM_Modele.Message.Titre, messageVM_Modele.Message.HistoireID))
             {
+                ViewBag.NumeroMessageEnfant1 = new SelectList(dropDownListActions, "MessageID", "Titre");
+                ViewBag.NumeroMessageEnfant2 = new SelectList(dropDownListActions, "MessageID", "Titre");
+                ViewBag.NumeroMessageEnfant3 = new SelectList(dropDownListActions, "MessageID", "Titre");
                 ViewBag.error = "Ce titre de message est déjà utilisé dans cette histoire";
                 ViewData["HistoireID"] = messageVM_Modele.Message.HistoireID;
                 return View(messageVM_Modele);
             }
 
-            //logic des liens vers les autres messages 
-
-            //pour le lien1
-            if (messageVM_Modele.Message.NumeroMessageEnfant1 != null && messageVM_Modele.Message.NumeroMessageEnfant1 >0)
+            //Logic Liens Actions Messages
+            bool erreurLiensActionsMessage = false; 
+            //1
+            if (messageVM_Modele.Message.NumeroMessageEnfant1 != 1) // un N° message a été saisi dans la dropdownList autre que l'id 1 qui est celui par défaut
             {
-                if (messageVM_Modele.Message.MessageEnfant1 == null)
+                if (messageVM_Modele.Message.NomAction1 == null)// vérifie qu'un message pour l action a été saisi
                 {
-                    ViewBag.MessageEnfant1 = "vous avez renseigné un N° de destination sans renseigner un titre pour celui-ci";
-                    ViewData["HistoireID"] = messageVM_Modele.Message.HistoireID;
-                    return View(messageVM_Modele);
+                    ViewBag.errorNomAction1 = "Vous avez choisi un message d'action sans avoir donné un nom à cette action !";
+                    erreurLiensActionsMessage = true;
+                }
+
+            }
+            if (messageVM_Modele.Message.NomAction1 != null) // vérifie qu'un message pour l action a été saisi
+            {
+                if (messageVM_Modele.Message.NumeroMessageEnfant1 == 1) // un message a été saisi dans la dropdownList autre que l'id 1 qui est celui par défaut
+                {
+                    ViewBag.errorNumeroAction1 = "Vous avez rempli une action sans avoir choisi dans la liste un message de destination !";
+                    erreurLiensActionsMessage = true;
                 }
             }
 
-            if (messageVM_Modele.Message.MessageEnfant1 != null)
+            //2
+            if (messageVM_Modele.Message.NumeroMessageEnfant2 != 1) // un N° message a été saisi dans la dropdownList autre que l'id 1 qui est celui par défaut
             {
-                if (messageVM_Modele.Message.NumeroMessageEnfant1 == null )
+                if (messageVM_Modele.Message.NomAction2 == null)// vérifie qu'un message pour l action a été saisi
                 {
-                    ViewBag.NumeroMessageEnfant1 = "vous avez renseigné un libellé sans renseigner un N° pour celui-ci";
-                    ViewData["HistoireID"] = messageVM_Modele.Message.HistoireID;
-                    return View(messageVM_Modele);
+                    ViewBag.errorNomAction2 = "Vous avez choisi un message d'action sans avoir donné un nom à cette action !";
+                    erreurLiensActionsMessage = true;
+                }
+
+            }
+            if (messageVM_Modele.Message.NomAction2 != null) // vérifie qu'un message pour l action a été saisi
+            {
+                if (messageVM_Modele.Message.NumeroMessageEnfant2 == 1) // un message a été saisi dans la dropdownList autre que l'id 1 qui est celui par défaut
+                {
+                    ViewBag.errorNumeroAction2 = "Vous avez rempli une action sans avoir choisi dans la liste un message de destination !";
+                    erreurLiensActionsMessage = true;
+                }
+            }
+            //3
+            if (messageVM_Modele.Message.NumeroMessageEnfant3 != 1) // un N° message a été saisi dans la dropdownList autre que l'id 1 qui est celui par défaut
+            {
+                if (messageVM_Modele.Message.NomAction3 == null)// vérifie qu'un message pour l action a été saisi
+                {
+                    ViewBag.errorNomAction3 = "Vous avez choisi un message d'action sans avoir donné un nom à cette action !";
+                    erreurLiensActionsMessage = true;
+                }
+
+            }
+            if (messageVM_Modele.Message.NomAction3 != null) // vérifie qu'un message pour l action a été saisi
+            {
+                if (messageVM_Modele.Message.NumeroMessageEnfant3 == 1) // un message a été saisi dans la dropdownList autre que l'id 1 qui est celui par défaut
+                {
+                    ViewBag.errorNumeroAction3 = "Vous avez rempli une action sans avoir choisi dans la liste un message de destination !";
+                    erreurLiensActionsMessage = true;
                 }
             }
 
-            //pour le lien2
-            if (messageVM_Modele.Message.NumeroMessageEnfant2 != null && messageVM_Modele.Message.NumeroMessageEnfant2 > 0)
+            if (erreurLiensActionsMessage) // il y a un problème avec les liens d action dans le message créé
             {
-                if (messageVM_Modele.Message.MessageEnfant2 == null)
-                {
-                    ViewBag.MessageEnfant2 = "vous avez renseigné un N° de destination sans renseigner un titre pour celui-ci";
-                    ViewData["HistoireID"] = messageVM_Modele.Message.HistoireID;
-                    return View(messageVM_Modele);
-                }
-            }
-
-            if (messageVM_Modele.Message.MessageEnfant2 != null)
-            {
-                if (messageVM_Modele.Message.NumeroMessageEnfant2 == null )
-                {
-                    ViewBag.NumeroMessageEnfant2 = "vous avez renseigné un libellé sans renseigner un N° pour celui-ci";
-                    ViewData["HistoireID"] = messageVM_Modele.Message.HistoireID;
-                    return View(messageVM_Modele);
-                }
-            }
-
-
-            //pour le lien3
-            if (messageVM_Modele.Message.NumeroMessageEnfant3 != null && messageVM_Modele.Message.NumeroMessageEnfant3 > 0)
-            {
-                if (messageVM_Modele.Message.MessageEnfant3 == null)
-                {
-                    ViewBag.MessageEnfant3 = "vous avez renseigné un N° de destination sans renseigner un titre pour celui-ci";
-                    ViewData["HistoireID"] = messageVM_Modele.Message.HistoireID;
-                    return View(messageVM_Modele);
-                }
-            }
-
-            if (messageVM_Modele.Message.MessageEnfant3 != null)
-            {
-                if (messageVM_Modele.Message.NumeroMessageEnfant3 == null)
-                {
-                    ViewBag.NumeroMessageEnfant3 = "vous avez renseigné un libellé sans renseigner un N° pour celui-ci";
-                    ViewData["HistoireID"] = messageVM_Modele.Message.HistoireID;
-                    return View(messageVM_Modele);
-                }
+                //logic des liens vers les autres messages 
+                 ViewBag.NumeroMessageEnfant1 = new SelectList(dropDownListActions, "MessageID", "Titre");
+                ViewBag.NumeroMessageEnfant2 = new SelectList(dropDownListActions, "MessageID", "Titre");
+                ViewBag.NumeroMessageEnfant3 = new SelectList(dropDownListActions, "MessageID", "Titre");
+                ViewData["HistoireID"] = messageVM_Modele.Message.HistoireID;
+                return View(messageVM_Modele);
             }
 
             if (ModelState.IsValid)
             {
+                
                 Message leNouveauMessage = await _messageRepository.NouveauMessage(messageVM_Modele.Message);
 
                 //////////////////////////////////////////////////////////////////////////////////////////
@@ -228,7 +254,10 @@ namespace SolutionPersonnelleTemplate.Controllers.LogicWebSite
 
                 }));
             }
-
+            //logic des liens vers les autres messages 
+            ViewBag.NumeroMessageEnfant1 = new SelectList(dropDownListActions, "MessageID", "Titre");
+            ViewBag.NumeroMessageEnfant2 = new SelectList(dropDownListActions, "MessageID", "Titre");
+            ViewBag.NumeroMessageEnfant3 = new SelectList(dropDownListActions, "MessageID", "Titre");
             ViewData["HistoireID"] = messageVM_Modele.Message.HistoireID;
             return View(messageVM_Modele);
  
@@ -271,7 +300,11 @@ namespace SolutionPersonnelleTemplate.Controllers.LogicWebSite
                 Message = message,
                 Form = null
             };
-
+                        //logic des liens vers les autres messages 
+            var dropDownListActions = await _messageRepository.GetAllMessageOfStoryAsync(Convert.ToInt16(message.HistoireID));
+            ViewBag.NumeroMessageEnfant1 = new SelectList(dropDownListActions, "MessageID", "Titre", message.NumeroMessageEnfant1);
+            ViewBag.NumeroMessageEnfant2 = new SelectList(dropDownListActions, "MessageID", "Titre", message.NumeroMessageEnfant2);
+            ViewBag.NumeroMessageEnfant3 = new SelectList(dropDownListActions, "MessageID", "Titre", message.NumeroMessageEnfant3);
             ViewData["HistoireID"] = message.HistoireID;
             return View(messageVM);
         }
@@ -283,71 +316,83 @@ namespace SolutionPersonnelleTemplate.Controllers.LogicWebSite
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(MessageViewModel messageVM_Modele)
         {
-            //logic des liens vers les autres messages 
+            //il y avait deja une image et elle n a pas été changé
+            //var imageExistante = (from img in _context.Messages
+            //                      .Where(m => m.MessageID == messageVM_Modele.Message.MessageID)
+            //                      .Where(h=>h.HistoireID == messageVM_Modele.Message.HistoireID)
+            //                      select img.UrlMedia).FirstOrDefault().ToString();
 
-            //pour le lien1
-            if (messageVM_Modele.Message.NumeroMessageEnfant1 != null && messageVM_Modele.Message.NumeroMessageEnfant1 > 0)
+            //gestion des DDL pour le retour
+            var dropDownListActions = await _messageRepository.GetAllMessageOfStoryAsync(Convert.ToInt16(messageVM_Modele.Message.HistoireID));
+
+            //Logic Liens Actions Messages
+            bool erreurLiensActionsMessage = false;
+            //1
+            if (messageVM_Modele.Message.NumeroMessageEnfant1 != 1) // un N° message a été saisi dans la dropdownList autre que l'id 1 qui est celui par défaut
             {
-                if (messageVM_Modele.Message.MessageEnfant1 == null)
+                if (messageVM_Modele.Message.NomAction1 == null)// vérifie qu'un message pour l action a été saisi
                 {
-                    ViewBag.MessageEnfant1 = "vous avez renseigné un N° de destination sans renseigner un titre pour celui-ci";
-                    ViewData["HistoireID"] = messageVM_Modele.Message.HistoireID;
-                    return View(messageVM_Modele);
+                    ViewBag.errorNomAction1 = "Vous avez choisi un message d'action sans avoir donné un nom à cette action !";
+                    erreurLiensActionsMessage = true;
+                }
+
+            }
+            if (messageVM_Modele.Message.NomAction1 != null) // vérifie qu'un message pour l action a été saisi
+            {
+                if (messageVM_Modele.Message.NumeroMessageEnfant1 == 1) // un message a été saisi dans la dropdownList autre que l'id 1 qui est celui par défaut
+                {
+                    ViewBag.errorNumeroAction1 = "Vous avez rempli une action sans avoir choisi dans la liste un message de destination !";
+                    erreurLiensActionsMessage = true;
                 }
             }
 
-            if (messageVM_Modele.Message.MessageEnfant1 != null)
+            //2
+            if (messageVM_Modele.Message.NumeroMessageEnfant2 != 1) // un N° message a été saisi dans la dropdownList autre que l'id 1 qui est celui par défaut
             {
-                if (messageVM_Modele.Message.NumeroMessageEnfant1 == null)
+                if (messageVM_Modele.Message.NomAction2 == null)// vérifie qu'un message pour l action a été saisi
                 {
-                    ViewBag.NumeroMessageEnfant1 = "vous avez renseigné un libellé sans renseigner un N° pour celui-ci";
-                    ViewData["HistoireID"] = messageVM_Modele.Message.HistoireID;
-                    return View(messageVM_Modele);
+                    ViewBag.errorNomAction2 = "Vous avez choisi un message d'action sans avoir donné un nom à cette action !";
+                    erreurLiensActionsMessage = true;
+                }
+
+            }
+            if (messageVM_Modele.Message.NomAction2 != null) // vérifie qu'un message pour l action a été saisi
+            {
+                if (messageVM_Modele.Message.NumeroMessageEnfant2 == 1) // un message a été saisi dans la dropdownList autre que l'id 1 qui est celui par défaut
+                {
+                    ViewBag.errorNumeroAction2 = "Vous avez rempli une action sans avoir choisi dans la liste un message de destination !";
+                    erreurLiensActionsMessage = true;
+                }
+            }
+            //3
+            if (messageVM_Modele.Message.NumeroMessageEnfant3 != 1) // un N° message a été saisi dans la dropdownList autre que l'id 1 qui est celui par défaut
+            {
+                if (messageVM_Modele.Message.NomAction3 == null)// vérifie qu'un message pour l action a été saisi
+                {
+                    ViewBag.errorNomAction3 = "Vous avez choisi un message d'action sans avoir donné un nom à cette action !";
+                    erreurLiensActionsMessage = true;
+                }
+
+            }
+            if (messageVM_Modele.Message.NomAction3 != null) // vérifie qu'un message pour l action a été saisi
+            {
+                if (messageVM_Modele.Message.NumeroMessageEnfant3 == 1) // un message a été saisi dans la dropdownList autre que l'id 1 qui est celui par défaut
+                {
+                    ViewBag.errorNumeroAction3 = "Vous avez rempli une action sans avoir choisi dans la liste un message de destination !";
+                    erreurLiensActionsMessage = true;
                 }
             }
 
-            //pour le lien2
-            if (messageVM_Modele.Message.NumeroMessageEnfant2 != null && messageVM_Modele.Message.NumeroMessageEnfant2 > 0)
+            if (erreurLiensActionsMessage) // il y a un problème avec les liens d action dans le message créé
             {
-                if (messageVM_Modele.Message.MessageEnfant2 == null)
-                {
-                    ViewBag.MessageEnfant2 = "vous avez renseigné un N° de destination sans renseigner un titre pour celui-ci";
-                    ViewData["HistoireID"] = messageVM_Modele.Message.HistoireID;
-                    return View(messageVM_Modele);
-                }
+                //logic des liens vers les autres messages 
+                ViewBag.NumeroMessageEnfant1 = new SelectList(dropDownListActions, "MessageID", "Titre", messageVM_Modele.Message.NumeroMessageEnfant1);
+                ViewBag.NumeroMessageEnfant2 = new SelectList(dropDownListActions, "MessageID", "Titre", messageVM_Modele.Message.NumeroMessageEnfant2);
+                ViewBag.NumeroMessageEnfant3 = new SelectList(dropDownListActions, "MessageID", "Titre", messageVM_Modele.Message.NumeroMessageEnfant3);
+                ViewData["HistoireID"] = messageVM_Modele.Message.HistoireID;
+                return View(messageVM_Modele);
             }
 
-            if (messageVM_Modele.Message.MessageEnfant2 != null)
-            {
-                if (messageVM_Modele.Message.NumeroMessageEnfant2 == null)
-                {
-                    ViewBag.NumeroMessageEnfant2 = "vous avez renseigné un libellé sans renseigner un N° pour celui-ci";
-                    ViewData["HistoireID"] = messageVM_Modele.Message.HistoireID;
-                    return View(messageVM_Modele);
-                }
-            }
-
-
-            //pour le lien3
-            if (messageVM_Modele.Message.NumeroMessageEnfant3 != null && messageVM_Modele.Message.NumeroMessageEnfant3 > 0)
-            {
-                if (messageVM_Modele.Message.MessageEnfant3 == null)
-                {
-                    ViewBag.MessageEnfant3 = "vous avez renseigné un N° de destination sans renseigner un titre pour celui-ci";
-                    ViewData["HistoireID"] = messageVM_Modele.Message.HistoireID;
-                    return View(messageVM_Modele);
-                }
-            }
-
-            if (messageVM_Modele.Message.MessageEnfant3 != null)
-            {
-                if (messageVM_Modele.Message.NumeroMessageEnfant3 == null)
-                {
-                    ViewBag.NumeroMessageEnfant3 = "vous avez renseigné un libellé sans renseigner un N° pour celui-ci";
-                    ViewData["HistoireID"] = messageVM_Modele.Message.HistoireID;
-                    return View(messageVM_Modele);
-                }
-            }
 
             if (ModelState.IsValid)
             {
@@ -402,6 +447,9 @@ namespace SolutionPersonnelleTemplate.Controllers.LogicWebSite
 
                 }));
                 }
+
+                //réassigne l url deja présente
+              //  messageVM_Modele.Message.UrlMedia = imageExistante;
 
                 await _messageRepository.UpdateMessage(messageVM_Modele.Message);
 

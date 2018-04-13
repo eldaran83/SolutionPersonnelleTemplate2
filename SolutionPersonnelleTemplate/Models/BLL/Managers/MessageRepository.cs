@@ -91,11 +91,11 @@ namespace SolutionPersonnelleTemplate.Models.BLL.Managers
                 Contenu = messageModele.Contenu,
                 HistoireID = messageModele.HistoireID,
                 NumeroMessageEnfant1 = messageModele.NumeroMessageEnfant1,
-                MessageEnfant1 = messageModele.MessageEnfant1,
+                NomAction1 = messageModele.NomAction1,
                 NumeroMessageEnfant2 = messageModele.NumeroMessageEnfant2,
-                MessageEnfant2 = messageModele.MessageEnfant2,
+                NomAction2 = messageModele.NomAction2,
                 NumeroMessageEnfant3 = messageModele.NumeroMessageEnfant3,
-                MessageEnfant3 = messageModele.MessageEnfant3,
+                NomAction3 = messageModele.NomAction3,
                 UrlMedia = "/images/message-media-default.jpg"
             };
             _context.Messages.Add(messageAAjouter);
