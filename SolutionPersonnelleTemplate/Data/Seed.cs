@@ -2,6 +2,7 @@
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using SolutionPersonnelleTemplate.Models;
+using SolutionPersonnelleTemplate.Models.BO;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,7 +12,6 @@ namespace SolutionPersonnelleTemplate.Data
 {
     public class Seed
     {
-
         /// <summary>
         /// créer les roles de l application 
         /// "Administrateur", "Manager", "Membre"

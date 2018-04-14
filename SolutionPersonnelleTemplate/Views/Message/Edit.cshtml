@@ -1,4 +1,4 @@
-﻿@model SolutionPersonnelleTemplate.Models.ViewModels.MessageViewModel
+﻿@model SolutionPersonnelleTemplate.Models.BO.Message
 
 @{
     ViewData["Title"] = "Edit";
@@ -10,69 +10,23 @@
 <hr />
 <div class="row">
     <div class="col-md-4">
-        <form asp-action="Edit">
+        <form asp-action="Edit" method="post" enctype="multipart/form-data">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div class="form-group">
-                <label asp-for="Message.MessageID" class="control-label"></label>
-                <input asp-for="Message.MessageID" class="form-control" />
-                <span asp-validation-for="Message.MessageID" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Message.Titre" class="control-label"></label>
-                <input asp-for="Message.Titre" class="form-control" />
-                <span asp-validation-for="Message.Titre" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Message.Contenu" class="control-label"></label>
-                <input asp-for="Message.Contenu" class="form-control" />
-                <span asp-validation-for="Message.Contenu" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Message.UrlMedia" class="control-label"></label>
-                <input asp-for="Message.UrlMedia" class="form-control" />
-                <span asp-validation-for="Message.UrlMedia" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Message.NumeroMessageEnfant1" class="control-label"></label>
-                <input asp-for="Message.NumeroMessageEnfant1" class="form-control" />
-                <span asp-validation-for="Message.NumeroMessageEnfant1" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Message.NomAction1" class="control-label"></label>
-                <input asp-for="Message.NomAction1" class="form-control" />
-                <span asp-validation-for="Message.NomAction1" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Message.NumeroMessageEnfant2" class="control-label"></label>
-                <input asp-for="Message.NumeroMessageEnfant2" class="form-control" />
-                <span asp-validation-for="Message.NumeroMessageEnfant2" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Message.NomAction2" class="control-label"></label>
-                <input asp-for="Message.NomAction2" class="form-control" />
-                <span asp-validation-for="Message.NomAction2" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Message.NumeroMessageEnfant3" class="control-label"></label>
-                <input asp-for="Message.NumeroMessageEnfant3" class="form-control" />
-                <span asp-validation-for="Message.NumeroMessageEnfant3" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Message.NomAction3" class="control-label"></label>
-                <input asp-for="Message.NomAction3" class="form-control" />
-                <span asp-validation-for="Message.NomAction3" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Message.HistoireID" class="control-label"></label>
-                <input asp-for="Message.HistoireID" class="form-control" />
-                <span asp-validation-for="Message.HistoireID" class="text-danger"></span>
-            </div>
 
-
+            <div class="form-group">
+                <label asp-for="@Model.Titre" class="control-label"></label>
+                <input asp-for="Titre" class="form-control" />
+                <span asp-validation-for="Titre" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Contenu" class="control-label"></label>
+                <input asp-for="Contenu" class="form-control" />
+                <span asp-validation-for="Contenu" class="text-danger"></span>
+            </div>
             <div class="form-group">
                 @*Pour l image*@
                 <label class="control-label">Image de garde</label><br />
-                <input id="Histoire.UrlMedia" name="Histoire.UrlMedia" value="@ViewBag.ImgPath" type="hidden" />
+                <input id="@Model.UrlMedia" name="@Model.UrlMedia" value="@ViewBag.ImgPath" type="hidden" />
                 <img src="@ViewBag.ImgPath" class="img-responsive" /><br />
             </div>
             @*Pour l image changer d'image avatar*@
@@ -86,16 +40,84 @@
             </div>
 
 
+            <div class="form-group">
+                <label asp-for="NumeroMessageEnfant1" class="control-label"></label>
+                @{
+            if (ViewBag.errorNumeroAction1 != "")
+            {
+                <p class="alert-danger">@ViewBag.errorNumeroAction1</p>
+    }
+                }
+                <select asp-for="NumeroMessageEnfant1" class="form-control" asp-items="ViewBag.NumeroMessageEnfant1"></select>
+                <span asp-validation-for="NumeroMessageEnfant1" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="NomAction1" class="control-label"></label>
+                @{
+            if (ViewBag.errorNomAction1 != "")
+            {
+                <p class="alert-danger">@ViewBag.errorNomAction1</p>
+    }
+                }
+                <input asp-for="NomAction1" class="form-control" />
+                <span asp-validation-for="NomAction1" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="NumeroMessageEnfant2" class="control-label"></label>
+                @{
+            if (ViewBag.errorNumeroAction2 != "")
+            {
+                <p class="alert-danger">@ViewBag.errorNumeroAction2</p>
+    }
+                }
+                <select asp-for="NumeroMessageEnfant2" class="form-control" asp-items="ViewBag.NumeroMessageEnfant2"></select>
+                <span asp-validation-for="NumeroMessageEnfant2" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="NomAction2" class="control-label"></label>
+                @{
+            if (ViewBag.errorNomAction2 != "")
+            {
+                <p class="alert-danger">@ViewBag.errorNomAction2</p>
+    }
+                }
+                <input asp-for="NomAction2" class="form-control" />
+                <span asp-validation-for="NomAction2" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="NumeroMessageEnfant3" class="control-label"></label>
+                @{
+            if (ViewBag.errorNumeroAction3 != "")
+            {
+                <p class="alert-danger">@ViewBag.errorNumeroAction3</p>
+    }
+                }
+                <select asp-for="NumeroMessageEnfant3" class="form-control" asp-items="ViewBag.NumeroMessageEnfant3"></select>
+                <span asp-validation-for="NumeroMessageEnfant3" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="NomAction3" class="control-label"></label>
+                @{
+            if (ViewBag.errorNomAction3 != "")
+            {
+                <p class="alert-danger">@ViewBag.errorNomAction3</p>
+    }
+                }
+                <input asp-for="NomAction3" class="form-control" />
+                <span asp-validation-for="NomAction3" class="text-danger"></span>
+            </div>
 
             <div class="form-group">
-                <input type="submit" value="Save" class="btn btn-default" />
+                <input asp-for="HistoireID" type="hidden" />
+                <input asp-for="MessageID" class="form-control" type="hidden" />
+                <input type="submit" value="Mettre à jour" class="btn btn-info" />
             </div>
         </form>
     </div>
 </div>
 
 <div>
-    <a asp-action="Index">Back to List</a>
+    <a asp-action="Index" asp-controller="Message" asp-route-histoireID="@ViewData["HistoireID"]">Retour au recueil </a>
 </div>
 
 @section Scripts {

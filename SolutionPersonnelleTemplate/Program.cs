@@ -24,7 +24,10 @@ namespace SolutionPersonnelleTemplate
                 {
                      var serviceProvider = services.GetRequiredService<IServiceProvider>();
                     var configuration = services.GetRequiredService<IConfiguration>();
+                    var context = services.GetRequiredService<ApplicationDbContext>();
+                    //Creation des roles et des applicationUser
                     Seed.CreateRolesAndApplicationUser(serviceProvider, configuration).Wait();
+
                  }
                 catch (Exception exception)
                 {

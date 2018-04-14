@@ -15,5 +15,8 @@ namespace SolutionPersonnelleTemplate.Models.BLL.Interfaces
         Task<bool> RemoveHistoireById(int? histoireId);
         Task<Histoire> UpdateHistoire(Histoire histoireModele);
         Task<Histoire> GetHistoireByID(int? histoireID);
+
+        //Zone Admin 
+        Task<bool> PeuplerHistoiresBDD();
     }
 }

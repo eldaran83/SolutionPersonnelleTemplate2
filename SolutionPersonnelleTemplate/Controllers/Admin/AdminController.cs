@@ -30,6 +30,8 @@ namespace SolutionPersonnelleTemplate.Controllers.Admin
         private readonly ApplicationDbContext _context;
         private readonly IUtilisateurInterface _utilisateurManager;
         private readonly IRepositoryFichier _fichierRepository;
+        private readonly IRepositoryHistoire _histoireRepository;
+        private readonly IRepositoryMessage _messageRepository;
         /// <summary>
         /// constructeur
         /// </summary>
@@ -48,7 +50,9 @@ namespace SolutionPersonnelleTemplate.Controllers.Admin
             IHostingEnvironment env,
             ApplicationDbContext context,
             IUtilisateurInterface utilisateurManager,
-            IRepositoryFichier fichierRepository)
+            IRepositoryFichier fichierRepository,
+            IRepositoryHistoire histoireRepository
+            )
         {
             _userManager = userManager;
             _signInManager = signInManager;
@@ -58,6 +62,8 @@ namespace SolutionPersonnelleTemplate.Controllers.Admin
             _context = context;
             _utilisateurManager = utilisateurManager;
             _fichierRepository = fichierRepository;
+            _histoireRepository = histoireRepository;
+
         }
 
         // GET: /<controller>/
@@ -74,6 +80,41 @@ namespace SolutionPersonnelleTemplate.Controllers.Admin
             IEnumerable<Utilisateur> listeUtilisateurs = await _utilisateurManager.GetAllUtilisateursAsync();
 
             return View(listeUtilisateurs);
+        }
+
+        public async Task<IActionResult> PeuplerBddHistoires()
+        {
+            if (_context.Histoires.Count() < 6) // la bdd n'a pas encore été peuplée
+            {
+                if (await _histoireRepository.PeuplerHistoiresBDD())
+                {
+                    ViewData["Message"] = "Les histoires ont été enregistré en bdd.";
+                    return RedirectToAction("Index", new RouteValueDictionary(new
+                    {
+                        controller = "Admin",
+                        action = "Index",
+                    }));
+                }
+                else
+                {
+                    ViewData["Message"] = "Les histoires n'ont pas été enregistré en bdd.";
+                    return RedirectToAction("Index", new RouteValueDictionary(new
+                    {
+                        controller = "Admin",
+                        action = "Index",
+                    }));
+                }
+            }
+             else
+            {
+                ViewBag.Message = "La bdd continet déja 6 histoires ou plus.";
+                return RedirectToAction("Index", new RouteValueDictionary(new
+                {
+                    controller = "Admin",
+                    action = "Index",
+                }));
+            }
+          
         }
 
         /// <summary>

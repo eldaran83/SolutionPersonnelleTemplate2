@@ -87,6 +87,7 @@ namespace SolutionPersonnelleTemplate.Models.BLL.Managers
         {
             Message messageAAjouter = new Message
             {
+                MessageID = messageModele.MessageID,
                 Titre = messageModele.Titre,
                 Contenu = messageModele.Contenu,
                 HistoireID = messageModele.HistoireID,

@@ -1,13 +1,10 @@
 ﻿@model SolutionPersonnelleTemplate.Models.BO.Message
-
 @{
     ViewData["Title"] = "Details";
 }
-
 <h2>
     Details du message de l'histoire @Model.Histoire.Titre
 </h2>
-
 <div>
     <h4>Message</h4>
     <hr />
@@ -30,43 +27,45 @@
         <dd>
             @Html.DisplayFor(model => model.NumeroMessageEnfant1)
         </dd>
- 
-
+        <dt>
+            @Html.DisplayNameFor(model => model.NomAction1)
+        </dt>
+        <dd>
+            <a asp-action="Details" asp-controller="Message" asp-route-messageId="@Model.NumeroMessageEnfant1" asp-route-histoireID="@ViewData["HistoireID"]">@Html.DisplayFor(model => model.NomAction1)</a>
+        </dd>
         <dt>
             @Html.DisplayNameFor(model => model.NumeroMessageEnfant2)
         </dt>
         <dd>
             @Html.DisplayFor(model => model.NumeroMessageEnfant2)
         </dd>
- 
-
+        <dt>
+            @Html.DisplayNameFor(model => model.NomAction2)
+        </dt>
+        <dd>
+            <a asp-action="Details" asp-controller="Message" asp-route-messageId="@Model.NumeroMessageEnfant2" asp-route-histoireID="@ViewData["HistoireID"]">@Html.DisplayFor(model => model.NomAction2)</a>
+        </dd>
         <dt>
             @Html.DisplayNameFor(model => model.NumeroMessageEnfant3)
         </dt>
         <dd>
             @Html.DisplayFor(model => model.NumeroMessageEnfant3)
         </dd>
- 
         <dt>
-            @Html.DisplayNameFor(model => model.Histoire)
+            @Html.DisplayNameFor(model => model.NomAction3)
         </dt>
         <dd>
-            @Html.DisplayFor(model => model.Histoire.HistoireID)
-        </dd>
-        <dt>
-            Image
-        </dt>
-        <dd>
-            <div class="form-group">
-                @*Pour l image*@
-                <label class="control-label">Image de garde</label><br />
-                <input id="Message.UrlMedia" name="Message.UrlMedia" value="@ViewBag.ImgPath" type="hidden" />
-                <img src="@ViewBag.ImgPath" class="img-responsive" /><br />
-            </div>
+            <a asp-action="Details" asp-controller="Message" asp-route-messageId="@Model.NumeroMessageEnfant3" asp-route-histoireID="@ViewData["HistoireID"]">@Html.DisplayFor(model => model.NomAction3)</a>
         </dd>
     </dl>
 </div>
+
+<div class="form-group">
+    @*Pour l image*@
+    <label class="control-label">Image présentation</label><br />
+    <img src="@ViewBag.ImgPath" alt="@Model.Titre" class="img-responsive" /><br />
+</div>
 <div>
     <a asp-action="Edit" asp-controller="Message" asp-route-histoireID="@ViewData["HistoireID"]" asp-route-messageId="@Model.MessageID">Edit</a> |
-     <a asp-action="Index" asp-controller="Message" asp-route-histoireID="@ViewData["HistoireID"]">Retour au recueil </a>
+    <a asp-action="Index" asp-controller="Message" asp-route-histoireID="@ViewData["HistoireID"]">Retour au recueil </a>
 </div>
