@@ -7,10 +7,15 @@
     <h2 style="text-align :center">Cette zone est strictement réservée aux administrateurs.</h2>
     <h4 style="text-align :center">Les actions dans cette section peuvent avoir des effets importants sur la sécurité et les informations présentes sur le site.</h4>
     <h4 style="text-align :center; color:whitesmoke;">Prenez garde à vos actions.</h4>
-    <a asp-action="PeuplerBddHistoires" class="btn btn-default">Peupler la base avec les 6 histoires</a>
-</div>
+    <div class="col-lg-4">
+        <a asp-action="PeuplerBddHistoires" class="btn btn-default">Peupler la base avec les 6 histoires</a>
+    </div>
+    <div class="col-lg-4">
+        <a asp-action="PeuplerBddMessages" asp-controller="Message" class="btn btn-default">Peupler la base avec les messages histoires</a>
+    </div>
+    </div>
 
-     <a asp-action="Create" class="btn btn-success">Créer nouvel utilisateur</a>
+    <a asp-action="Create" class="btn btn-success">Créer nouvel utilisateur</a>
 
 
     <div class="alert-info">

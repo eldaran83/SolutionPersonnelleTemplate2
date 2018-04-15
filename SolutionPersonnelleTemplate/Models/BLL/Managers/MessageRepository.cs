@@ -27,6 +27,183 @@ namespace SolutionPersonnelleTemplate.Models.BLL.Managers
             _env = env;
         }
 
+        public async Task<bool> PeuplerLesMessagesDesHistoire()
+        {
+            ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
+            // Pour MESSAGE
+            ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+            //HISTOIRE 1
+            /////////////////////////////////////////////////////////////////////////////////////////////////////////////
+            //On utilise cette facon de faire car sinon on ne peut pas ajouter l'ID 
+            /////////////////////////////////////////////////////////////////////////////////////////////////////////////
+            using (var db = _context)
+            using (var transaction = db.Database.BeginTransaction())
+            {
+                 //Message 
+                Message message1Histoire1 = new Message
+                {
+                    MessageID = 1,
+                    HistoireID = 1,
+                    Titre = "Le commencement",
+                    Contenu = "Le soleil se levait sur la prairie, et vous vous réveillez peu à peu en sentant l'herbe fraiche sous votre dos au milieu d'une clairière. Que faites vous ?",
+                    NumeroMessageEnfant1 = 2,
+                    NomAction1 = "Observer autour de soi",
+                    NumeroMessageEnfant2 = 3,
+                    NomAction2 = "Se lever",
+                    NumeroMessageEnfant3 = 4,
+                    NomAction3 = "Continuer à dormir"
+                };
+                _context.Add(message1Histoire1);
+                //Message 2
+                Message message2Histoire1 = new Message
+                {
+                    MessageID = 2,
+                    HistoireID = 1,
+                    Titre = "Aux aguets",
+                    Contenu = "Alors que votre regard contemple la clairière tout autour de vous, vous sentez dans l'air une odeur de brulée et remarquez un panache noir face à vous. Que faites vous ?",
+                    NumeroMessageEnfant1 = 5,
+                    NomAction1 = "Aller vers la fumée",
+                    NumeroMessageEnfant2 = 6,
+                    NomAction2 = "Partir à l'opposé de la fumée",
+                    NumeroMessageEnfant3 = 4,
+                    NomAction3 = "Se recoucher pour dormir"
+                };
+                _context.Add(message2Histoire1);
+                //Message 4
+                Message message3Histoire1 = new Message
+                {
+                    MessageID = 3,
+                    HistoireID = 1,
+                    Titre = "Sur ses deux pieds",
+                    Contenu = "Alors que vous vous levez, vous remarquez un panache noir face à vous, de toute évidence il s'agit du résultat d'un incendie. Que faites vous ?",
+                    NumeroMessageEnfant1 = 5,
+                    NomAction1 = "Aller vers la fumée",
+                    NumeroMessageEnfant2 = 6,
+                    NomAction2 = "Partir à l'opposé de la fumée",
+                    NumeroMessageEnfant3 = 4,
+                    NomAction3 = "Se recoucher pour dormir"
+                };
+                _context.Add(message3Histoire1);
+                //Message 4
+                Message message4Histoire1 = new Message
+                {
+                    MessageID = 4,
+                    HistoireID = 1,
+                    Titre = "Le monde appartient à ceux qui se lévent tôt",
+                    Contenu = "Faisant fi de tout ce qui pourrait se passer autour de vous, vous vous laissez attirer par les chaleureux et puissants bras de Morphée. Vous ressentez bien de façon de plus en plus cuisante une odeur de fumée mais votre coprs de vous répondu plus. Votre histoire s'arrête ici Héros ! ."
+                };
+                _context.Add(message4Histoire1);
+                //Message 5
+                Message message5Histoire1 = new Message
+                {
+                    MessageID = 5,
+                    HistoireID = 1,
+                    Titre = "Petit curieux",
+                    Contenu = "Vous sortez de la clairière et vous entrez dans la forêt qui l'enserre. La fumée se fait de plus en plus dense rendant votre vison moins précise, et alors que vous êtes sur le point de vous demander s'il est bien prudent de continuer votre chemin, vous entendez un immense craquement sur votre flanc droit. Vous avez juste le temps d'apercevoir un tronc d'arbre en partie calciné vous frapper à la tête au moment où vous vous tournez vers ce son.",
+                    NumeroMessageEnfant1 = 4,
+                    NomAction1 = "Entre deux eaux"
+                };
+                _context.Add(message5Histoire1);
+                //Message 6
+                Message message6Histoire1 = new Message
+                {
+                    MessageID = 6,
+                    HistoireID = 1,
+                    Titre = "La prudence à parfois du bon",
+                    Contenu = "Sans autres équipement sur vous et ne vous souvenant plus de rien, vous vous dites qu'il n'est peut être pas déjà temps de vous lancer dans des actions risquées.Faisant acte de prudence, vos pieds se tournent à l'opposé d'un potentiel danger, remarquant un petit sentier au travers de la forêt vous l'empruntez jusqu'à ne plus sentir cette odeur de fumée que loin derrière vous. Après une heure de marche, vos pas vous guide à l'entrée d'un petit village qui vous semblez habité. Que faites-vous ?.",
+                    NumeroMessageEnfant1 = 7,
+                    NomAction1 = "Chaque chose en son temps"
+                };
+                _context.Add(message6Histoire1);
+                //Message 8
+                Message message7Histoire1 = new Message
+                {
+                    MessageID = 7,
+                    HistoireID = 1,
+                    Titre = "Chaque chose en son temps",
+                    Contenu = "La suite de l'aventure arrivera plus tard, merci d'y avoir participé."
+                };
+                _context.Add(message7Histoire1);
+
+                //HISTOIRE 2
+                //Message 1
+                //Message message2Histoire2 = new Message
+                //{
+                //    MessageID = 2,
+                //    HistoireID = 2,
+                //    Titre = "Le commencement",
+                //    Contenu = "Aujourd’hui, comme tous les lundis, dès la sortie de la classe, je cours vers le parc avec mes copains pour y retrouver monsieur Charles. J’essaye d’arriver le premier pour pouvoir choisir l’histoire qu’il va nous conter. Moi, je choisis toujours des histoires de détectives... Vite je dois me dépêcher.. Que faites vous ?",
+                //    NumeroMessageEnfant1 = 3,
+                //    NomAction1 = "Continuer vers le parc"
+                //};
+                //_context.Add(message2Histoire2);
+                ////Message 3
+                //Message message3Histoire2 = new Message
+                //{
+                //    MessageID = 3,
+                //    HistoireID = 2,
+                //    Titre = "Le parc",
+                //    Contenu = "Nous voilà arrivés au parc. On repère toujours monsieur Charles de loin grâce à son grand panier rouge. Mais ce soir, le banc vert sur lequel monsieur Charles s’assoit est vide. Nous partons à sa recherche dans le parc.. Que faites vous ?",
+                //    NumeroMessageEnfant1 = 4,
+                //    NomAction1 = "Nous partons vers le grand arbre",
+                //    NumeroMessageEnfant2 = 5,
+                //    NomAction2 = "Nous partons vers le petit ruisseau",
+                //    NumeroMessageEnfant3 = 7,
+                //    NomAction3 = "Nous partons vers l’entrée du parc"
+                //};
+                //_context.Add(message3Histoire2);
+                ////Message 4
+                //Message message4Histoire2 = new Message
+                //{
+                //    MessageID = 4,
+                //    HistoireID = 2,
+                //    Titre = "Le grand arbre",
+                //    Contenu = "Nous avons beau chercher, mais nous ne le trouvons toujours pas. Nous décidons de retourner vers le banc vert",
+                //    NumeroMessageEnfant1 = 6,
+                //    NomAction1 = "Vers le banc"
+                //};
+                //_context.Add(message4Histoire2);
+                ////Message 5
+                //Message message5Histoire2 = new Message
+                //{
+                //    MessageID = 5,
+                //    HistoireID = 2,
+                //    Titre = "Le petit ruisseau",
+                //    Contenu = "Il n’y a personne du côté du petit ruisseau. Nous décidons de retourner vers le banc vert.Pour aller plus vite nous décidons de revenir par le petit talus.",
+                //    NumeroMessageEnfant1 = 6,
+                //    NomAction1 = "Passer le talus"
+                //};
+                //_context.Add(message5Histoire2);
+                ////Message 6
+                //Message message6Histoire2 = new Message
+                //{
+                //    MessageID = 6,
+                //    HistoireID = 2,
+                //    Titre = "Le banc",
+                //    Contenu = "Nous nous asseyons sur le banc et attendons un peu. Mais personne ne vient. Pour la première fois, nous n’aurons pas d’histoire...",
+                //    NumeroMessageEnfant1 = 7,
+                //    NomAction1 = "La suite"
+                //};
+                //_context.Add(message6Histoire2);
+                ////Message 7
+                //Message message7Histoire2 = new Message
+                //{
+                //    MessageID = 7,
+                //    HistoireID = 2,
+                //    Titre = "L'entrée du parc",
+                //    Contenu = "Nous nous dirigeons vers l'entrée du parc.Mais personne ne vient. Pour la première fois, nous n’aurons pas d’histoire... Merci d'avoir suivi cette aventure, la suite arrive très vite"
+                //};
+                //_context.Add(message7Histoire2);
+
+                //Facon (IDENTITY_INSERT) pour pouvoir SET soit meme l'ID
+                db.Database.ExecuteSqlCommand("SET IDENTITY_INSERT dbo.Messages ON;");
+                db.SaveChanges();
+                db.Database.ExecuteSqlCommand("SET IDENTITY_INSERT dbo.Messages OFF");
+                transaction.Commit();
+            }
+            return true;
+        }
         /// <summary>
         /// renvoi tous les messages d'un histoire
         /// </summary>
@@ -87,8 +264,7 @@ namespace SolutionPersonnelleTemplate.Models.BLL.Managers
         {
             Message messageAAjouter = new Message
             {
-                MessageID = messageModele.MessageID,
-                Titre = messageModele.Titre,
+                 Titre = messageModele.Titre,
                 Contenu = messageModele.Contenu,
                 HistoireID = messageModele.HistoireID,
                 NumeroMessageEnfant1 = messageModele.NumeroMessageEnfant1,

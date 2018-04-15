@@ -31,6 +31,45 @@ namespace SolutionPersonnelleTemplate.Controllers.LogicWebSite
             _fichierRepository = fichierRepository;
         }
 
+        /// <summary>
+        /// peuple la bdd de messages
+        /// pour le moment juste les messages de l histoire avec l ID1
+        /// </summary>
+        /// <returns></returns>
+        public async Task<IActionResult> PeuplerBddMessages()
+        {
+            if (_context.Histoires.Count() == 6) // la bdd n'a pas encore été peuplée
+            {
+                if (await _messageRepository.PeuplerLesMessagesDesHistoire())
+                {
+                    ViewData["Message"] = "Les histoires ont été enregistré en bdd.";
+                    return RedirectToAction("Index", new RouteValueDictionary(new
+                    {
+                        controller = "Admin",
+                        action = "Index",
+                    }));
+                }
+                else
+                {
+                    ViewData["Message"] = "Les histoires n'ont pas été enregistré en bdd.";
+                    return RedirectToAction("Index", new RouteValueDictionary(new
+                    {
+                        controller = "Admin",
+                        action = "Index",
+                    }));
+                }
+            }
+            else
+            {
+                ViewBag.Message = "La bdd continet déja 6 histoires ou plus.";
+                return RedirectToAction("Index", new RouteValueDictionary(new
+                {
+                    controller = "Admin",
+                    action = "Index",
+                }));
+            }
+        }
+
         // GET: Message
         public async Task<IActionResult> Index(int? histoireID)
         {
@@ -81,23 +120,9 @@ namespace SolutionPersonnelleTemplate.Controllers.LogicWebSite
         // GET: Message/Create
         public async Task<IActionResult> Create(int histoireID)
         {
-          IEnumerable<Message> dropDownListActions= await  _messageRepository.GetAllMessageOfStoryAsync(Convert.ToInt16(histoireID));
-
-            if (dropDownListActions.Count() == 0)
-            {
-                Message leMessageDeSelection = new Message
-                {
-                    MessageID = 1,
-                    Titre = "--Sélectionnez une action--",
-                    Contenu = "Vous avez la possibilité de choisir une action que pourra effectuer le héros au cours de l'aventure",
-                    HistoireID = histoireID
-                };
-               await _messageRepository.NouveauMessage(leMessageDeSelection);
-            }
-            ViewBag.NumeroMessageEnfant1 = new SelectList(dropDownListActions, "MessageID", "Titre");
-            ViewBag.NumeroMessageEnfant2 = new SelectList(dropDownListActions, "MessageID", "Titre");
-            ViewBag.NumeroMessageEnfant3 = new SelectList(dropDownListActions, "MessageID", "Titre");
-
+            ViewBag.NumeroMessageEnfant1 = new SelectList(_context.Messages.Where(h => h.HistoireID == histoireID).ToList(), "MessageID", "Titre");
+            ViewBag.NumeroMessageEnfant2 = new SelectList(_context.Messages.Where(h => h.HistoireID == histoireID).ToList(), "MessageID", "Titre");
+            ViewBag.NumeroMessageEnfant3 = new SelectList(_context.Messages.Where(h => h.HistoireID == histoireID).ToList(), "MessageID", "Titre");
             ViewData["HistoireID"] = histoireID;
             return View();
         }
@@ -109,14 +134,12 @@ namespace SolutionPersonnelleTemplate.Controllers.LogicWebSite
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(MessageViewModel messageVM_Modele)
         {
-            var dropDownListActions = await _messageRepository.GetAllMessageOfStoryAsync(Convert.ToInt16(messageVM_Modele.Message.HistoireID));
-
             if (await _messageRepository.messageTitreExistDansCetteHistoire(messageVM_Modele.Message.Titre, messageVM_Modele.Message.HistoireID))
             {
-                ViewBag.NumeroMessageEnfant1 = new SelectList(dropDownListActions, "MessageID", "Titre");
-                ViewBag.NumeroMessageEnfant2 = new SelectList(dropDownListActions, "MessageID", "Titre");
-                ViewBag.NumeroMessageEnfant3 = new SelectList(dropDownListActions, "MessageID", "Titre");
-                ViewBag.error = "Ce titre de message est déjà utilisé dans cette histoire";
+                ViewBag.NumeroMessageEnfant1 = new SelectList(_context.Messages.Where(h => h.HistoireID == messageVM_Modele.Message.HistoireID).ToList(), "MessageID", "Titre");
+                ViewBag.NumeroMessageEnfant2 = new SelectList(_context.Messages.Where(h => h.HistoireID == messageVM_Modele.Message.HistoireID).ToList(), "MessageID", "Titre");
+                ViewBag.NumeroMessageEnfant3 = new SelectList(_context.Messages.Where(h => h.HistoireID == messageVM_Modele.Message.HistoireID).ToList(), "MessageID", "Titre");
+                 ViewBag.error = "Ce titre de message est déjà utilisé dans cette histoire";
                 ViewData["HistoireID"] = messageVM_Modele.Message.HistoireID;
                 return View(messageVM_Modele);
             }
@@ -124,7 +147,7 @@ namespace SolutionPersonnelleTemplate.Controllers.LogicWebSite
             //Logic Liens Actions Messages
             bool erreurLiensActionsMessage = false; 
             //1
-            if (messageVM_Modele.Message.NumeroMessageEnfant1 != 1) // un N° message a été saisi dans la dropdownList autre que l'id 1 qui est celui par défaut
+            if (messageVM_Modele.Message.NumeroMessageEnfant1 != null) // un N° message a été saisi dans la dropdownList autre que l'id 1 qui est celui par défaut
             {
                 if (messageVM_Modele.Message.NomAction1 == null)// vérifie qu'un message pour l action a été saisi
                 {
@@ -135,7 +158,7 @@ namespace SolutionPersonnelleTemplate.Controllers.LogicWebSite
             }
             if (messageVM_Modele.Message.NomAction1 != null) // vérifie qu'un message pour l action a été saisi
             {
-                if (messageVM_Modele.Message.NumeroMessageEnfant1 == 1) // un message a été saisi dans la dropdownList autre que l'id 1 qui est celui par défaut
+                if (messageVM_Modele.Message.NumeroMessageEnfant1 == null) // un message a été saisi dans la dropdownList autre que l'id 1 qui est celui par défaut
                 {
                     ViewBag.errorNumeroAction1 = "Vous avez rempli une action sans avoir choisi dans la liste un message de destination !";
                     erreurLiensActionsMessage = true;
@@ -143,7 +166,7 @@ namespace SolutionPersonnelleTemplate.Controllers.LogicWebSite
             }
 
             //2
-            if (messageVM_Modele.Message.NumeroMessageEnfant2 != 1) // un N° message a été saisi dans la dropdownList autre que l'id 1 qui est celui par défaut
+            if (messageVM_Modele.Message.NumeroMessageEnfant2 != null) // un N° message a été saisi dans la dropdownList autre que l'id 1 qui est celui par défaut
             {
                 if (messageVM_Modele.Message.NomAction2 == null)// vérifie qu'un message pour l action a été saisi
                 {
@@ -154,14 +177,14 @@ namespace SolutionPersonnelleTemplate.Controllers.LogicWebSite
             }
             if (messageVM_Modele.Message.NomAction2 != null) // vérifie qu'un message pour l action a été saisi
             {
-                if (messageVM_Modele.Message.NumeroMessageEnfant2 == 1) // un message a été saisi dans la dropdownList autre que l'id 1 qui est celui par défaut
+                if (messageVM_Modele.Message.NumeroMessageEnfant2 == null) // un message a été saisi dans la dropdownList autre que l'id 1 qui est celui par défaut
                 {
                     ViewBag.errorNumeroAction2 = "Vous avez rempli une action sans avoir choisi dans la liste un message de destination !";
                     erreurLiensActionsMessage = true;
                 }
             }
             //3
-            if (messageVM_Modele.Message.NumeroMessageEnfant3 != 1) // un N° message a été saisi dans la dropdownList autre que l'id 1 qui est celui par défaut
+            if (messageVM_Modele.Message.NumeroMessageEnfant3 != null) // un N° message a été saisi dans la dropdownList autre que l'id 1 qui est celui par défaut
             {
                 if (messageVM_Modele.Message.NomAction3 == null)// vérifie qu'un message pour l action a été saisi
                 {
@@ -172,7 +195,7 @@ namespace SolutionPersonnelleTemplate.Controllers.LogicWebSite
             }
             if (messageVM_Modele.Message.NomAction3 != null) // vérifie qu'un message pour l action a été saisi
             {
-                if (messageVM_Modele.Message.NumeroMessageEnfant3 == 1) // un message a été saisi dans la dropdownList autre que l'id 1 qui est celui par défaut
+                if (messageVM_Modele.Message.NumeroMessageEnfant3 == null) // un message a été saisi dans la dropdownList autre que l'id 1 qui est celui par défaut
                 {
                     ViewBag.errorNumeroAction3 = "Vous avez rempli une action sans avoir choisi dans la liste un message de destination !";
                     erreurLiensActionsMessage = true;
@@ -182,9 +205,9 @@ namespace SolutionPersonnelleTemplate.Controllers.LogicWebSite
             if (erreurLiensActionsMessage) // il y a un problème avec les liens d action dans le message créé
             {
                 //logic des liens vers les autres messages 
-                 ViewBag.NumeroMessageEnfant1 = new SelectList(dropDownListActions, "MessageID", "Titre");
-                ViewBag.NumeroMessageEnfant2 = new SelectList(dropDownListActions, "MessageID", "Titre");
-                ViewBag.NumeroMessageEnfant3 = new SelectList(dropDownListActions, "MessageID", "Titre");
+                ViewBag.NumeroMessageEnfant1 = new SelectList(_context.Messages.Where(h => h.HistoireID == messageVM_Modele.Message.HistoireID).ToList(), "MessageID", "Titre");
+                ViewBag.NumeroMessageEnfant2 = new SelectList(_context.Messages.Where(h => h.HistoireID == messageVM_Modele.Message.HistoireID).ToList(), "MessageID", "Titre");
+                ViewBag.NumeroMessageEnfant3 = new SelectList(_context.Messages.Where(h => h.HistoireID == messageVM_Modele.Message.HistoireID).ToList(), "MessageID", "Titre");
                 ViewData["HistoireID"] = messageVM_Modele.Message.HistoireID;
                 return View(messageVM_Modele);
             }
@@ -258,9 +281,9 @@ namespace SolutionPersonnelleTemplate.Controllers.LogicWebSite
                 }));
             }
             //logic des liens vers les autres messages 
-            ViewBag.NumeroMessageEnfant1 = new SelectList(dropDownListActions, "MessageID", "Titre");
-            ViewBag.NumeroMessageEnfant2 = new SelectList(dropDownListActions, "MessageID", "Titre");
-            ViewBag.NumeroMessageEnfant3 = new SelectList(dropDownListActions, "MessageID", "Titre");
+            ViewBag.NumeroMessageEnfant1 = new SelectList(_context.Messages.Where(h => h.HistoireID == messageVM_Modele.Message.HistoireID).ToList(), "MessageID", "Titre");
+            ViewBag.NumeroMessageEnfant2 = new SelectList(_context.Messages.Where(h => h.HistoireID == messageVM_Modele.Message.HistoireID).ToList(), "MessageID", "Titre");
+            ViewBag.NumeroMessageEnfant3 = new SelectList(_context.Messages.Where(h => h.HistoireID == messageVM_Modele.Message.HistoireID).ToList(), "MessageID", "Titre");
             ViewData["HistoireID"] = messageVM_Modele.Message.HistoireID;
             return View(messageVM_Modele);
  

@@ -14,5 +14,8 @@ namespace SolutionPersonnelleTemplate.Models.BLL.Interfaces
         Task<bool> RemoveMessageOfStoryById(int? messageId, int? histoireId);
         Task<Message> UpdateMessage(Message messageModele);
         Task<Message> GetMessageByMessageIDAndHistoireId(int? messageId,int? histoireID);
+
+        //Zone ADMIN
+        Task<bool> PeuplerLesMessagesDesHistoire();
     }
 }
