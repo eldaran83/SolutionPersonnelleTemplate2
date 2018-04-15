@@ -38,9 +38,17 @@ namespace SolutionPersonnelleTemplate.Controllers.LogicWebSite
         }
 
         // GET: Histoire
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(string rechercheHistoire)
         {
             IEnumerable<Histoire> lesHistoires = await _histoireRepository.GetAllHistoiresAsync();
+
+            if (!String.IsNullOrEmpty(rechercheHistoire))
+            {
+                IEnumerable<Histoire> lesHistoiresDeLaRecherche = lesHistoires
+                    .Where(h => h.Createur.ToUpper().Contains(rechercheHistoire.ToUpper())
+                    || h.Titre.ToUpper().Contains(rechercheHistoire.ToUpper()));
+                return View(lesHistoiresDeLaRecherche);
+            }
             return View(lesHistoires);
         }
 

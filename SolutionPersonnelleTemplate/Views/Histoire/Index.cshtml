@@ -2,54 +2,64 @@
 @{
     ViewData["Title"] = "Index";
 }
-
-<div class="container-fluid">
-    <h2>Le recueil des Codex</h2>
-    <p>
+<div class="container">
+    <h1>Le recueil des Codex</h1>
+    <div class="col-sm-12">
         <a asp-action="Create" asp-controller="Histoire" class="btn  btn-info">Devenez un scribe</a>
+    </div>
+</div>
+<br>
+<hr />
+<div class="col-sm-12" style="background-color: #e0e0eb">
+    <p>
+        Iis igitur est difficilius satis facere, qui se Latina scripta dicunt contemnere. in quibus hoc primum est in quo admirer, cur in gravissimis rebus non delectet eos sermo patrius, cum idem fabellas Latinas ad verbum e Graecis expressas non inviti legant. quis enim tam inimicus paene nomini Romano est, qui Ennii Medeam aut Antiopam Pacuvii spernat aut reiciat, quod se isdem Euripidis fabulis delectari dicat, Latinas litteras oderit?
     </p>
+
+    @using (Html.BeginForm())
+    {
+        <p>
+            @Html.TextBox("rechercheHistoire", null, new { @class = "col-sm-10" })<input type="submit" value="Recherche" class="btn btn-default" />
+        </p>
+    }
 
 </div>
 
-    <div class="container">
+<hr />
 
-        <div class="row">
-            @{ foreach (var item in Model)
-        {
-            <div class="col-sm-4">
-                <h2>@item.Titre</h2>
-                <h3>Scribe : @item.Createur</h3>
-                @{
-                    string idResumeHistoireBlinding = "#resume" + item.HistoireID;
-                    string idResumeHistoire = "resume" + item.HistoireID;
-                }
-                <h4>Codex <span class="badge">@item.HistoireID</span> Vote <span class="badge">@item.Score</span> Partie <span class="badge">@item.NombreDeFoisJouee</span> <button type="button" class="btn btn-default" data-toggle="collapse" data-target="@idResumeHistoireBlinding">Synopsis</button></h4>
-                 <div class="center-block">
-                     <div id="@idResumeHistoire" class="collapse text-justify">
-                        @item.Synopsis
+<div class="container">
+
+    <div class="row">
+        @{ foreach (var item in Model)
+            {
+                <div class="col-sm-4">
+                    <h2>@item.Titre</h2>
+                    <h3>Scribe : @item.Createur</h3>
+                    @{
+                        string idResumeHistoireBlinding = "#resume" + item.HistoireID;
+                        string idResumeHistoire = "resume" + item.HistoireID;
+                    }
+                    <h4>Codex <span class="badge">@item.HistoireID</span> Vote <span class="badge">@item.Score</span> Partie <span class="badge">@item.NombreDeFoisJouee</span> <button type="button" class="btn btn-default" data-toggle="collapse" data-target="@idResumeHistoireBlinding">Synopsis</button></h4>
+                    <div class="center-block">
+                        <div id="@idResumeHistoire" class="collapse text-justify">
+                            @item.Synopsis
+                        </div>
                     </div>
+                    <div class="jumbotron">
+                        <img src="@item.UrlMedia" alt="@item.Titre" class="img-responsive" style="height:165px;" />
+                    </div>
+                    <a asp-action="Details" asp-route-histoireID="@item.HistoireID" class="btn btn-info btn-block">Jouer à cette aventure</a>
                 </div>
-                <div class="jumbotron">
-                    <img src="@item.UrlMedia" alt="@item.Titre" class="img-responsive" style="height:165px;" />
-                </div>
-                <a asp-action="Details" asp-route-histoireID="@item.HistoireID" class="btn btn-info btn-block">Jouer à cette aventure</a>
-            </div>
- 
-    }
+
+            }
 
         }
     </div>
 
-
 </div>
 
 
 
-
-
-
 <div>
-
 </div>
 <table class="table">
     <thead>
@@ -72,7 +82,6 @@
             <th>
                 @Html.DisplayNameFor(model => model.NombreDeFoisJouee)
             </th>
-
             <th></th>
         </tr>
     </thead>
@@ -111,7 +120,6 @@
         }
     </tbody>
 </table>
-
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
