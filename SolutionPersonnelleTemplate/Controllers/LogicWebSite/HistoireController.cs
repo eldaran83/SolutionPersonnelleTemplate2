@@ -10,11 +10,13 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.EntityFrameworkCore;
+using ReflectionIT.Mvc.Paging;
 using SolutionPersonnelleTemplate.Data;
 using SolutionPersonnelleTemplate.Models;
 using SolutionPersonnelleTemplate.Models.BLL.Interfaces;
 using SolutionPersonnelleTemplate.Models.BO;
 using SolutionPersonnelleTemplate.Models.ViewModels;
+
 
 namespace SolutionPersonnelleTemplate.Controllers.LogicWebSite
 {
@@ -38,18 +40,24 @@ namespace SolutionPersonnelleTemplate.Controllers.LogicWebSite
         }
 
         // GET: Histoire
-        public async Task<IActionResult> Index(string rechercheHistoire)
+        public async Task<IActionResult> Index(string rechercheHistoire/*, int page =1*/)
         {
-            IEnumerable<Histoire> lesHistoires = await _histoireRepository.GetAllHistoiresAsync();
+            //nb d'histoire par page 
+            //int nbParPage = 6;
+            //var lesHistoires = _context.Histoires.AsNoTracking().OrderByDescending(h => h.NombreDeFoisJouee);
+            //var listeHistoires = await PagingList.CreateAsync(lesHistoires, nbParPage, page);
+
+            IEnumerable<Histoire> listeHistoires = await _histoireRepository.GetAllHistoiresAsync();
 
             if (!String.IsNullOrEmpty(rechercheHistoire))
             {
-                IEnumerable<Histoire> lesHistoiresDeLaRecherche = lesHistoires
-                    .Where(h => h.Createur.ToUpper().Contains(rechercheHistoire.ToUpper())
-                    || h.Titre.ToUpper().Contains(rechercheHistoire.ToUpper()));
-                return View(lesHistoiresDeLaRecherche);
+                listeHistoires = _context.Histoires.Where(h => h.Titre.ToUpper().Contains(rechercheHistoire.ToUpper())
+                                            || h.Createur.ToUpper().Contains(rechercheHistoire.ToUpper()));
             }
-            return View(lesHistoires);
+
+           
+            return View(listeHistoires);
+
         }
 
         // GET: Histoire/Details/5

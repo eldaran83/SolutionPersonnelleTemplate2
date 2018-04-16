@@ -1,6 +1,10 @@
-﻿@model IEnumerable<SolutionPersonnelleTemplate.Models.BO.Histoire>
+﻿@*@model ReflectionIT.Mvc.Paging.PagingList<SolutionPersonnelleTemplate.Models.BO.Histoire>
+@using ReflectionIT.Mvc.Paging
+@addTagHelper *, ReflectionIT.Mvc.Paging*@
+
+@model IEnumerable<SolutionPersonnelleTemplate.Models.BO.Histoire>
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "Les aventures";
 }
 <div class="container">
     <h1>Le recueil des Codex</h1>
@@ -27,6 +31,9 @@
 <hr />
 
 <div class="container">
+    @*<nav>
+        @await  this.Component.InvokeAsync("Pager",new {pagingList = this.Model })
+    </nav>*@
 
     <div class="row">
         @{ foreach (var item in Model)
@@ -55,6 +62,9 @@
         }
     </div>
 
+    @*<nav>
+        <vc:pager paging-list="@Model"/>
+    </nav>*@
 </div>
 
 

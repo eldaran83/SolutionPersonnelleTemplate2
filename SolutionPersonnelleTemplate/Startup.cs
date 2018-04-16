@@ -11,10 +11,10 @@ using Microsoft.Extensions.DependencyInjection;
 using SolutionPersonnelleTemplate.Data;
 using SolutionPersonnelleTemplate.Models;
 using SolutionPersonnelleTemplate.Services;
- 
 using SolutionPersonnelleTemplate.Models.BLL.Interfaces;
 using SolutionPersonnelleTemplate.Models.BLL.Managers;
 using SolutionPersonnelleTemplate.Models.BO;
+using ReflectionIT.Mvc.Paging;
 
 namespace SolutionPersonnelleTemplate
 {
@@ -55,6 +55,8 @@ namespace SolutionPersonnelleTemplate
             services.AddScoped<IRepositoryMessage, MessageRepository>();
 
             services.AddMvc();
+            //add pour la pagination
+            services.AddPaging();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
