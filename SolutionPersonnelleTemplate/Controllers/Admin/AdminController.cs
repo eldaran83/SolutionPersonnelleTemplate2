@@ -31,7 +31,7 @@ namespace SolutionPersonnelleTemplate.Controllers.Admin
         private readonly IUtilisateurInterface _utilisateurManager;
         private readonly IRepositoryFichier _fichierRepository;
         private readonly IRepositoryHistoire _histoireRepository;
-        private readonly IRepositoryMessage _messageRepository;
+
         /// <summary>
         /// constructeur
         /// </summary>

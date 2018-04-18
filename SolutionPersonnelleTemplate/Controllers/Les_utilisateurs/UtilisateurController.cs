@@ -63,14 +63,37 @@ namespace SolutionPersonnelleTemplate.Controllers.Les_utilisateurs
             _fichierRepository = fichierRepository;
         }
 
+        [HttpGet]
+        public async Task<IActionResult> Formuaire(string utilisateurID)
+        {
+            //je recupere la vraie identité de l user
+            var applicationUser = _userManager.GetUserId(HttpContext.User);
+            if (utilisateurID != applicationUser)
+            {
+                utilisateurID = applicationUser;
+            }
+            if (utilisateurID == null)
+            {
+                return NotFound();
+            }
+            Utilisateur utilisateur = await _utilisateurManager.GetUtilisateurByIdAsync(utilisateurID);
+            return View(utilisateur);
+         }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Formuaire(FormCollection form)
+        {
+            return null;
+        }
         //GET Utilisateur/Inscription/userId
         public async Task<IActionResult> Inscription(string userId)
         {
             //je recupere la vraie identité de l user
-            var ApplicationUser = _userManager.GetUserId(HttpContext.User);
-            if (userId != ApplicationUser)
+            var applicationUser = _userManager.GetUserId(HttpContext.User);
+            if (userId != applicationUser)
             {
-                userId = ApplicationUser;
+                userId = applicationUser;
             }
             if (userId == null)
             {

@@ -1,0 +1,93 @@
+﻿@model IEnumerable<SolutionPersonnelleTemplate.Models.BO.Histoire>
+@{
+    ViewData["Title"] = "Les aventures";
+}
+<div class="container">
+    <h1>Le recueil des Codex</h1>
+    <div class="col-sm-12">
+        <a asp-action="Create" asp-controller="Histoire" class="btn  btn-info">Créer une nouvelle histoire</a>
+    </div>
+</div>
+<br>
+<hr />
+<div class="col-sm-12" style="background-color: #e0e0eb">
+    <p>
+        Iis igitur est difficilius satis facere, qui se Latina scripta dicunt contemnere. in quibus hoc primum est in quo admirer, cur in gravissimis rebus non delectet eos sermo patrius, cum idem fabellas Latinas ad verbum e Graecis expressas non inviti legant. quis enim tam inimicus paene nomini Romano est, qui Ennii Medeam aut Antiopam Pacuvii spernat aut reiciat, quod se isdem Euripidis fabulis delectari dicat, Latinas litteras oderit?
+    </p>
+
+    @using (Html.BeginForm())
+    {
+        <p>
+            @Html.TextBox("rechercheHistoire", null, new { @class = "col-sm-10" })<input type="submit" value="Recherche" class="btn btn-default" />
+        </p>
+    }
+
+</div>
+
+<hr />
+
+<div>
+</div>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.HistoireID)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Titre)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.UtilisateurID)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Createur)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Score)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.NombreDeFoisJouee)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.HistoireID)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Titre)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.UtilisateurID)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Createur)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Score)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.NombreDeFoisJouee)
+                </td>
+                <td>
+                    <img src="@item.UrlMedia" alt="@item.Titre" class="img-responsive" />
+                </td>
+                <td>
+                    <a asp-action="Index" asp-controller="Message" asp-route-histoireID="@item.HistoireID" class="btn btn-block btn-success">Les messages</a>
+                    <a asp-action="Edit" asp-route-histoireID="@item.HistoireID" class="btn btn-block btn-warning">MAJ</a>
+                    <a asp-action="Details" asp-route-histoireID="@item.HistoireID" class="btn btn-block btn-info">Détails</a>
+                    <a asp-action="Delete" asp-route-histoireID="@item.HistoireID" class="btn btn-block btn-danger">Supprimer</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

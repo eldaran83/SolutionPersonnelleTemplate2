@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
@@ -20,6 +21,8 @@ using SolutionPersonnelleTemplate.Models.ViewModels;
 
 namespace SolutionPersonnelleTemplate.Controllers.LogicWebSite
 {
+    [Authorize]
+    [Route("[controller]/[action]")]
     public class HistoireController : Controller
     {
         private readonly UserManager<ApplicationUser> _userManager;
@@ -39,8 +42,35 @@ namespace SolutionPersonnelleTemplate.Controllers.LogicWebSite
             _fichierRepository = fichierRepository;
         }
 
+        [Authorize(Roles = "Administrateur,Manager")]
+        public async Task<IActionResult> GererMesHistoires(string rechercheHistoire)
+        {
+            //je recupere la vraie identité de l user
+            var applicationUserID = _userManager.GetUserId(HttpContext.User);
+            //je recupere l utilisateur
+            Utilisateur utilisateur = await _utilisateurManager.GetUtilisateurByIdAsync(applicationUserID);
+            string utilisateurID = utilisateur.ApplicationUserID;
+
+            IEnumerable<Histoire> listeDeMesHistoires = await _histoireRepository.GetAllStoryOfUtilisateur(utilisateurID);
+            if (!String.IsNullOrEmpty(rechercheHistoire)) //pour la barre de recherche
+            {
+                listeDeMesHistoires = _context.Histoires.Where(h => h.Titre.ToUpper().Contains(rechercheHistoire.ToUpper()));                                           
+            }
+            return View(listeDeMesHistoires);
+        }
+
+        public async Task<IActionResult> DevenirScribe()
+        {
+            //je recupere la vraie identité de l user
+            var applicationUserID = _userManager.GetUserId(HttpContext.User);
+            //je recupere l utilisateur
+            Utilisateur utilisateur = await _utilisateurManager.GetUtilisateurByIdAsync(applicationUserID);
+            ViewBag.utilisateurID = utilisateur.ApplicationUserID;
+
+            return View(utilisateur);
+        }
         // GET: Histoire
-        public async Task<IActionResult> Index(string rechercheHistoire/*, int page =1*/)
+         public async Task<IActionResult> Index(string rechercheHistoire/*, int page =1*/)
         {
             //nb d'histoire par page 
             //int nbParPage = 6;
@@ -94,12 +124,13 @@ namespace SolutionPersonnelleTemplate.Controllers.LogicWebSite
         }
 
         // GET: Histoire/Create
+        [Authorize(Roles = "Administrateur,Manager")]
         public async Task<IActionResult> Create()
         {
             //je recupere la vraie identité de l user
-            var ApplicationUserID = _userManager.GetUserId(HttpContext.User);
+            var applicationUserID = _userManager.GetUserId(HttpContext.User);
             //je recupere l utilisateur
-            Utilisateur utilisateur = await _utilisateurManager.GetUtilisateurByIdAsync(ApplicationUserID);
+            Utilisateur utilisateur = await _utilisateurManager.GetUtilisateurByIdAsync(applicationUserID);
 
             string role = utilisateur.Role;
 
@@ -116,7 +147,7 @@ namespace SolutionPersonnelleTemplate.Controllers.LogicWebSite
 
             string pseudo = utilisateur.Pseudo;
             ViewBag.Createur = pseudo;
-            ViewBag.UtilisateurID = ApplicationUserID;
+            ViewBag.UtilisateurID = applicationUserID;
 
             return View();
         }
@@ -126,6 +157,7 @@ namespace SolutionPersonnelleTemplate.Controllers.LogicWebSite
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Administrateur,Manager")]
         public async Task<IActionResult> Create(HistoireViewModel histoireVM, IFormCollection form )
          {
             //vérification pour savoir si le titre de l histoire est libre ou pas 
@@ -198,8 +230,9 @@ namespace SolutionPersonnelleTemplate.Controllers.LogicWebSite
                 return View(histoireVM.Histoire);
             }
         }
- 
+
         // GET: Message/Delete/5
+        [Authorize(Roles = "Administrateur,Manager")]
         public async Task<IActionResult> Delete(int? HistoireID)
         {
             if (HistoireID == null)
@@ -219,6 +252,7 @@ namespace SolutionPersonnelleTemplate.Controllers.LogicWebSite
         // POST: Message/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Administrateur,Manager")]
         public async Task<IActionResult> DeleteConfirmed(int? HistoireID)
         {
 
@@ -237,6 +271,7 @@ namespace SolutionPersonnelleTemplate.Controllers.LogicWebSite
         }
 
         // GET: Message/Edit/5
+        [Authorize(Roles = "Administrateur,Manager")]
         public async Task<IActionResult> Edit(int? HistoireID)
         {
             if (HistoireID == null)
@@ -280,6 +315,7 @@ namespace SolutionPersonnelleTemplate.Controllers.LogicWebSite
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Administrateur,Manager")]
         public async Task<IActionResult> Edit(HistoireViewModel histoireVM)
         {
 
