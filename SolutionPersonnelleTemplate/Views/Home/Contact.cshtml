@@ -1,17 +1,46 @@
-﻿@{
+﻿@model SolutionPersonnelleTemplate.Models.ViewModels.ContactViewModel
+@{
     ViewData["Title"] = "Contact";
 }
 <h2>@ViewData["Title"]</h2>
 <h3>@ViewData["Message"]</h3>
 
-<address>
-    One Microsoft Way<br />
-    Redmond, WA 98052-6399<br />
-    <abbr title="Phone">P:</abbr>
-    425.555.0100
-</address>
+<div id="contact-form row">
+    <form asp-controller="Home" asp-action="Contact" asp-anti-forgery="true" method="post">
+        <div class="form-group">
+            @*<div class="col-md-12 form-group">
+                <input asp-for="Name" class="form-control" placeholder="Nom" />
+                <span asp-validation-for="Name" style="color: red"></span>
+            </div>
+            <div class="col-md-12 form-group">
+                <input asp-for="Email" class="form-control" placeholder="Email" />
+                <span asp-validation-for="Email" style="color: red"></span>
+            </div>*@
+            <div class="col-md-12 form-group">
+                <label asp-for="Subject" class="control-label"></label>
+                @if (ViewBag.subject != "")
+    {
+            <input asp-for="Subject" class="form-control" value="@ViewBag.subjet" readonly="readonly" />
+}
+else
+{
+            <input asp-for="Subject" class="form-control" placeholder="Objet" />
+}
+                <span asp-validation-for="Subject" style="color: red"></span>
+            </div>
+            <div class="col-md-12 form-group">
+                <label asp-for="Message" class="control-label"></label>
+                <textarea asp-for="Message" class="message form-control" placeholder="Votre message..."></textarea>
+            </div>
+            <div class="col-md-6">
+                <input asp-for="UserId" type="hidden" value="@ViewBag.utilisateurID"/>
+               
+                <button class="btn btn-primary" type="submit" id="submit">Envoyer</button>
+            </div>
+        </div>
+    </form>
+</div>
 
-<address>
-    <strong>Support:</strong> <a href="mailto:Support@example.com">Support@example.com</a><br />
-    <strong>Marketing:</strong> <a href="mailto:Marketing@example.com">Marketing@example.com</a>
-</address>
+@section Scripts {
+    @Html.Partial("_ValidationScriptsPartial")
+}
