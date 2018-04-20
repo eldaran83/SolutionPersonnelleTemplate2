@@ -15,6 +15,7 @@ using SolutionPersonnelleTemplate.Models.BLL.Interfaces;
 using SolutionPersonnelleTemplate.Models.BLL.Managers;
 using SolutionPersonnelleTemplate.Models.BO;
 using ReflectionIT.Mvc.Paging;
+using PaulMiami.AspNetCore.Mvc.Recaptcha;
 
 namespace SolutionPersonnelleTemplate
 {
@@ -44,7 +45,13 @@ namespace SolutionPersonnelleTemplate
 
             // Add application services.
             services.AddTransient<IEmailSender, EmailSender>();
-
+            //Add pour le Captcha !  faut installer un nouveau package : PaulMiami.AspNetCore.Mvc.Recaptcha
+            services.AddRecaptcha(new RecaptchaOptions
+            {
+                SiteKey = Configuration["Recaptcha:SiteKey"],
+                SecretKey = Configuration["Recaptcha:SecretKey"],
+                ValidationMessage = "Are you a robot?"
+            });
             //Add utilisateur services
             services.AddScoped<IUtilisateurInterface, UtilisateurManager>();
             //Add application services for fichier

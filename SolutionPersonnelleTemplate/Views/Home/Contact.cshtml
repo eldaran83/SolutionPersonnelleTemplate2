@@ -9,38 +9,51 @@
     <form asp-controller="Home" asp-action="Contact" asp-anti-forgery="true" method="post">
         <div class="form-group">
             @*<div class="col-md-12 form-group">
-                <input asp-for="Name" class="form-control" placeholder="Nom" />
-                <span asp-validation-for="Name" style="color: red"></span>
-            </div>
-            <div class="col-md-12 form-group">
-                <input asp-for="Email" class="form-control" placeholder="Email" />
-                <span asp-validation-for="Email" style="color: red"></span>
-            </div>*@
+                    <input asp-for="Name" class="form-control" placeholder="Nom" />
+                    <span asp-validation-for="Name" style="color: red"></span>
+                </div>
+                <div class="col-md-12 form-group">
+                    <input asp-for="Email" class="form-control" placeholder="Email" />
+                    <span asp-validation-for="Email" style="color: red"></span>
+                </div>*@
             <div class="col-md-12 form-group">
                 <label asp-for="Subject" class="control-label"></label>
-                @if (ViewBag.subject != "")
-    {
-            <input asp-for="Subject" class="form-control" value="@ViewBag.subjet" readonly="readonly" />
-}
-else
-{
-            <input asp-for="Subject" class="form-control" placeholder="Objet" />
-}
+                @if (ViewBag.subject != null)
+                {
+                    <input asp-for="Subject" class="form-control" value="@ViewBag.subjet" readonly="readonly" />
+                }
+                else
+                {
+                    <input asp-for="Subject" class="form-control" placeholder="Objet" />
+                }
                 <span asp-validation-for="Subject" style="color: red"></span>
             </div>
             <div class="col-md-12 form-group">
                 <label asp-for="Message" class="control-label"></label>
                 <textarea asp-for="Message" class="message form-control" placeholder="Votre message..."></textarea>
             </div>
+            @*Pour le Captach*@
             <div class="col-md-6">
-                <input asp-for="UserId" type="hidden" value="@ViewBag.utilisateurID"/>
-               
+                <div class="g-recaptcha" data-sitekey="6LcjlFQUAAAAAL1VJVswyhgGnCY9MBIlmQ124JPG"></div>
+            </div>
+
+            <div class="col-md-6">
+                <input asp-for="UserId" type="hidden" value="@ViewBag.utilisateurID" />
                 <button class="btn btn-primary" type="submit" id="submit">Envoyer</button>
             </div>
+
         </div>
     </form>
 </div>
 
+
+
+@if (ViewBag.Success == false || !string.IsNullOrWhiteSpace(ViewBag.Error))
+{
+    <div style="color: red">@(string.IsNullOrWhiteSpace(ViewBag.Error) ? "Echec d'envoi du message" : ViewBag.Error)</div>
+}
+
 @section Scripts {
     @Html.Partial("_ValidationScriptsPartial")
+ <recaptcha-script />
 }

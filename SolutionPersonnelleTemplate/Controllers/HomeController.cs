@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using PaulMiami.AspNetCore.Mvc.Recaptcha;
 using SolutionPersonnelleTemplate.Data;
 using SolutionPersonnelleTemplate.Models;
 using SolutionPersonnelleTemplate.Models.BLL.Interfaces;
@@ -80,16 +81,29 @@ namespace SolutionPersonnelleTemplate.Controllers
 
             if (subjet != null)
             {
-                ViewBag.subjet = subjet;
+                if (subjet == "devenirScribe")
+                {
+                    ViewBag.subjet = "Demande pour devenir un Scribe";
+                }
+              
             }
-           
-             return View();
+
+            return View();
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [ValidateRecaptcha]
         public async Task<IActionResult> Contact(ContactViewModel model)
         {
+            //pour la gestion du Captcha
+            var captcha = ModelState["g-recaptcha-response"];
+            if (captcha != null && captcha.Errors.Any())
+            {
+                this.ViewBag.Error = "Le Captcha est erroné";
+                this.ViewBag.subjet = model.Subject.ToString();
+                return View(model);
+            }
             //je recupere la vraie identité de l user
             var applicationUserID = _userManager.GetUserId(HttpContext.User);
             //je recupere l utilisateur
@@ -101,18 +115,31 @@ namespace SolutionPersonnelleTemplate.Controllers
             }
 
             string subject = "";
-            if (model.Subject == "devenirScribe")
+            string email = "";
+            string message = "";
+
+            if (model.Subject == "Demande pour devenir un Scribe")
             {
-                 subject = "L'utilisateur " + model.UserId + " souhaite devenir Sribe, il faut le passer en Manager";
+                subject = "devenirScribe";
+                email = "eldaran83@gmail.com"; // mail en dur pour le moment , par al suite a récuperer du Json
+                message = "<p>Un utilisateur veut devenir un scribe et il faut le passer en statut manager </p>" +
+                    "<p>Son ID est le : " + utilisateur.ApplicationUserID + "</p>" +
+                    "<p>Son email est :" + utilisateur.Email + "</p>" +
+                    "<p>Pour le passer directement Sribe vous pouvez cliquer" + "<a href=\"https://localhost:44344/Admin/Edit?userId=" + utilisateur.ApplicationUserID + "\">ICI</a></p>" +
+                    "<p>Son message :</p>" +
+                    "<p>" + model.Message + "</p>";
             }
             else
             {
-                model.Subject.ToString();
+                email = utilisateur.Email.ToString();
+                subject= model.Subject.ToString();
+                message = model.Message.ToString();
+
             }
 
-            string email = utilisateur.Email;
-         
-            string message = model.Message;
+            //email = utilisateur.Email;
+
+            //message = model.Message;
 
             if (ModelState.IsValid)
             {
@@ -120,6 +147,7 @@ namespace SolutionPersonnelleTemplate.Controllers
             }
 
             return View("Index"); // a changer avec le retour 
+
         }
 
 
