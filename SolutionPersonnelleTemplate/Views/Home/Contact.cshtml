@@ -20,7 +20,7 @@
                 <label asp-for="Subject" class="control-label"></label>
                 @if (ViewBag.subject != null)
                 {
-                    <input asp-for="Subject" class="form-control" value="@ViewBag.subjet" readonly="readonly" />
+                    <input asp-for="Subject" class="form-control" value="@ViewBag.subject" readonly="readonly" />
                 }
                 else
                 {
@@ -41,8 +41,7 @@
                 <input asp-for="UserId" type="hidden" value="@ViewBag.utilisateurID" />
                 <button class="btn btn-primary" type="submit" id="submit">Envoyer</button>
             </div>
-
-        </div>
+         </div>
     </form>
 </div>
 

@@ -83,7 +83,7 @@ namespace SolutionPersonnelleTemplate.Controllers
             {
                 if (subjet == "devenirScribe")
                 {
-                    ViewBag.subjet = "Demande pour devenir un Scribe";
+                    ViewBag.subject = "Demande pour devenir un Scribe";
                 }
               
             }
@@ -114,35 +114,39 @@ namespace SolutionPersonnelleTemplate.Controllers
                 return NotFound();
             }
 
-            string subject = "";
-            string email = "";
-            string message = "";
+            //string subject = "";
+            //string email = "";
+            //string message = "";
 
-            if (model.Subject == "Demande pour devenir un Scribe")
-            {
-                subject = "devenirScribe";
-                email = "eldaran83@gmail.com"; // mail en dur pour le moment , par al suite a récuperer du Json
-                message = "<p>Un utilisateur veut devenir un scribe et il faut le passer en statut manager </p>" +
-                    "<p>Son ID est le : " + utilisateur.ApplicationUserID + "</p>" +
-                    "<p>Son email est :" + utilisateur.Email + "</p>" +
-                    "<p>Pour le passer directement Sribe vous pouvez cliquer" + "<a href=\"https://localhost:44344/Admin/Edit?userId=" + utilisateur.ApplicationUserID + "\">ICI</a></p>" +
-                    "<p>Son message :</p>" +
-                    "<p>" + model.Message + "</p>";
-            }
-            else
-            {
-                email = utilisateur.Email.ToString();
-                subject= model.Subject.ToString();
-                message = model.Message.ToString();
+            //if (model.Subject == "Demande pour devenir un Scribe")
+            //{
+            //    subject = "devenirScribe";
+            //    email = "eldaran83@gmail.com"; // mail en dur pour le moment , par al suite a récuperer du Json
+            //    message = "<p>Un utilisateur veut devenir un scribe et il faut le passer en statut manager </p>" +
+            //        "<p>Son ID est le : " + utilisateur.ApplicationUserID + "</p>" +
+            //        "<p>Son email est :" + utilisateur.Email + "</p>" +
+            //        "<p>Pour le passer directement Sribe vous pouvez cliquer" + "<a href=\"https://localhost:44344/Admin/Edit?userId=" + utilisateur.ApplicationUserID + "\">ICI</a></p>" +
+            //        "<p>Son message :</p>" +
+            //        "<p>" + model.Message + "</p>";
+            //}
+            //else
+            //{
+            //    email = utilisateur.Email.ToString();
+            //    subject= model.Subject.ToString();
+            //    message = model.Message.ToString();
 
-            }
-
-            //email = utilisateur.Email;
-
-            //message = model.Message;
+            //}
 
             if (ModelState.IsValid)
             {
+                string subject = model.Subject;
+                string email = "eldaran83@gmail.com"; // mail en dur pour le moment , par al suite a récuperer du Json
+                string message ="<p>Son ID est le : " + utilisateur.ApplicationUserID + "</p>" +
+                            "<p>Son email est :" + utilisateur.Email + "</p>" +
+                             "<p>Son message :</p>" +
+                            "<p>" + model.Message + "</p>";
+
+
                 await _emailSender.SendEmailAsync(email, subject, message);
             }
 

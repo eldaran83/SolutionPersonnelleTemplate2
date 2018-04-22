@@ -40,6 +40,8 @@ namespace SolutionPersonnelleTemplate
 
             //Add mail methode personnelle
             services.Configure<EmailSettings>(Configuration.GetSection("EmailSettings"));
+            //Add mail strategy contact
+            services.AddScoped<StrategyMailContact, MailContact>();
             // add utilisateur
             services.Configure<Utilisateur>(Configuration);
 
