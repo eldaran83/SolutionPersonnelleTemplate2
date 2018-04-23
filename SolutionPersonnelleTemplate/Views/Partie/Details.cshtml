@@ -1,0 +1,30 @@
+﻿@model SolutionPersonnelleTemplate.Models.BO.Partie
+
+@{
+    ViewData["Title"] = "Details";
+}
+
+<h2>Details</h2>
+
+<div>
+    <h4>Partie</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.Histoire)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Histoire.Synopsis)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Utilisateur)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Utilisateur.ApplicationUserID)
+        </dd>
+    </dl>
+</div>
+<div>
+    <a asp-action="Edit" asp-route-id="@Model.PartieID">Edit</a> |
+    <a asp-action="Index">Back to List</a>
+</div>

@@ -13,10 +13,11 @@ namespace SolutionPersonnelleTemplate.Models.BO
         public string UtilisateurID { get; set; }
         public int HistoireID { get; set; }
         //prop
-        public TimeSpan Horodatage { get; set; }
+
 
         //nav 
         public Utilisateur Utilisateur { get; set; }
         public Histoire Histoire { get; set; }
+        public EtreVivant EtreVivant { get; set; }
     }
 }

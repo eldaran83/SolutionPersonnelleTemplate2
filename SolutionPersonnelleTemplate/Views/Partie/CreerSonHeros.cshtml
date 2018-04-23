@@ -1,0 +1,69 @@
+﻿@model SolutionPersonnelleTemplate.Models.ViewModels.CreerSonHerosViewModel
+
+@{
+    ViewData["Title"] = "Creer Son Heros";
+}
+
+<h2>CreerSonHeros</h2>
+
+<h4>Partie</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="CreerSonHeros">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            @*<div class="form-group">
+            <label asp-for="UtilisateurID" class="control-label"></label>
+            <select asp-for="UtilisateurID" class ="form-control" asp-items="ViewBag.UtilisateurID"></select>
+        </div>*@
+            @*<div class="form-group">
+            <label asp-for="HistoireID" class="control-label"></label>
+            <select asp-for="HistoireID" class ="form-control" asp-items="ViewBag.HistoireID"></select>
+        </div>*@
+
+            <div class="form-group">
+                <label asp-for="EtreVivant.Nom" class="control-label"></label>
+                <input asp-for="EtreVivant.Nom" class="form-control" />
+                <span asp-validation-for="EtreVivant.Nom" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="EtreVivant.Force" class="control-label"></label>
+                <input asp-for="EtreVivant.Force" class="form-control" />
+                <span asp-validation-for="EtreVivant.Force" class="text-danger"></span>
+            </div>        
+            <div class="form-group">
+                <label asp-for="EtreVivant.Constitution" class="control-label"></label>
+                <input asp-for="EtreVivant.Constitution" class="form-control" />
+                <span asp-validation-for="EtreVivant.Constitution" class="text-danger"></span>
+            </div>           
+            <div class="form-group">
+                <label asp-for="EtreVivant.Dexterite" class="control-label"></label>
+                <input asp-for="EtreVivant.Dexterite" class="form-control" />
+                <span asp-validation-for="EtreVivant.Dexterite" class="text-danger"></span>
+            </div>          
+            <div class="form-group">
+                <label asp-for="EtreVivant.Intelligence" class="control-label"></label>
+                <input asp-for="EtreVivant.Intelligence" class="form-control" />
+                <span asp-validation-for="EtreVivant.Intelligence" class="text-danger"></span>
+            </div>            
+            <div class="form-group">
+                <label asp-for="EtreVivant.Charisme" class="control-label"></label>
+                <input asp-for="EtreVivant.Charisme" class="form-control" />
+                <span asp-validation-for="EtreVivant.Charisme" class="text-danger"></span>
+            </div>
+
+
+            <div class="form-group">
+                <input asp-for="Histoire.HistoireID" value="@ViewBag.HistoireID" type="hidden" />
+                <input asp-for="Utilisateur.ApplicationUserID" value="@ViewBag.ApplicationUserID" type="hidden" />
+
+                <input type="submit" value="Go !" class="btn btn-success" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+

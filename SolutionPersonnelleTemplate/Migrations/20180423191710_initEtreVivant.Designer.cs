@@ -8,11 +8,11 @@ using Microsoft.EntityFrameworkCore.Storage.Internal;
 using SolutionPersonnelleTemplate.Data;
 using System;
 
-namespace SolutionPersonnelleTemplate.Data.Migrations
+namespace SolutionPersonnelleTemplate.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20180331093049_init")]
-    partial class init
+    [Migration("20180423191710_initEtreVivant")]
+    partial class initEtreVivant
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -180,6 +180,141 @@ namespace SolutionPersonnelleTemplate.Data.Migrations
                     b.ToTable("AspNetUsers");
                 });
 
+            modelBuilder.Entity("SolutionPersonnelleTemplate.Models.BO.EtreVivant", b =>
+                {
+                    b.Property<int>("EtreVivantID")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<int>("Charisme");
+
+                    b.Property<int>("Constitution");
+
+                    b.Property<int>("Dexterite");
+
+                    b.Property<int>("Force");
+
+                    b.Property<int>("Intelligence");
+
+                    b.Property<string>("Nom")
+                        .IsRequired();
+
+                    b.HasKey("EtreVivantID");
+
+                    b.ToTable("EtreVivants");
+                });
+
+            modelBuilder.Entity("SolutionPersonnelleTemplate.Models.BO.Histoire", b =>
+                {
+                    b.Property<int>("HistoireID")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<string>("Createur");
+
+                    b.Property<int>("NombreDeFoisJouee");
+
+                    b.Property<int>("Score");
+
+                    b.Property<string>("Synopsis")
+                        .IsRequired()
+                        .HasMaxLength(600);
+
+                    b.Property<string>("Titre")
+                        .IsRequired()
+                        .HasMaxLength(80);
+
+                    b.Property<string>("UrlMedia");
+
+                    b.Property<string>("UtilisateurID");
+
+                    b.HasKey("HistoireID");
+
+                    b.HasIndex("UtilisateurID");
+
+                    b.ToTable("Histoires");
+                });
+
+            modelBuilder.Entity("SolutionPersonnelleTemplate.Models.BO.Message", b =>
+                {
+                    b.Property<int>("MessageID")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<string>("Contenu")
+                        .IsRequired();
+
+                    b.Property<int>("HistoireID");
+
+                    b.Property<string>("NomAction1");
+
+                    b.Property<string>("NomAction2");
+
+                    b.Property<string>("NomAction3");
+
+                    b.Property<int?>("NumeroMessageEnfant1");
+
+                    b.Property<int?>("NumeroMessageEnfant2");
+
+                    b.Property<int?>("NumeroMessageEnfant3");
+
+                    b.Property<string>("Titre")
+                        .IsRequired()
+                        .HasMaxLength(80);
+
+                    b.Property<string>("UrlMedia");
+
+                    b.HasKey("MessageID");
+
+                    b.HasIndex("HistoireID");
+
+                    b.ToTable("Messages");
+                });
+
+            modelBuilder.Entity("SolutionPersonnelleTemplate.Models.BO.Partie", b =>
+                {
+                    b.Property<int>("PartieID")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<int?>("EtreVivantID");
+
+                    b.Property<int>("HistoireID");
+
+                    b.Property<string>("UtilisateurID");
+
+                    b.HasKey("PartieID");
+
+                    b.HasIndex("EtreVivantID");
+
+                    b.HasIndex("HistoireID");
+
+                    b.HasIndex("UtilisateurID");
+
+                    b.ToTable("Parties");
+                });
+
+            modelBuilder.Entity("SolutionPersonnelleTemplate.Models.BO.Utilisateur", b =>
+                {
+                    b.Property<string>("ApplicationUserID");
+
+                    b.Property<bool>("ConfirmEmail");
+
+                    b.Property<DateTime>("DateCreationUtilisateur");
+
+                    b.Property<DateTime>("DateDeNaissance");
+
+                    b.Property<string>("Email");
+
+                    b.Property<bool>("ProfilUtilisateurComplet");
+
+                    b.Property<string>("Pseudo");
+
+                    b.Property<string>("Role");
+
+                    b.Property<string>("UrlAvatarImage");
+
+                    b.HasKey("ApplicationUserID");
+
+                    b.ToTable("Utilisateurs");
+                });
+
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
                 {
                     b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole")
@@ -222,6 +357,45 @@ namespace SolutionPersonnelleTemplate.Data.Migrations
                     b.HasOne("SolutionPersonnelleTemplate.Models.ApplicationUser")
                         .WithMany()
                         .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade);
+                });
+
+            modelBuilder.Entity("SolutionPersonnelleTemplate.Models.BO.Histoire", b =>
+                {
+                    b.HasOne("SolutionPersonnelleTemplate.Models.BO.Utilisateur", "Utilisateur")
+                        .WithMany()
+                        .HasForeignKey("UtilisateurID");
+                });
+
+            modelBuilder.Entity("SolutionPersonnelleTemplate.Models.BO.Message", b =>
+                {
+                    b.HasOne("SolutionPersonnelleTemplate.Models.BO.Histoire", "Histoire")
+                        .WithMany("Messages")
+                        .HasForeignKey("HistoireID")
+                        .OnDelete(DeleteBehavior.Cascade);
+                });
+
+            modelBuilder.Entity("SolutionPersonnelleTemplate.Models.BO.Partie", b =>
+                {
+                    b.HasOne("SolutionPersonnelleTemplate.Models.BO.EtreVivant", "EtreVivant")
+                        .WithMany()
+                        .HasForeignKey("EtreVivantID");
+
+                    b.HasOne("SolutionPersonnelleTemplate.Models.BO.Histoire", "Histoire")
+                        .WithMany()
+                        .HasForeignKey("HistoireID")
+                        .OnDelete(DeleteBehavior.Cascade);
+
+                    b.HasOne("SolutionPersonnelleTemplate.Models.BO.Utilisateur", "Utilisateur")
+                        .WithMany("Parties")
+                        .HasForeignKey("UtilisateurID");
+                });
+
+            modelBuilder.Entity("SolutionPersonnelleTemplate.Models.BO.Utilisateur", b =>
+                {
+                    b.HasOne("SolutionPersonnelleTemplate.Models.ApplicationUser", "ApplicationUser")
+                        .WithOne("Utilisateur")
+                        .HasForeignKey("SolutionPersonnelleTemplate.Models.BO.Utilisateur", "ApplicationUserID")
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 #pragma warning restore 612, 618
