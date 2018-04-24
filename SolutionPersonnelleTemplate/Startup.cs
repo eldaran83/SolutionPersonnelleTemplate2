@@ -62,6 +62,8 @@ namespace SolutionPersonnelleTemplate
             services.AddScoped<IRepositoryHistoire, HistoireRepository>();
             //Add application services for message
             services.AddScoped<IRepositoryMessage, MessageRepository>();
+            //Add application services for Partie
+            services.AddScoped<IRepositoryPartie, PartieRepository>();
 
             services.AddMvc();
             //add pour la pagination

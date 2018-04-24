@@ -29,6 +29,6 @@ namespace SolutionPersonnelleTemplate.Data
         public DbSet<Histoire> Histoires { get; set; }
         public DbSet<Message> Messages { get; set; }
 
-        public DbSet<EtreVivant> EtreVivants { get; set; }
+        public DbSet<Personne> Personnes { get; set; }
     }
 }

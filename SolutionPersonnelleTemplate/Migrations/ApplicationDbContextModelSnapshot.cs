@@ -179,34 +179,6 @@ namespace SolutionPersonnelleTemplate.Migrations
                     b.ToTable("AspNetUsers");
                 });
 
-            modelBuilder.Entity("SolutionPersonnelleTemplate.Models.BO.EtreVivant", b =>
-                {
-                    b.Property<int>("EtreVivantID")
-                        .ValueGeneratedOnAdd();
-
-                    b.Property<int>("Charisme");
-
-                    b.Property<int>("Constitution");
-
-                    b.Property<int>("Dexterite");
-
-                    b.Property<int>("Force");
-
-                    b.Property<int>("Intelligence");
-
-                    b.Property<string>("Nom")
-                        .IsRequired();
-
-                    b.Property<int>("PartieID");
-
-                    b.HasKey("EtreVivantID");
-
-                    b.HasIndex("PartieID")
-                        .IsUnique();
-
-                    b.ToTable("EtreVivants");
-                });
-
             modelBuilder.Entity("SolutionPersonnelleTemplate.Models.BO.Histoire", b =>
                 {
                     b.Property<int>("HistoireID")
@@ -279,15 +251,42 @@ namespace SolutionPersonnelleTemplate.Migrations
 
                     b.Property<int>("HistoireID");
 
+                    b.Property<int>("PersonneID");
+
                     b.Property<string>("UtilisateurID");
 
                     b.HasKey("PartieID");
 
                     b.HasIndex("HistoireID");
 
+                    b.HasIndex("PersonneID");
+
                     b.HasIndex("UtilisateurID");
 
                     b.ToTable("Parties");
+                });
+
+            modelBuilder.Entity("SolutionPersonnelleTemplate.Models.BO.Personne", b =>
+                {
+                    b.Property<int>("PersonneID")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<int>("Charisme");
+
+                    b.Property<int>("Constitution");
+
+                    b.Property<int>("Dexterite");
+
+                    b.Property<int>("Force");
+
+                    b.Property<int>("Intelligence");
+
+                    b.Property<string>("Nom")
+                        .IsRequired();
+
+                    b.HasKey("PersonneID");
+
+                    b.ToTable("Personnes");
                 });
 
             modelBuilder.Entity("SolutionPersonnelleTemplate.Models.BO.Utilisateur", b =>
@@ -360,14 +359,6 @@ namespace SolutionPersonnelleTemplate.Migrations
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 
-            modelBuilder.Entity("SolutionPersonnelleTemplate.Models.BO.EtreVivant", b =>
-                {
-                    b.HasOne("SolutionPersonnelleTemplate.Models.BO.Partie", "Partie")
-                        .WithOne("EtreVivant")
-                        .HasForeignKey("SolutionPersonnelleTemplate.Models.BO.EtreVivant", "PartieID")
-                        .OnDelete(DeleteBehavior.Cascade);
-                });
-
             modelBuilder.Entity("SolutionPersonnelleTemplate.Models.BO.Histoire", b =>
                 {
                     b.HasOne("SolutionPersonnelleTemplate.Models.BO.Utilisateur", "Utilisateur")
@@ -388,6 +379,11 @@ namespace SolutionPersonnelleTemplate.Migrations
                     b.HasOne("SolutionPersonnelleTemplate.Models.BO.Histoire", "Histoire")
                         .WithMany()
                         .HasForeignKey("HistoireID")
+                        .OnDelete(DeleteBehavior.Cascade);
+
+                    b.HasOne("SolutionPersonnelleTemplate.Models.BO.Personne", "Heros")
+                        .WithMany()
+                        .HasForeignKey("PersonneID")
                         .OnDelete(DeleteBehavior.Cascade);
 
                     b.HasOne("SolutionPersonnelleTemplate.Models.BO.Utilisateur", "Utilisateur")

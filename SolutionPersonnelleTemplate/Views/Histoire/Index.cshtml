@@ -57,7 +57,7 @@ else
                     <div class="jumbotron">
                         <img src="@item.UrlMedia" alt="@item.Titre" class="img-responsive" style="height:165px;" />
                     </div>
-                    <a asp-action="CreerSonHeros" asp-controller="Partie" asp-route-histoireID="@item.HistoireID" class="btn btn-info btn-block">Jouer à cette aventure</a>
+                    <a asp-action="Jouer" asp-controller="Partie" asp-route-histoireID="@item.HistoireID" class="btn btn-info btn-block">Jouer à cette aventure</a>
                 </div>
 
             }

@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.AspNetCore.Routing;
 using Microsoft.EntityFrameworkCore;
 using SolutionPersonnelleTemplate.Data;
 using SolutionPersonnelleTemplate.Models;
@@ -20,15 +21,47 @@ namespace SolutionPersonnelleTemplate.Controllers.LogicWebSite
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly IUtilisateurInterface _utilisateurManager;
         private readonly IRepositoryHistoire _histoireManager;
+        private readonly IRepositoryPartie _partieManager;
 
         public PartieController(ApplicationDbContext context, UserManager<ApplicationUser> userManager,
-            IUtilisateurInterface utilisateurManager, IRepositoryHistoire histoireManager)
+            IUtilisateurInterface utilisateurManager, IRepositoryHistoire histoireManager,
+            IRepositoryPartie partieManager)
         {
             _context = context;
             _userManager = userManager;
             _utilisateurManager = utilisateurManager;
             _histoireManager = histoireManager;
+            _partieManager = partieManager;
         }
+
+
+        public async Task<IActionResult> Jouer(int HistoireID)
+        {
+            //je recupere la vraie identité de l user
+            var applicationUserID = _userManager.GetUserId(HttpContext.User);
+            //je recupere l utilisateur
+            Utilisateur utilisateur = await _utilisateurManager.GetUtilisateurByIdAsync(applicationUserID);
+            string utilisateurID = utilisateur.ApplicationUserID;
+
+            //pour la redirection 
+            int idHistoire = HistoireID;
+            //verifie si l utilisateur joue deja ou pas a cette histoire
+            if (await _partieManager.DejaJouerDeCetteHistoire(HistoireID,utilisateurID))
+            {
+                //redirection vers là où en est le jouer dans sa partie 
+                return View("Index");
+            }
+            else
+            {
+                return RedirectToAction("CreerSonHeros", new RouteValueDictionary(new
+                {
+                    controller = "Partie",
+                    action = "CreerSonHeros",
+                    HistoireID = idHistoire
+                }));
+            }
+        }
+
 
         [HttpGet]
         public async Task<IActionResult> CreerSonHeros(int HistoireID)
@@ -45,7 +78,7 @@ namespace SolutionPersonnelleTemplate.Controllers.LogicWebSite
                 Partie = null,
                 Histoire = lhistoireAJouer,
                 Utilisateur = utilisateur,
-                EtreVivant = null
+                Heros = null
             };
 
             ViewBag.HistoireID = creerSonHeros.Histoire.HistoireID;
@@ -58,31 +91,19 @@ namespace SolutionPersonnelleTemplate.Controllers.LogicWebSite
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> CreerSonHeros(CreerSonHerosViewModel creerSonHerosModel)
         {
-
-            Partie laPartie = new Partie
+            try
             {
-                HistoireID = creerSonHerosModel.Histoire.HistoireID,
-                UtilisateurID = creerSonHerosModel.Utilisateur.ApplicationUserID,
-
-            };
-            _context.Add(laPartie);
-            await _context.SaveChangesAsync();
-
-            EtreVivant heros = new EtreVivant {
-                Charisme =creerSonHerosModel.EtreVivant.Charisme,
-                Constitution =creerSonHerosModel.EtreVivant.Constitution,
-                Dexterite = creerSonHerosModel.EtreVivant.Dexterite,
-                Force = creerSonHerosModel.EtreVivant.Force,
-                 Intelligence =creerSonHerosModel.EtreVivant.Intelligence,
-                 Nom = creerSonHerosModel.EtreVivant.Nom,
-                 PartieID = laPartie.PartieID
-            };
-
-            _context.Add(heros);
-            await _context.SaveChangesAsync();
+                await _partieManager.NouvellePartie(creerSonHerosModel);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("ajout heros ou partie mal passé" + ex);
+            }
 
 
-            return View(creerSonHerosModel);
+
+
+            return View("Index"); // redirection a changer pour pointer la où il faut 
         }
 
 

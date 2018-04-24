@@ -5,7 +5,7 @@ using System.Collections.Generic;
 
 namespace SolutionPersonnelleTemplate.Migrations
 {
-    public partial class initEtreVivant : Migration
+    public partial class testPerson : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -49,10 +49,10 @@ namespace SolutionPersonnelleTemplate.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "EtreVivants",
+                name: "Personnes",
                 columns: table => new
                 {
-                    EtreVivantID = table.Column<int>(nullable: false)
+                    PersonneID = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
                     Charisme = table.Column<int>(nullable: false),
                     Constitution = table.Column<int>(nullable: false),
@@ -63,7 +63,7 @@ namespace SolutionPersonnelleTemplate.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_EtreVivants", x => x.EtreVivantID);
+                    table.PrimaryKey("PK_Personnes", x => x.PersonneID);
                 });
 
             migrationBuilder.CreateTable(
@@ -256,24 +256,24 @@ namespace SolutionPersonnelleTemplate.Migrations
                 {
                     PartieID = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
-                    EtreVivantID = table.Column<int>(nullable: true),
                     HistoireID = table.Column<int>(nullable: false),
+                    PersonneID = table.Column<int>(nullable: false),
                     UtilisateurID = table.Column<string>(nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Parties", x => x.PartieID);
                     table.ForeignKey(
-                        name: "FK_Parties_EtreVivants_EtreVivantID",
-                        column: x => x.EtreVivantID,
-                        principalTable: "EtreVivants",
-                        principalColumn: "EtreVivantID",
-                        onDelete: ReferentialAction.Restrict);
-                    table.ForeignKey(
                         name: "FK_Parties_Histoires_HistoireID",
                         column: x => x.HistoireID,
                         principalTable: "Histoires",
                         principalColumn: "HistoireID",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_Parties_Personnes_PersonneID",
+                        column: x => x.PersonneID,
+                        principalTable: "Personnes",
+                        principalColumn: "PersonneID",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_Parties_Utilisateurs_UtilisateurID",
@@ -333,14 +333,14 @@ namespace SolutionPersonnelleTemplate.Migrations
                 column: "HistoireID");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Parties_EtreVivantID",
-                table: "Parties",
-                column: "EtreVivantID");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_Parties_HistoireID",
                 table: "Parties",
                 column: "HistoireID");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Parties_PersonneID",
+                table: "Parties",
+                column: "PersonneID");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Parties_UtilisateurID",
@@ -375,10 +375,10 @@ namespace SolutionPersonnelleTemplate.Migrations
                 name: "AspNetRoles");
 
             migrationBuilder.DropTable(
-                name: "EtreVivants");
+                name: "Histoires");
 
             migrationBuilder.DropTable(
-                name: "Histoires");
+                name: "Personnes");
 
             migrationBuilder.DropTable(
                 name: "Utilisateurs");

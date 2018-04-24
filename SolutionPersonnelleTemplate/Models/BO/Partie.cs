@@ -12,12 +12,13 @@ namespace SolutionPersonnelleTemplate.Models.BO
         //FK
         public string UtilisateurID { get; set; }
         public int HistoireID { get; set; }
+        public int PersonneID { get; set; }
         //prop
 
 
         //nav 
         public Utilisateur Utilisateur { get; set; }
         public Histoire Histoire { get; set; }
-        public EtreVivant EtreVivant { get; set; }
+        public Personne Heros { get; set; }
     }
 }

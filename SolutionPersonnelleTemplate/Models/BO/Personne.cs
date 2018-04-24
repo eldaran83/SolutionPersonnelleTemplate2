@@ -6,10 +6,9 @@ using System.Threading.Tasks;
 
 namespace SolutionPersonnelleTemplate.Models.BO
 {
-    public class EtreVivant
-    {
-        //PK
-        public int EtreVivantID { get; set; }
+    public class Personne
+    {        //PK
+        public int PersonneID { get; set; }
 
         [Required]
         public string Nom { get; set; }
@@ -28,12 +27,8 @@ namespace SolutionPersonnelleTemplate.Models.BO
 
         public virtual string Presentation()
         {
-            return "Je me présente, je suis un etre vivant, je m'apelle "+Nom+ "j'ai une force de "+Force+ " une Intelligence de " + Intelligence +
-                " une Dexterite de "+ Dexterite+ " une Constitution de "+ Constitution+ " et un Charisme de " + Charisme;
+            return "Je me présente, je suis une personne, je m'apelle " + Nom + "j'ai une force de " + Force + " une Intelligence de " + Intelligence +
+                " une Dexterite de " + Dexterite + " une Constitution de " + Constitution + " et un Charisme de " + Charisme;
         }
-        //fk
-
-        public int PartieID { get; set; }
-        public Partie Partie { get; set; }
     }
 }

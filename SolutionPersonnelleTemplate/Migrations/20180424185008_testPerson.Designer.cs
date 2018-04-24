@@ -11,8 +11,8 @@ using System;
 namespace SolutionPersonnelleTemplate.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20180423191710_initEtreVivant")]
-    partial class initEtreVivant
+    [Migration("20180424185008_testPerson")]
+    partial class testPerson
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -180,29 +180,6 @@ namespace SolutionPersonnelleTemplate.Migrations
                     b.ToTable("AspNetUsers");
                 });
 
-            modelBuilder.Entity("SolutionPersonnelleTemplate.Models.BO.EtreVivant", b =>
-                {
-                    b.Property<int>("EtreVivantID")
-                        .ValueGeneratedOnAdd();
-
-                    b.Property<int>("Charisme");
-
-                    b.Property<int>("Constitution");
-
-                    b.Property<int>("Dexterite");
-
-                    b.Property<int>("Force");
-
-                    b.Property<int>("Intelligence");
-
-                    b.Property<string>("Nom")
-                        .IsRequired();
-
-                    b.HasKey("EtreVivantID");
-
-                    b.ToTable("EtreVivants");
-                });
-
             modelBuilder.Entity("SolutionPersonnelleTemplate.Models.BO.Histoire", b =>
                 {
                     b.Property<int>("HistoireID")
@@ -273,21 +250,44 @@ namespace SolutionPersonnelleTemplate.Migrations
                     b.Property<int>("PartieID")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<int?>("EtreVivantID");
-
                     b.Property<int>("HistoireID");
+
+                    b.Property<int>("PersonneID");
 
                     b.Property<string>("UtilisateurID");
 
                     b.HasKey("PartieID");
 
-                    b.HasIndex("EtreVivantID");
-
                     b.HasIndex("HistoireID");
+
+                    b.HasIndex("PersonneID");
 
                     b.HasIndex("UtilisateurID");
 
                     b.ToTable("Parties");
+                });
+
+            modelBuilder.Entity("SolutionPersonnelleTemplate.Models.BO.Personne", b =>
+                {
+                    b.Property<int>("PersonneID")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<int>("Charisme");
+
+                    b.Property<int>("Constitution");
+
+                    b.Property<int>("Dexterite");
+
+                    b.Property<int>("Force");
+
+                    b.Property<int>("Intelligence");
+
+                    b.Property<string>("Nom")
+                        .IsRequired();
+
+                    b.HasKey("PersonneID");
+
+                    b.ToTable("Personnes");
                 });
 
             modelBuilder.Entity("SolutionPersonnelleTemplate.Models.BO.Utilisateur", b =>
@@ -377,13 +377,14 @@ namespace SolutionPersonnelleTemplate.Migrations
 
             modelBuilder.Entity("SolutionPersonnelleTemplate.Models.BO.Partie", b =>
                 {
-                    b.HasOne("SolutionPersonnelleTemplate.Models.BO.EtreVivant", "EtreVivant")
-                        .WithMany()
-                        .HasForeignKey("EtreVivantID");
-
                     b.HasOne("SolutionPersonnelleTemplate.Models.BO.Histoire", "Histoire")
                         .WithMany()
                         .HasForeignKey("HistoireID")
+                        .OnDelete(DeleteBehavior.Cascade);
+
+                    b.HasOne("SolutionPersonnelleTemplate.Models.BO.Personne", "Heros")
+                        .WithMany()
+                        .HasForeignKey("PersonneID")
                         .OnDelete(DeleteBehavior.Cascade);
 
                     b.HasOne("SolutionPersonnelleTemplate.Models.BO.Utilisateur", "Utilisateur")
