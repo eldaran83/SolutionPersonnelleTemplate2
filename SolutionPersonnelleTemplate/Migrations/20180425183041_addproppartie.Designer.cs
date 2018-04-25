@@ -11,9 +11,10 @@ using System;
 namespace SolutionPersonnelleTemplate.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20180425183041_addproppartie")]
+    partial class addproppartie
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -216,8 +217,6 @@ namespace SolutionPersonnelleTemplate.Migrations
 
                     b.Property<string>("Contenu")
                         .IsRequired();
-
-                    b.Property<DateTime>("DateCreationMessage");
 
                     b.Property<int>("HistoireID");
 

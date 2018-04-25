@@ -48,6 +48,27 @@ namespace SolutionPersonnelleTemplate.Models.BLL.Managers
 
         }
 
+
+        public async Task<Partie> GetPartieById(int partieID)
+        {
+            Partie laPartie = await _context.Parties
+                 .Where(m => m.PartieID == partieID)
+                 .FirstOrDefaultAsync(); // il faut PENSER a ajouter le using Microsoft.EntityFrameworkCore;
+            return laPartie;
+
+        }
+
+        public async Task<Partie> GetPartieByUtilisateurAndHistoireID(int HistoireID, string utilisateurID)
+        {
+            Partie laPartie = await _context.Parties
+                .Where(m => m.HistoireID == HistoireID)
+                .Where(m => m.UtilisateurID == utilisateurID)
+                .FirstOrDefaultAsync(); // il faut PENSER a ajouter le using Microsoft.EntityFrameworkCore;
+
+            return laPartie;
+        }
+
+
         public async Task<Partie> NouvellePartie(CreerSonHerosViewModel herosDeLaPartieModel)
         {
             //creation du heros

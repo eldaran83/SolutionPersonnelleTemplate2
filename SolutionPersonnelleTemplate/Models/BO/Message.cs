@@ -18,6 +18,10 @@ namespace SolutionPersonnelleTemplate.Models.BO
         public string Contenu { get; set; }
         public string UrlMedia { get; internal set; }
 
+        [Required(ErrorMessage = "Message créer le")]
+        [DataType(DataType.DateTime)]
+        public DateTime DateCreationMessage { get; set; }
+
         //liens vers les 3 actions messages possibles
         //1
         [Display(Name = "N° du message 1")]

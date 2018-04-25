@@ -11,5 +11,7 @@ namespace SolutionPersonnelleTemplate.Models.BLL.Interfaces
     {
         Task<Partie> NouvellePartie(CreerSonHerosViewModel herosDeLaPartieModel);
         Task<bool> DejaJouerDeCetteHistoire(int HistoireID, string utilisateurID);
+        Task<Partie> GetPartieById(int partieID);
+        Task<Partie> GetPartieByUtilisateurAndHistoireID(int HistoireID, string utilisateurID);
     }
 }

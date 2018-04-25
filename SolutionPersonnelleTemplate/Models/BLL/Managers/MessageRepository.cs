@@ -27,6 +27,16 @@ namespace SolutionPersonnelleTemplate.Models.BLL.Managers
             _env = env;
         }
 
+        public async Task<Message> RetourneLePremierMessageDeLHistoire(int histoireID)
+        {
+            Message listeDesMessagesDeLHisoire = await _context.Messages
+                .Where(h => h.HistoireID == histoireID).OrderBy(m => m.DateCreationMessage).FirstOrDefaultAsync();
+
+            // Message lePremierMessageDeLHisoire = listeDesMessagesDeLHisoire.f
+            return listeDesMessagesDeLHisoire;
+
+        }
+
         public async Task<bool> PeuplerLesMessagesDesHistoire()
         {
             ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -52,7 +62,8 @@ namespace SolutionPersonnelleTemplate.Models.BLL.Managers
                     NumeroMessageEnfant2 = 3,
                     NomAction2 = "Se lever",
                     NumeroMessageEnfant3 = 4,
-                    NomAction3 = "Continuer à dormir"
+                    NomAction3 = "Continuer à dormir",
+                    DateCreationMessage = DateTime.Now
                 };
                 _context.Add(message1Histoire1);
                 //Message 2
@@ -67,7 +78,8 @@ namespace SolutionPersonnelleTemplate.Models.BLL.Managers
                     NumeroMessageEnfant2 = 6,
                     NomAction2 = "Partir à l'opposé de la fumée",
                     NumeroMessageEnfant3 = 4,
-                    NomAction3 = "Se recoucher pour dormir"
+                    NomAction3 = "Se recoucher pour dormir",
+                    DateCreationMessage = DateTime.Now
                 };
                 _context.Add(message2Histoire1);
                 //Message 4
@@ -82,7 +94,8 @@ namespace SolutionPersonnelleTemplate.Models.BLL.Managers
                     NumeroMessageEnfant2 = 6,
                     NomAction2 = "Partir à l'opposé de la fumée",
                     NumeroMessageEnfant3 = 4,
-                    NomAction3 = "Se recoucher pour dormir"
+                    NomAction3 = "Se recoucher pour dormir",
+                    DateCreationMessage = DateTime.Now
                 };
                 _context.Add(message3Histoire1);
                 //Message 4
@@ -91,7 +104,8 @@ namespace SolutionPersonnelleTemplate.Models.BLL.Managers
                     MessageID = 4,
                     HistoireID = 1,
                     Titre = "Le monde appartient à ceux qui se lévent tôt",
-                    Contenu = "Faisant fi de tout ce qui pourrait se passer autour de vous, vous vous laissez attirer par les chaleureux et puissants bras de Morphée. Vous ressentez bien de façon de plus en plus cuisante une odeur de fumée mais votre coprs de vous répondu plus. Votre histoire s'arrête ici Héros ! ."
+                    Contenu = "Faisant fi de tout ce qui pourrait se passer autour de vous, vous vous laissez attirer par les chaleureux et puissants bras de Morphée. Vous ressentez bien de façon de plus en plus cuisante une odeur de fumée mais votre coprs de vous répondu plus. Votre histoire s'arrête ici Héros ! .",
+                    DateCreationMessage = DateTime.Now
                 };
                 _context.Add(message4Histoire1);
                 //Message 5
@@ -102,7 +116,8 @@ namespace SolutionPersonnelleTemplate.Models.BLL.Managers
                     Titre = "Petit curieux",
                     Contenu = "Vous sortez de la clairière et vous entrez dans la forêt qui l'enserre. La fumée se fait de plus en plus dense rendant votre vison moins précise, et alors que vous êtes sur le point de vous demander s'il est bien prudent de continuer votre chemin, vous entendez un immense craquement sur votre flanc droit. Vous avez juste le temps d'apercevoir un tronc d'arbre en partie calciné vous frapper à la tête au moment où vous vous tournez vers ce son.",
                     NumeroMessageEnfant1 = 4,
-                    NomAction1 = "Entre deux eaux"
+                    NomAction1 = "Entre deux eaux",
+                    DateCreationMessage = DateTime.Now
                 };
                 _context.Add(message5Histoire1);
                 //Message 6
@@ -113,7 +128,8 @@ namespace SolutionPersonnelleTemplate.Models.BLL.Managers
                     Titre = "La prudence à parfois du bon",
                     Contenu = "Sans autres équipement sur vous et ne vous souvenant plus de rien, vous vous dites qu'il n'est peut être pas déjà temps de vous lancer dans des actions risquées.Faisant acte de prudence, vos pieds se tournent à l'opposé d'un potentiel danger, remarquant un petit sentier au travers de la forêt vous l'empruntez jusqu'à ne plus sentir cette odeur de fumée que loin derrière vous. Après une heure de marche, vos pas vous guide à l'entrée d'un petit village qui vous semblez habité. Que faites-vous ?.",
                     NumeroMessageEnfant1 = 7,
-                    NomAction1 = "Chaque chose en son temps"
+                    NomAction1 = "Chaque chose en son temps",
+                    DateCreationMessage = DateTime.Now
                 };
                 _context.Add(message6Histoire1);
                 //Message 8
@@ -122,7 +138,8 @@ namespace SolutionPersonnelleTemplate.Models.BLL.Managers
                     MessageID = 7,
                     HistoireID = 1,
                     Titre = "Chaque chose en son temps",
-                    Contenu = "La suite de l'aventure arrivera plus tard, merci d'y avoir participé."
+                    Contenu = "La suite de l'aventure arrivera plus tard, merci d'y avoir participé.",
+                    DateCreationMessage = DateTime.Now
                 };
                 _context.Add(message7Histoire1);
 
@@ -135,7 +152,8 @@ namespace SolutionPersonnelleTemplate.Models.BLL.Managers
                 //    Titre = "Le commencement",
                 //    Contenu = "Aujourd’hui, comme tous les lundis, dès la sortie de la classe, je cours vers le parc avec mes copains pour y retrouver monsieur Charles. J’essaye d’arriver le premier pour pouvoir choisir l’histoire qu’il va nous conter. Moi, je choisis toujours des histoires de détectives... Vite je dois me dépêcher.. Que faites vous ?",
                 //    NumeroMessageEnfant1 = 3,
-                //    NomAction1 = "Continuer vers le parc"
+                //    NomAction1 = "Continuer vers le parc",
+                //    DateCreationMessage = DateTime.Now
                 //};
                 //_context.Add(message2Histoire2);
                 ////Message 3
@@ -150,7 +168,8 @@ namespace SolutionPersonnelleTemplate.Models.BLL.Managers
                 //    NumeroMessageEnfant2 = 5,
                 //    NomAction2 = "Nous partons vers le petit ruisseau",
                 //    NumeroMessageEnfant3 = 7,
-                //    NomAction3 = "Nous partons vers l’entrée du parc"
+                //    NomAction3 = "Nous partons vers l’entrée du parc",
+                //    DateCreationMessage = DateTime.Now
                 //};
                 //_context.Add(message3Histoire2);
                 ////Message 4
@@ -161,7 +180,8 @@ namespace SolutionPersonnelleTemplate.Models.BLL.Managers
                 //    Titre = "Le grand arbre",
                 //    Contenu = "Nous avons beau chercher, mais nous ne le trouvons toujours pas. Nous décidons de retourner vers le banc vert",
                 //    NumeroMessageEnfant1 = 6,
-                //    NomAction1 = "Vers le banc"
+                //    NomAction1 = "Vers le banc",
+                //    DateCreationMessage = DateTime.Now
                 //};
                 //_context.Add(message4Histoire2);
                 ////Message 5
@@ -172,7 +192,8 @@ namespace SolutionPersonnelleTemplate.Models.BLL.Managers
                 //    Titre = "Le petit ruisseau",
                 //    Contenu = "Il n’y a personne du côté du petit ruisseau. Nous décidons de retourner vers le banc vert.Pour aller plus vite nous décidons de revenir par le petit talus.",
                 //    NumeroMessageEnfant1 = 6,
-                //    NomAction1 = "Passer le talus"
+                //    NomAction1 = "Passer le talus",
+                //    DateCreationMessage = DateTime.Now
                 //};
                 //_context.Add(message5Histoire2);
                 ////Message 6
@@ -183,7 +204,8 @@ namespace SolutionPersonnelleTemplate.Models.BLL.Managers
                 //    Titre = "Le banc",
                 //    Contenu = "Nous nous asseyons sur le banc et attendons un peu. Mais personne ne vient. Pour la première fois, nous n’aurons pas d’histoire...",
                 //    NumeroMessageEnfant1 = 7,
-                //    NomAction1 = "La suite"
+                //    NomAction1 = "La suite",
+                //    DateCreationMessage = DateTime.Now
                 //};
                 //_context.Add(message6Histoire2);
                 ////Message 7
@@ -192,7 +214,8 @@ namespace SolutionPersonnelleTemplate.Models.BLL.Managers
                 //    MessageID = 7,
                 //    HistoireID = 2,
                 //    Titre = "L'entrée du parc",
-                //    Contenu = "Nous nous dirigeons vers l'entrée du parc.Mais personne ne vient. Pour la première fois, nous n’aurons pas d’histoire... Merci d'avoir suivi cette aventure, la suite arrive très vite"
+                //    Contenu = "Nous nous dirigeons vers l'entrée du parc.Mais personne ne vient. Pour la première fois, nous n’aurons pas d’histoire... Merci d'avoir suivi cette aventure, la suite arrive très vite",
+                //    DateCreationMessage = DateTime.Now
                 //};
                 //_context.Add(message7Histoire2);
 
@@ -273,7 +296,8 @@ namespace SolutionPersonnelleTemplate.Models.BLL.Managers
                 NomAction2 = messageModele.NomAction2,
                 NumeroMessageEnfant3 = messageModele.NumeroMessageEnfant3,
                 NomAction3 = messageModele.NomAction3,
-                UrlMedia = "/images/message-media-default.jpg"
+                UrlMedia = "/images/message-media-default.jpg",
+                DateCreationMessage = DateTime.Now
             };
             _context.Messages.Add(messageAAjouter);
             await _context.SaveChangesAsync();

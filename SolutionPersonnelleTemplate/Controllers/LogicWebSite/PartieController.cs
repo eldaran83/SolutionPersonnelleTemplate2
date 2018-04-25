@@ -22,16 +22,45 @@ namespace SolutionPersonnelleTemplate.Controllers.LogicWebSite
         private readonly IUtilisateurInterface _utilisateurManager;
         private readonly IRepositoryHistoire _histoireManager;
         private readonly IRepositoryPartie _partieManager;
+        private readonly IRepositoryMessage _messageManager;
 
         public PartieController(ApplicationDbContext context, UserManager<ApplicationUser> userManager,
             IUtilisateurInterface utilisateurManager, IRepositoryHistoire histoireManager,
-            IRepositoryPartie partieManager)
+            IRepositoryPartie partieManager, IRepositoryMessage messageManager)
         {
             _context = context;
             _userManager = userManager;
             _utilisateurManager = utilisateurManager;
             _histoireManager = histoireManager;
             _partieManager = partieManager;
+            _messageManager = messageManager;
+        }
+
+        public async Task<IActionResult> MonAventure(int? partieID)
+        {
+            if (partieID == null)
+            {
+                return NotFound();
+            }
+
+            Partie laPartie = await _partieManager.GetPartieById(Convert.ToInt32(partieID));
+            //on charge le dernier message qui a été joué
+            Message leMessageADistribuer = await _messageManager.GetMessageByMessageIDAndHistoireId(laPartie.DernierMessageJouer, laPartie.HistoireID);
+            if (leMessageADistribuer !=null)
+            {
+                return View(leMessageADistribuer);
+            }
+            else
+            {
+                //on cherche le message par lequel commence l histoire ( on suppose - pour le moment- que c 'est le premier message créer)
+                 Message leDebutDeLHistoire = await _messageManager.RetourneLePremierMessageDeLHistoire(laPartie.HistoireID);
+                if (leDebutDeLHistoire != null)
+                {
+                    leMessageADistribuer = leDebutDeLHistoire;
+                }
+            }
+            //redirection vers là où en est le jouer dans sa partie 
+            return View(leMessageADistribuer); //ATTENTION LA VU N'EST PAS TYPE EN MESSAGEVIEWMODELE !!!!
         }
 
 
@@ -48,8 +77,14 @@ namespace SolutionPersonnelleTemplate.Controllers.LogicWebSite
             //verifie si l utilisateur joue deja ou pas a cette histoire
             if (await _partieManager.DejaJouerDeCetteHistoire(HistoireID,utilisateurID))
             {
+                Partie laPartie = await _partieManager.GetPartieByUtilisateurAndHistoireID(HistoireID, utilisateurID);
                 //redirection vers là où en est le jouer dans sa partie 
-                return View("Index");
+                return RedirectToAction("MonAventure", new RouteValueDictionary(new
+                {
+                    controller = "Partie",
+                    action = "MonAventure",
+                    PartieID = laPartie.PartieID
+                }));
             }
             else
             {

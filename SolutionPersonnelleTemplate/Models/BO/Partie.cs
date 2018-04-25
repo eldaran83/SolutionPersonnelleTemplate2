@@ -14,7 +14,7 @@ namespace SolutionPersonnelleTemplate.Models.BO
         public int HistoireID { get; set; }
         public int PersonneID { get; set; }
         //prop
-
+        public int DernierMessageJouer { get; set; }
 
         //nav 
         public Utilisateur Utilisateur { get; set; }

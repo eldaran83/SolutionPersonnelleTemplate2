@@ -1,0 +1,84 @@
+﻿@model SolutionPersonnelleTemplate.Models.BO.Message
+
+@{
+    ViewData["Title"] = "MonAventure";
+}
+
+<h2>MonAventure</h2>
+
+<div>
+    <h4>Message</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.Titre)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Titre)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Contenu)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Contenu)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.UrlMedia)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.UrlMedia)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.DateCreationMessage)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.DateCreationMessage)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.NumeroMessageEnfant1)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.NumeroMessageEnfant1)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.NomAction1)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.NomAction1)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.NumeroMessageEnfant2)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.NumeroMessageEnfant2)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.NomAction2)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.NomAction2)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.NumeroMessageEnfant3)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.NumeroMessageEnfant3)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.NomAction3)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.NomAction3)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Histoire)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Histoire.Synopsis)
+        </dd>
+    </dl>
+</div>
+<div>
+    <a asp-action="Edit" asp-route-id="@Model.MessageID">Edit</a> |
+    <a asp-action="Index">Back to List</a>
+</div>
