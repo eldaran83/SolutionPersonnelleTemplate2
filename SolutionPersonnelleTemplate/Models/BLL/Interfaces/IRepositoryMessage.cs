@@ -15,6 +15,7 @@ namespace SolutionPersonnelleTemplate.Models.BLL.Interfaces
         Task<Message> UpdateMessage(Message messageModele);
         Task<Message> GetMessageByMessageIDAndHistoireId(int? messageId,int? histoireID);
         Task<Message> RetourneLePremierMessageDeLHistoire(int histoireID);
+        Task<bool> LeMessageEstILLePremierMessageDeLHistoire(int histoireID);
 
         //Zone ADMIN
         Task<bool> PeuplerLesMessagesDesHistoire();

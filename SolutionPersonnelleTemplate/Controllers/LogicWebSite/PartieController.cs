@@ -42,8 +42,7 @@ namespace SolutionPersonnelleTemplate.Controllers.LogicWebSite
             {
                 return NotFound();
             }
-
-            Partie laPartie = await _partieManager.GetPartieById(Convert.ToInt32(partieID));
+             Partie laPartie = await _partieManager.GetPartieById(Convert.ToInt32(partieID));
             //on charge le dernier message qui a été joué
             Message leMessageADistribuer = await _messageManager.GetMessageByMessageIDAndHistoireId(laPartie.DernierMessageJouer, laPartie.HistoireID);
             if (leMessageADistribuer !=null)
@@ -83,7 +82,7 @@ namespace SolutionPersonnelleTemplate.Controllers.LogicWebSite
                 {
                     controller = "Partie",
                     action = "MonAventure",
-                    PartieID = laPartie.PartieID
+                    partieID = laPartie.PartieID
                 }));
             }
             else

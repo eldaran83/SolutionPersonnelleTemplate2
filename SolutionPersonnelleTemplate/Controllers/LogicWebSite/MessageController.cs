@@ -123,6 +123,10 @@ namespace SolutionPersonnelleTemplate.Controllers.LogicWebSite
         // GET: Message/Create
         public async Task<IActionResult> Create(int histoireID)
         {
+            bool lHistoirePossedeUnPremierMessage = await _messageRepository.LeMessageEstILLePremierMessageDeLHistoire(histoireID);
+
+            ViewBag.lHistoirePossedeUnPremierMessage = lHistoirePossedeUnPremierMessage;
+
             ViewBag.NumeroMessageEnfant1 = new SelectList(_context.Messages.Where(h => h.HistoireID == histoireID).ToList(), "MessageID", "Titre");
             ViewBag.NumeroMessageEnfant2 = new SelectList(_context.Messages.Where(h => h.HistoireID == histoireID).ToList(), "MessageID", "Titre");
             ViewBag.NumeroMessageEnfant3 = new SelectList(_context.Messages.Where(h => h.HistoireID == histoireID).ToList(), "MessageID", "Titre");
@@ -139,6 +143,8 @@ namespace SolutionPersonnelleTemplate.Controllers.LogicWebSite
         {
             if (await _messageRepository.messageTitreExistDansCetteHistoire(messageVM_Modele.Message.Titre, messageVM_Modele.Message.HistoireID))
             {
+                ViewBag.lHistoirePossedeUnPremierMessage = messageVM_Modele.Message.EstLePremierMessageDeLHistoire;
+
                 ViewBag.NumeroMessageEnfant1 = new SelectList(_context.Messages.Where(h => h.HistoireID == messageVM_Modele.Message.HistoireID).ToList(), "MessageID", "Titre");
                 ViewBag.NumeroMessageEnfant2 = new SelectList(_context.Messages.Where(h => h.HistoireID == messageVM_Modele.Message.HistoireID).ToList(), "MessageID", "Titre");
                 ViewBag.NumeroMessageEnfant3 = new SelectList(_context.Messages.Where(h => h.HistoireID == messageVM_Modele.Message.HistoireID).ToList(), "MessageID", "Titre");
@@ -207,6 +213,7 @@ namespace SolutionPersonnelleTemplate.Controllers.LogicWebSite
 
             if (erreurLiensActionsMessage) // il y a un problème avec les liens d action dans le message créé
             {
+                ViewBag.lHistoirePossedeUnPremierMessage = messageVM_Modele.Message.EstLePremierMessageDeLHistoire;
                 //logic des liens vers les autres messages 
                 ViewBag.NumeroMessageEnfant1 = new SelectList(_context.Messages.Where(h => h.HistoireID == messageVM_Modele.Message.HistoireID).ToList(), "MessageID", "Titre");
                 ViewBag.NumeroMessageEnfant2 = new SelectList(_context.Messages.Where(h => h.HistoireID == messageVM_Modele.Message.HistoireID).ToList(), "MessageID", "Titre");
@@ -214,6 +221,8 @@ namespace SolutionPersonnelleTemplate.Controllers.LogicWebSite
                 ViewData["HistoireID"] = messageVM_Modele.Message.HistoireID;
                 return View(messageVM_Modele);
             }
+
+            messageVM_Modele.Message.DateCreationMessage = DateTime.Now;
 
             if (ModelState.IsValid)
             {
@@ -283,6 +292,8 @@ namespace SolutionPersonnelleTemplate.Controllers.LogicWebSite
 
                 }));
             }
+
+            ViewBag.lHistoirePossedeUnPremierMessage = messageVM_Modele.Message.EstLePremierMessageDeLHistoire;
             //logic des liens vers les autres messages 
             ViewBag.NumeroMessageEnfant1 = new SelectList(_context.Messages.Where(h => h.HistoireID == messageVM_Modele.Message.HistoireID).ToList(), "MessageID", "Titre");
             ViewBag.NumeroMessageEnfant2 = new SelectList(_context.Messages.Where(h => h.HistoireID == messageVM_Modele.Message.HistoireID).ToList(), "MessageID", "Titre");
@@ -329,7 +340,9 @@ namespace SolutionPersonnelleTemplate.Controllers.LogicWebSite
             //    Message = message,
             //    Form = null
             //};
-            
+
+            ViewBag.lHistoirePossedeUnPremierMessage = message.EstLePremierMessageDeLHistoire;
+
             //logic des liens vers les autres messages 
             var dropDownListActions = await _messageRepository.GetAllMessageOfStoryAsync(Convert.ToInt16(message.HistoireID));
             ViewData["NumeroMessageEnfant1"] = new SelectList(dropDownListActions, "MessageID", "Titre", message.NumeroMessageEnfant1);
@@ -370,7 +383,7 @@ namespace SolutionPersonnelleTemplate.Controllers.LogicWebSite
             //Logic Liens Actions Messages
             bool erreurLiensActionsMessage = false;
             //1
-            if (messageVM_Modele.NumeroMessageEnfant1 != 1) // un N° message a été saisi dans la dropdownList autre que l'id 1 qui est celui par défaut
+            if (messageVM_Modele.NumeroMessageEnfant1 != null) // un N° message a été saisi dans la dropdownList 
             {
                 if (messageVM_Modele.NomAction1 == null)// vérifie qu'un message pour l action a été saisi
                 {
@@ -381,14 +394,14 @@ namespace SolutionPersonnelleTemplate.Controllers.LogicWebSite
             }
             if (messageVM_Modele.NomAction1 != null) // vérifie qu'un message pour l action a été saisi
             {
-                if (messageVM_Modele.NumeroMessageEnfant1 == 1) // un message a été saisi dans la dropdownList autre que l'id 1 qui est celui par défaut
+                if (messageVM_Modele.NumeroMessageEnfant1 == null) // un message a été saisi dans la dropdownList 
                 {
                     ViewBag.errorNumeroAction1 = "Vous avez rempli une action sans avoir choisi dans la liste un message de destination !";
                     erreurLiensActionsMessage = true;
                 }
             }
             //2
-            if (messageVM_Modele.NumeroMessageEnfant2 != 1) // un N° message a été saisi dans la dropdownList autre que l'id 1 qui est celui par défaut
+            if (messageVM_Modele.NumeroMessageEnfant2 != null) // un N° message a été saisi dans la dropdownList 
             {
                 if (messageVM_Modele.NomAction2 == null)// vérifie qu'un message pour l action a été saisi
                 {
@@ -398,14 +411,14 @@ namespace SolutionPersonnelleTemplate.Controllers.LogicWebSite
             }
             if (messageVM_Modele.NomAction2 != null) // vérifie qu'un message pour l action a été saisi
             {
-                if (messageVM_Modele.NumeroMessageEnfant2 == 1) // un message a été saisi dans la dropdownList autre que l'id 1 qui est celui par défaut
+                if (messageVM_Modele.NumeroMessageEnfant2 == null) // un message a été saisi dans la dropdownList 
                 {
                     ViewBag.errorNumeroAction2 = "Vous avez rempli une action sans avoir choisi dans la liste un message de destination !";
                     erreurLiensActionsMessage = true;
                 }
             }
             //3
-            if (messageVM_Modele.NumeroMessageEnfant3 != 1) // un N° message a été saisi dans la dropdownList autre que l'id 1 qui est celui par défaut
+            if (messageVM_Modele.NumeroMessageEnfant3 != null) // un N° message a été saisi dans la dropdownList 
             {
                 if (messageVM_Modele.NomAction3 == null)// vérifie qu'un message pour l action a été saisi
                 {
@@ -415,7 +428,7 @@ namespace SolutionPersonnelleTemplate.Controllers.LogicWebSite
             }
             if (messageVM_Modele.NomAction3 != null) // vérifie qu'un message pour l action a été saisi
             {
-                if (messageVM_Modele.NumeroMessageEnfant3 == 1) // un message a été saisi dans la dropdownList autre que l'id 1 qui est celui par défaut
+                if (messageVM_Modele.NumeroMessageEnfant3 == null) // un message a été saisi dans la dropdownList 
                 {
                     ViewBag.errorNumeroAction3 = "Vous avez rempli une action sans avoir choisi dans la liste un message de destination !";
                     erreurLiensActionsMessage = true;
