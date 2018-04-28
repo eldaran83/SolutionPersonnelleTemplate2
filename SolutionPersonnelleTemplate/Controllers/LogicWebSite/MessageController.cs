@@ -335,24 +335,17 @@ namespace SolutionPersonnelleTemplate.Controllers.LogicWebSite
             ///////////////////////////////////////////////////////////////////////
             //  FIN gestion image
             ///////////////////////////////////////////////////////////////////////
-            //MessageViewModel messageVM = new MessageViewModel
-            //{
-            //    Message = message,
-            //    Form = null
-            //};
 
-            ViewBag.lHistoirePossedeUnPremierMessage = message.EstLePremierMessageDeLHistoire;
+           
 
             //logic des liens vers les autres messages 
             var dropDownListActions = await _messageRepository.GetAllMessageOfStoryAsync(Convert.ToInt16(message.HistoireID));
             ViewData["NumeroMessageEnfant1"] = new SelectList(dropDownListActions, "MessageID", "Titre", message.NumeroMessageEnfant1);
-            //ViewBag.NumeroMessageEnfant1 = new SelectList(dropDownListActions, "MessageID", "Titre", message.NumeroMessageEnfant1);
             ViewData["NumeroMessageEnfant2"] = new SelectList(dropDownListActions, "MessageID", "Titre", message.NumeroMessageEnfant2);
-            //ViewBag.NumeroMessageEnfant2 = new SelectList(dropDownListActions, "MessageID", "Titre", message.NumeroMessageEnfant2);
             ViewData["NumeroMessageEnfant3"] = new SelectList(dropDownListActions, "MessageID", "Titre", message.NumeroMessageEnfant3);
-            //ViewBag.NumeroMessageEnfant3 = new SelectList(dropDownListActions, "MessageID", "Titre", message.NumeroMessageEnfant3);
             ViewData["HistoireID"] = message.HistoireID;
-            // return View(messageVM);
+            ViewData["MessageID"] = message.MessageID;
+            ViewBag.lHistoirePossedeUnPremierMessage = message.EstLePremierMessageDeLHistoire;
             return View(message);
         }
 
@@ -362,73 +355,73 @@ namespace SolutionPersonnelleTemplate.Controllers.LogicWebSite
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(Message messageVM_Modele, IFormCollection form)
+        public async Task<IActionResult> Edit(Message message_Modele, IFormCollection form)
         {            
             string imageDejaLa = "";
             try
             {
                 imageDejaLa = (from ppl in _context.Messages
-                                 .Where(m => m.MessageID == messageVM_Modele.MessageID)
-                                 .Where(h => h.HistoireID == messageVM_Modele.HistoireID)
+                                 .Where(m => m.MessageID == message_Modele.MessageID)
+                                 .Where(h => h.HistoireID == message_Modele.HistoireID)
                                       select ppl.UrlMedia).FirstOrDefault().ToString();
-                messageVM_Modele.UrlMedia = imageDejaLa;
+                message_Modele.UrlMedia = imageDejaLa;
             }
             catch (Exception ex)
             {
                 Console.WriteLine("Le message ne possede pas encore d'image " + ex);
                 imageDejaLa = "";
-                messageVM_Modele.UrlMedia = imageDejaLa;
+                message_Modele.UrlMedia = imageDejaLa;
             }
 
             //Logic Liens Actions Messages
             bool erreurLiensActionsMessage = false;
             //1
-            if (messageVM_Modele.NumeroMessageEnfant1 != null) // un N° message a été saisi dans la dropdownList 
+            if (message_Modele.NumeroMessageEnfant1 != null) // un N° message a été saisi dans la dropdownList 
             {
-                if (messageVM_Modele.NomAction1 == null)// vérifie qu'un message pour l action a été saisi
+                if (message_Modele.NomAction1 == null)// vérifie qu'un message pour l action a été saisi
                 {
                     ViewBag.errorNomAction1 = "Vous avez choisi un message d'action sans avoir donné un nom à cette action !";
                     erreurLiensActionsMessage = true;
                 }
 
             }
-            if (messageVM_Modele.NomAction1 != null) // vérifie qu'un message pour l action a été saisi
+            if (message_Modele.NomAction1 != null) // vérifie qu'un message pour l action a été saisi
             {
-                if (messageVM_Modele.NumeroMessageEnfant1 == null) // un message a été saisi dans la dropdownList 
+                if (message_Modele.NumeroMessageEnfant1 == null) // un message a été saisi dans la dropdownList 
                 {
                     ViewBag.errorNumeroAction1 = "Vous avez rempli une action sans avoir choisi dans la liste un message de destination !";
                     erreurLiensActionsMessage = true;
                 }
             }
             //2
-            if (messageVM_Modele.NumeroMessageEnfant2 != null) // un N° message a été saisi dans la dropdownList 
+            if (message_Modele.NumeroMessageEnfant2 != null) // un N° message a été saisi dans la dropdownList 
             {
-                if (messageVM_Modele.NomAction2 == null)// vérifie qu'un message pour l action a été saisi
+                if (message_Modele.NomAction2 == null)// vérifie qu'un message pour l action a été saisi
                 {
                     ViewBag.errorNomAction2 = "Vous avez choisi un message d'action sans avoir donné un nom à cette action !";
                     erreurLiensActionsMessage = true;
                 }
             }
-            if (messageVM_Modele.NomAction2 != null) // vérifie qu'un message pour l action a été saisi
+            if (message_Modele.NomAction2 != null) // vérifie qu'un message pour l action a été saisi
             {
-                if (messageVM_Modele.NumeroMessageEnfant2 == null) // un message a été saisi dans la dropdownList 
+                if (message_Modele.NumeroMessageEnfant2 == null) // un message a été saisi dans la dropdownList 
                 {
                     ViewBag.errorNumeroAction2 = "Vous avez rempli une action sans avoir choisi dans la liste un message de destination !";
                     erreurLiensActionsMessage = true;
                 }
             }
             //3
-            if (messageVM_Modele.NumeroMessageEnfant3 != null) // un N° message a été saisi dans la dropdownList 
+            if (message_Modele.NumeroMessageEnfant3 != null) // un N° message a été saisi dans la dropdownList 
             {
-                if (messageVM_Modele.NomAction3 == null)// vérifie qu'un message pour l action a été saisi
+                if (message_Modele.NomAction3 == null)// vérifie qu'un message pour l action a été saisi
                 {
                     ViewBag.errorNomAction3 = "Vous avez choisi un message d'action sans avoir donné un nom à cette action !";
                     erreurLiensActionsMessage = true;
                 }
             }
-            if (messageVM_Modele.NomAction3 != null) // vérifie qu'un message pour l action a été saisi
+            if (message_Modele.NomAction3 != null) // vérifie qu'un message pour l action a été saisi
             {
-                if (messageVM_Modele.NumeroMessageEnfant3 == null) // un message a été saisi dans la dropdownList 
+                if (message_Modele.NumeroMessageEnfant3 == null) // un message a été saisi dans la dropdownList 
                 {
                     ViewBag.errorNumeroAction3 = "Vous avez rempli une action sans avoir choisi dans la liste un message de destination !";
                     erreurLiensActionsMessage = true;
@@ -440,16 +433,16 @@ namespace SolutionPersonnelleTemplate.Controllers.LogicWebSite
                 //pour une raison que je ne comprend pas si je fais appel ici pour les DDL de la methode _messageRepository.GetAllMessageOfStoryAsync(histoireID);
                 //j'ai une erreur par la suite : The instance of entity type 'Message' cannot be tracked because another instance with the same key value for {'MessageID'} is already being tracked. When attaching existing entities, ensure that only one entity instance with a given key value is attached. Consider using 'DbContextOptionsBuilder.EnableSensitiveDataLogging' to see the conflicting key values.
 
-                ViewBag.NumeroMessageEnfant1 = new SelectList(_context.Messages.Where(h=>h.HistoireID == messageVM_Modele.HistoireID).ToList(), "MessageID", "Titre", messageVM_Modele.NumeroMessageEnfant1);
-                ViewBag.NumeroMessageEnfant2 = new SelectList(_context.Messages.Where(h => h.HistoireID == messageVM_Modele.HistoireID).ToList(), "MessageID", "Titre", messageVM_Modele.NumeroMessageEnfant2);
-                ViewBag.NumeroMessageEnfant3 = new SelectList(_context.Messages.Where(h => h.HistoireID == messageVM_Modele.HistoireID).ToList(), "MessageID", "Titre", messageVM_Modele.NumeroMessageEnfant3);
+                ViewBag.NumeroMessageEnfant1 = new SelectList(_context.Messages.Where(h=>h.HistoireID == message_Modele.HistoireID).ToList(), "MessageID", "Titre", message_Modele.NumeroMessageEnfant1);
+                ViewBag.NumeroMessageEnfant2 = new SelectList(_context.Messages.Where(h => h.HistoireID == message_Modele.HistoireID).ToList(), "MessageID", "Titre", message_Modele.NumeroMessageEnfant2);
+                ViewBag.NumeroMessageEnfant3 = new SelectList(_context.Messages.Where(h => h.HistoireID == message_Modele.HistoireID).ToList(), "MessageID", "Titre", message_Modele.NumeroMessageEnfant3);
 
                 //////////////////////////////////////////////////////////////////////////////////////////
                 //      GESTION de la photo
                 //////////////////////////////////////////////////////////////////////////////////////////
-                if (messageVM_Modele.UrlMedia != null)
+                if (message_Modele.UrlMedia != null)
                 {
-                    string img = messageVM_Modele.UrlMedia.ToString();
+                    string img = message_Modele.UrlMedia.ToString();
                     ViewBag.ImgPath = img;
                 }
                 else
@@ -459,7 +452,11 @@ namespace SolutionPersonnelleTemplate.Controllers.LogicWebSite
                 ///////////////////////////////////////////////////////////////////////
                 //  FIN gestion image
                 ///////////////////////////////////////////////////////////////////////
-                return View(messageVM_Modele);
+                ViewData["HistoireID"] = message_Modele.HistoireID;
+                ViewData["MessageID"] = message_Modele.MessageID;
+                ViewBag.lHistoirePossedeUnPremierMessage = message_Modele.EstLePremierMessageDeLHistoire;
+
+                return View(message_Modele);
             }
             if (ModelState.IsValid)
             {
@@ -474,8 +471,8 @@ namespace SolutionPersonnelleTemplate.Controllers.LogicWebSite
                     }
                     string webRoot = _env.WebRootPath; // récupère l environnement
                     string nameDirectory = "/StoryFiles/"; // nomme le dossier dans lequel le média va se retrouver ici MessageFiles pour l image de histoire
-                    string messageId = Convert.ToString(messageVM_Modele.MessageID); // sert à la personnalisation du dossier pour l utilisateur
-                    string nomDuDossier = "/ImageHistoire/" + messageVM_Modele.HistoireID + "_Histoire/Messages/"; // variable qui sert à nommer le dossier dans lequel le fichier sera ajouté, ICI c est le dossier Image
+                    string messageId = Convert.ToString(message_Modele.MessageID); // sert à la personnalisation du dossier pour l utilisateur
+                    string nomDuDossier = "/ImageHistoire/" + message_Modele.HistoireID + "_Histoire/Messages/"; // variable qui sert à nommer le dossier dans lequel le fichier sera ajouté, ICI c est le dossier Image
 
                     //Comme l utilisateur ne peut avoir qu'un seul avatar, on vérifie avant d'ajouter un fichier
                     //que le dossier n'a pas d autre image en supprimant tous les fichiers qui pourraient s y trouver
@@ -499,55 +496,76 @@ namespace SolutionPersonnelleTemplate.Controllers.LogicWebSite
                     }
                      //ajoute le fichier 
                     var imageURl = _fichierRepository.SaveFichier(webRoot, nameDirectory, nomDuDossier, messageId, form);
-                    messageVM_Modele.UrlMedia = imageURl;
+                    message_Modele.UrlMedia = imageURl;
 
                     //je met à jour l histoire pour quelle est le nouveau lien de son image
-                    await _messageRepository.UpdateMessage(messageVM_Modele);
+                    await _messageRepository.UpdateMessage(message_Modele);
 
-                    ViewData["HistoireID"] = messageVM_Modele.HistoireID;
+                    ViewData["HistoireID"] = message_Modele.HistoireID;
                     return RedirectToAction("Index", new RouteValueDictionary(new
                     {
                         controller = "Message",
                         action = "Index",
-                        histoireID = messageVM_Modele.HistoireID
+                        histoireID = message_Modele.HistoireID
                     }));
                 }
-                await _messageRepository.UpdateMessage(messageVM_Modele);
+                await _messageRepository.UpdateMessage(message_Modele);
 
-                ViewData["HistoireID"] = messageVM_Modele.HistoireID;
+                ViewData["HistoireID"] = message_Modele.HistoireID;
                 return RedirectToAction("Index", new RouteValueDictionary(new
                 {
                     controller = "Message",
                     action = "Index",
-                    histoireID = messageVM_Modele.HistoireID
+                    histoireID = message_Modele.HistoireID
 
                 }));
             }
 
-             var dropDownListActions = await _messageRepository.GetAllMessageOfStoryAsync(Convert.ToInt16(messageVM_Modele.HistoireID));
-            ViewBag.NumeroMessageEnfant1 = new SelectList(dropDownListActions, "MessageID", "Titre", messageVM_Modele.NumeroMessageEnfant1);
-            ViewBag.NumeroMessageEnfant2 = new SelectList(dropDownListActions, "MessageID", "Titre", messageVM_Modele.NumeroMessageEnfant2);
-            ViewBag.NumeroMessageEnfant3 = new SelectList(dropDownListActions, "MessageID", "Titre", messageVM_Modele.NumeroMessageEnfant3);
+             var dropDownListActions = await _messageRepository.GetAllMessageOfStoryAsync(Convert.ToInt16(message_Modele.HistoireID));
+            ViewBag.NumeroMessageEnfant1 = new SelectList(dropDownListActions, "MessageID", "Titre", message_Modele.NumeroMessageEnfant1);
+            ViewBag.NumeroMessageEnfant2 = new SelectList(dropDownListActions, "MessageID", "Titre", message_Modele.NumeroMessageEnfant2);
+            ViewBag.NumeroMessageEnfant3 = new SelectList(dropDownListActions, "MessageID", "Titre", message_Modele.NumeroMessageEnfant3);
 
-            ViewData["HistoireID"] = messageVM_Modele.HistoireID;
-            return View(messageVM_Modele);
+            ViewData["HistoireID"] = message_Modele.HistoireID;
+            ViewData["MessageID"] = message_Modele.MessageID;
+            ViewBag.lHistoirePossedeUnPremierMessage = message_Modele.EstLePremierMessageDeLHistoire;
+
+            return View(message_Modele);
         }
 
-    
 
-    // POST: Message/Delete/5
-    [HttpPost, ActionName("Delete")]
+        // GET: Message/Delete/5
+       
+        public async Task<IActionResult> Delete(int? messageId, int? HistoireID)
+        {
+            if (HistoireID == null || messageId == null)
+            {
+                return NotFound();
+            }
+
+            Message message = await _messageRepository.GetMessageByMessageIDAndHistoireId(messageId, HistoireID);
+
+            if (message == null)
+            {
+                return NotFound();
+            }
+
+            ViewData["HistoireID"] = message.HistoireID;
+            ViewData["MessageID"] = message.MessageID;
+
+            return View(message);
+        }
+
+        // POST: Message/Delete/5
+        [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int? messageId, int? HistoireID)
         {
-            if (messageId == null)
+            if (HistoireID == null || messageId == null)
             {
                 return NotFound();
             }
-            if (HistoireID == null)
-            {
-                return NotFound();
-            }
+
             await _messageRepository.RemoveMessageOfStoryById(messageId, HistoireID);
             return RedirectToAction("Index", new RouteValueDictionary(new
             {

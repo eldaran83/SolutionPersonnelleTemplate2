@@ -8,7 +8,7 @@
 <hr />
 <div class="row">
     <div class="col-md-12">
-        <form asp-action="Create" enctype="multipart/form-data" method="post">
+        <form asp-action="Edit" enctype="multipart/form-data" method="post">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
 
             @if (ViewBag.lHistoirePossedeUnPremierMessage == false)
@@ -130,6 +130,7 @@
             </div>
             <div class="form-group">
                 <input type="hidden" asp-for="HistoireID" value="@ViewData["HistoireID"]" />
+                <input type="hidden" asp-for="MessageID" value="@ViewData["MessageID"]" />
                 <input type="submit" value="Valider" class="btn btn-success" />
             </div>
         </form>
