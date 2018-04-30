@@ -79,7 +79,9 @@ namespace SolutionPersonnelleTemplate.Models.BLL.Managers
                 Dexterite = herosDeLaPartieModel.Heros.Dexterite,
                 Force = herosDeLaPartieModel.Heros.Force,
                 Intelligence = herosDeLaPartieModel.Heros.Intelligence,
-                Nom = herosDeLaPartieModel.Heros.Nom
+                Nom = herosDeLaPartieModel.Heros.Nom,
+                PointsDeVieMax = herosDeLaPartieModel.Heros.Constitution * 3,
+                PointsDeVieActuels = herosDeLaPartieModel.Heros.Constitution * 3
             };
             _context.Personnes.Add(leHeros);
             await _context.SaveChangesAsync();

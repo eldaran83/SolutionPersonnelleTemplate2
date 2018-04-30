@@ -1,0 +1,31 @@
+﻿@model SolutionPersonnelleTemplate.Models.BO.Des
+@{
+    ViewData["Title"] = "Index";
+}
+
+
+<h1>Dégats infligés : @ViewBag.degats</h1>
+
+<div class="col-sm-12">
+    <a asp-action="Degats" asp-controller="Test" asp-route-leTypeDeDesALancer="D6" asp-route-nbDeDesALancer="2" asp-route-bonusDegat="2" class="btn  btn-info">
+        2D6+2
+    </a>
+</div>
+<div class="col-sm-12">
+    <a asp-action="Degats" asp-controller="Test" asp-route-leTypeDeDesALancer="D10" asp-route-nbDeDesALancer="1" asp-route-bonusDegat="-2" class="btn  btn-info">
+        1D10-2
+    </a>
+</div>
+
+<h1>Test Compétence  : @ViewBag.competence</h1>
+
+<div class="col-sm-12">
+    <a asp-action="Competence" asp-controller="Test" asp-route-caracteristiqueATester="Force" asp-route-difficulte="15" class="btn  btn-info">
+        Force 15 = ?
+    </a>
+</div>
+<div class="col-sm-12">
+    <a asp-action="Competence" asp-controller="Test" asp-route-caracteristiqueATester="Dexterite" asp-route-difficulte="15" class="btn  btn-info">
+        Dexterite 15 = ?
+    </a>
+</div>

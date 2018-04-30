@@ -64,7 +64,9 @@ namespace SolutionPersonnelleTemplate
             services.AddScoped<IRepositoryMessage, MessageRepository>();
             //Add application services for Partie
             services.AddScoped<IRepositoryPartie, PartieRepository>();
-
+            //add application services for Moteur du jeu 
+            services.AddScoped<IMoteurDuJeu, MoteurDuJeuManager>();
+            
             services.AddMvc();
             //add pour la pagination
             services.AddPaging();

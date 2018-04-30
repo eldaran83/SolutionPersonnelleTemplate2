@@ -12,26 +12,26 @@
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
 
             @if (ViewBag.lHistoirePossedeUnPremierMessage == false)
-            {
-                <input type="hidden" asp-for="EstLePremierMessageDeLHistoire" value="@true" />
-                <h1 class="text-center">Créons le message par lequel commençera l'histoire</h1>
-                <br />
+    {
+        <input type="hidden" asp-for="EstLePremierMessageDeLHistoire" value="@true" />
+        <h1 class="text-center">Créons le message par lequel commençera l'histoire</h1>
+        <br />
 
-            }
-            else
-            {
-                <input type="hidden" asp-for="EstLePremierMessageDeLHistoire" value="@false" />
-                <h2 style="text-align :center">Créer votre nouveau message pour l'histoire : @ViewBag.TitreHistoire</h2>
+}
+else
+{
+        <input type="hidden" asp-for="EstLePremierMessageDeLHistoire" value="@false" />
+        <h2 style="text-align :center">Créer votre nouveau message pour l'histoire : @ViewBag.TitreHistoire</h2>
 
-            }
+}
 
 
             <div class="form-group">
                 <label asp-for="Titre" class="control-label"></label>
                 @if (ViewBag.error != null)
-                {
-                    <p class="alert-danger">@ViewBag.error</p>
-                }
+        {
+            <p class="alert-danger">@ViewBag.error</p>
+}
                 <input asp-for="Titre" class="form-control" />
                 <span asp-validation-for="Titre" class="text-danger"></span>
             </div>
@@ -60,18 +60,18 @@
                 <div class="form-group">
                     <label asp-for="NomAction1" class="control-label"></label>
                     @if (ViewBag.errorNomAction1 != null)
-                    {
-                        <p class="alert-danger">@ViewBag.errorNomAction1</p>
-                    }
+            {
+                <p class="alert-danger">@ViewBag.errorNomAction1</p>
+    }
                     <input asp-for="NomAction1" class="form-control" />
                     <span asp-validation-for="NomAction1" class="text-danger"></span>
                 </div>
                 <div class="form-group">
                     <label asp-for="NumeroMessageEnfant1" class="control-label"></label>
                     @if (ViewBag.errorNumeroAction1 != null)
-                    {
-                        <p class="alert-danger">@ViewBag.errorNumeroAction1</p>
-                    }
+            {
+                <p class="alert-danger">@ViewBag.errorNumeroAction1</p>
+    }
                     @Html.DropDownListFor(M => M.NumeroMessageEnfant1, ViewBag.NumeroMessageEnfant1 as SelectList, "--Sélectionnez une action--", new { @class = "form-control" })
                 </div>
             </div>
@@ -80,18 +80,18 @@
                 <div class="form-group">
                     <label asp-for="NomAction2" class="control-label"></label>
                     @if (ViewBag.errorNomAction2 != null)
-                    {
-                        <p class="alert-danger">@ViewBag.errorNomAction2</p>
-                    }
+            {
+                <p class="alert-danger">@ViewBag.errorNomAction2</p>
+    }
                     <input asp-for="NomAction2" class="form-control" />
                     <span asp-validation-for="NomAction2" class="text-danger"></span>
                 </div>
                 <div class="form-group">
                     <label asp-for="NumeroMessageEnfant2" class="control-label"></label>
                     @if (ViewBag.errorNumeroAction2 != null)
-                    {
-                        <p class="alert-danger">@ViewBag.errorNumeroAction2</p>
-                    }
+            {
+                <p class="alert-danger">@ViewBag.errorNumeroAction2</p>
+    }
                     @Html.DropDownListFor(M => M.NumeroMessageEnfant2, ViewBag.NumeroMessageEnfant2 as SelectList, "--Sélectionnez une action--", new { @class = "form-control" })
                 </div>
             </div>
@@ -100,18 +100,18 @@
                 <div class="form-group">
                     <label asp-for="NomAction3" class="control-label"></label>
                     @if (ViewBag.errorNomAction3 != null)
-                    {
-                        <p class="alert-danger">@ViewBag.errorNomAction3</p>
-                    }
+            {
+                <p class="alert-danger">@ViewBag.errorNomAction3</p>
+    }
                     <input asp-for="NomAction3" class="form-control" />
                     <span asp-validation-for="NomAction3" class="text-danger"></span>
                 </div>
                 <div class="form-group">
                     <label asp-for="NumeroMessageEnfant3" class="control-label"></label>
                     @if (ViewBag.errorNumeroAction3 != null)
-                    {
-                        <p class="alert-danger">@ViewBag.errorNumeroAction3</p>
-                    }
+            {
+                <p class="alert-danger">@ViewBag.errorNumeroAction3</p>
+    }
                     @Html.DropDownListFor(M => M.NumeroMessageEnfant3, ViewBag.NumeroMessageEnfant3 as SelectList, "--Sélectionnez une action--", new { @class = "form-control" })
                 </div>
             </div>
@@ -121,10 +121,16 @@
             @*Pour l image changer d'image avatar*@
             <br />
             <div class="form-group">
+                @*Pour l image*@
+                <label class="control-label">Image de garde</label><br />
+                <input id="Histoire.UrlMedia" name="Histoire.UrlMedia" value="@ViewBag.ImgPath" type="hidden" />
+                <img src="@ViewBag.ImgPath" class="img-responsive" /><br />
+            </div>
+            <div class="form-group">
                 @if (@ViewBag.errorFichier != "")
-                {
-                    <p class="alert-danger">@ViewBag.errorFichier</p>
-                }
+        {
+            <p class="alert-danger">@ViewBag.errorFichier</p>
+}
                 <label class="control-label">Ajouter une image de présentation</label><br />
                 <input type="file" name="user_image" id="user_image" />
             </div>
