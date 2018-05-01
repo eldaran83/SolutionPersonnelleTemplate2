@@ -17,17 +17,19 @@ namespace SolutionPersonnelleTemplate.Models.BLL.Managers
         private readonly IRepositoryFichier _fichierRepository;
         private readonly IRepositoryHistoire _histoireRepository;
         private readonly IHostingEnvironment _env;
+        private readonly IPersonneInterface _personneManager;
         /// <summary>
         /// contructeur 
         /// </summary>
         /// <param name="context"></param>
         public PartieRepository(ApplicationDbContext context, IRepositoryFichier fichierRepository, IHostingEnvironment env,
-            IRepositoryHistoire histoireRepository)
+            IRepositoryHistoire histoireRepository, IPersonneInterface personneManager)
         {
             _context = context;
             _fichierRepository = fichierRepository;
             _env = env;
             _histoireRepository = histoireRepository;
+            _personneManager = personneManager;
         }
 
         public async Task<bool> DejaJouerDeCetteHistoire(int HistoireID, string utilisateurID)
@@ -72,19 +74,7 @@ namespace SolutionPersonnelleTemplate.Models.BLL.Managers
         public async Task<Partie> NouvellePartie(CreerSonHerosViewModel herosDeLaPartieModel)
         {
             //creation du heros
-            Personne leHeros = new Personne
-            {
-                Charisme = herosDeLaPartieModel.Heros.Charisme,
-                Constitution = herosDeLaPartieModel.Heros.Constitution,
-                Dexterite = herosDeLaPartieModel.Heros.Dexterite,
-                Force = herosDeLaPartieModel.Heros.Force,
-                Intelligence = herosDeLaPartieModel.Heros.Intelligence,
-                Nom = herosDeLaPartieModel.Heros.Nom,
-                PointsDeVieMax = herosDeLaPartieModel.Heros.Constitution * 3,
-                PointsDeVieActuels = herosDeLaPartieModel.Heros.Constitution * 3
-            };
-            _context.Personnes.Add(leHeros);
-            await _context.SaveChangesAsync();
+            Personne leHeros = await _personneManager.AjouterPersonneAsync(herosDeLaPartieModel.Heros);
             //creation de la partie 
             Partie laPartie = new Partie
             {

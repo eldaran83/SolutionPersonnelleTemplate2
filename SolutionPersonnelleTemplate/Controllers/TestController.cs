@@ -62,7 +62,7 @@ namespace SolutionPersonnelleTemplate.Controllers
             //pour le test je recupere le personnage deja crée apres ca sera celui dela partie
             Personne lePerso = _context.Personnes.Where(u => u.PersonneID == 4).FirstOrDefault();
 
-            int laValeurATester = await lePerso.ValeurDeLaCaracteristiqueATester(caracteristiqueATester);
+            int laValeurATester =  lePerso.ValeurDeLaCaracteristiqueATester(caracteristiqueATester);
 
             bool reussiteOuPasAuTest = await _moteurDuJeu.TestCaracteristique(laValeurATester, difficulte);
 

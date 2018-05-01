@@ -56,6 +56,8 @@ namespace SolutionPersonnelleTemplate.Models.BLL.Managers
             return await _context.Personnes.Where(p => p.PersonneID == personneID).FirstOrDefaultAsync();
         }
 
+
+
         /// <summary>
         /// determine si un test de caractéristique est reussi ou pas 
         /// </summary>

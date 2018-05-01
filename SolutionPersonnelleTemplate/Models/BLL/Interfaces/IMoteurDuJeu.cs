@@ -12,5 +12,6 @@ namespace SolutionPersonnelleTemplate.Models.BLL.Interfaces
         Task<int> DegatsDes(Des.TypeDeDes leTypeDeDesALancer, int? nbDeDesALancer, int? bonusDegat);
         Task<bool> TestCaracteristique(int valeurCaracteristiqueATester, int seuilDeDifficulte);
 
+
     }
 }

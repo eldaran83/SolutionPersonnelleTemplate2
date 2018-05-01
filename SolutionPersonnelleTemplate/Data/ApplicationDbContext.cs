@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using SolutionPersonnelleTemplate.Models;
+using SolutionPersonnelleTemplate.Models.BLL.Autres;
 using SolutionPersonnelleTemplate.Models.BO;
 
 namespace SolutionPersonnelleTemplate.Data
@@ -30,5 +31,6 @@ namespace SolutionPersonnelleTemplate.Data
         public DbSet<Message> Messages { get; set; }
 
         public DbSet<Personne> Personnes { get; set; }
+        public DbSet<QuelBonusDeBasePourLeNiveauDeLaClasse> BonusDesClassesJoueurs { get; set; } 
     }
 }
