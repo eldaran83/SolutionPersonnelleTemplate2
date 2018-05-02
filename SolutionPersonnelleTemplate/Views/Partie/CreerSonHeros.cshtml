@@ -1,63 +1,157 @@
 ﻿@model SolutionPersonnelleTemplate.Models.ViewModels.CreerSonHerosViewModel
 
+
 @{
-    ViewData["Title"] = "Creer Son Heros";
+    ViewData["Title"] = "CreerSonHeros";
 }
 
 <h2>CreerSonHeros</h2>
 
-<h4>Partie</h4>
+<h4>Personne</h4>
 <hr />
 <div class="row">
     <div class="col-md-4">
         <form asp-action="CreerSonHeros">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            @*<div class="form-group">
-            <label asp-for="UtilisateurID" class="control-label"></label>
-            <select asp-for="UtilisateurID" class ="form-control" asp-items="ViewBag.UtilisateurID"></select>
-        </div>*@
-            @*<div class="form-group">
-            <label asp-for="HistoireID" class="control-label"></label>
-            <select asp-for="HistoireID" class ="form-control" asp-items="ViewBag.HistoireID"></select>
-        </div>*@
-
             <div class="form-group">
                 <label asp-for="Heros.Nom" class="control-label"></label>
                 <input asp-for="Heros.Nom" class="form-control" />
                 <span asp-validation-for="Heros.Nom" class="text-danger"></span>
             </div>
             <div class="form-group">
+                <label asp-for="Heros.SexePersonnage" class="control-label"></label>
+                <select asp-for="Heros.SexePersonnage" class="form-control"></select>
+                <span asp-validation-for="Heros.SexePersonnage" class="text-danger"></span>
+            </div>
+            <div class="form-group">
                 <label asp-for="Heros.Force" class="control-label"></label>
                 <input asp-for="Heros.Force" class="form-control" />
                 <span asp-validation-for="Heros.Force" class="text-danger"></span>
-            </div>        
+            </div>
             <div class="form-group">
-                <label asp-for="Heros.Constitution" class="control-label"></label>
-                <input asp-for="Heros.Constitution" class="form-control" />
-                <span asp-validation-for="Heros.Constitution" class="text-danger"></span>
-            </div>           
+                <label asp-for="Heros.BonusForce" class="control-label"></label>
+                <input asp-for="Heros.BonusForce" class="form-control" />
+                <span asp-validation-for="Heros.BonusForce" class="text-danger"></span>
+            </div>
             <div class="form-group">
                 <label asp-for="Heros.Dexterite" class="control-label"></label>
                 <input asp-for="Heros.Dexterite" class="form-control" />
                 <span asp-validation-for="Heros.Dexterite" class="text-danger"></span>
-            </div>          
+            </div>
+            <div class="form-group">
+                <label asp-for="Heros.BonusDexterite" class="control-label"></label>
+                <input asp-for="Heros.BonusDexterite" class="form-control" />
+                <span asp-validation-for="Heros.BonusDexterite" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Heros.Constitution" class="control-label"></label>
+                <input asp-for="Heros.Constitution" class="form-control" />
+                <span asp-validation-for="Heros.Constitution" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Heros.BonusConstitution" class="control-label"></label>
+                <input asp-for="Heros.BonusConstitution" class="form-control" />
+                <span asp-validation-for="Heros.BonusConstitution" class="text-danger"></span>
+            </div>
             <div class="form-group">
                 <label asp-for="Heros.Intelligence" class="control-label"></label>
                 <input asp-for="Heros.Intelligence" class="form-control" />
                 <span asp-validation-for="Heros.Intelligence" class="text-danger"></span>
-            </div>            
+            </div>
+            <div class="form-group">
+                <label asp-for="Heros.BonusIntelligence" class="control-label"></label>
+                <input asp-for="Heros.BonusIntelligence" class="form-control" />
+                <span asp-validation-for="Heros.BonusIntelligence" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Heros.Sagesse" class="control-label"></label>
+                <input asp-for="Heros.Sagesse" class="form-control" />
+                <span asp-validation-for="Heros.Sagesse" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Heros.BonusSagesse" class="control-label"></label>
+                <input asp-for="Heros.BonusSagesse" class="form-control" />
+                <span asp-validation-for="Heros.BonusSagesse" class="text-danger"></span>
+            </div>
             <div class="form-group">
                 <label asp-for="Heros.Charisme" class="control-label"></label>
                 <input asp-for="Heros.Charisme" class="form-control" />
                 <span asp-validation-for="Heros.Charisme" class="text-danger"></span>
             </div>
-
-
             <div class="form-group">
-                <input asp-for="Histoire.HistoireID" value="@ViewBag.HistoireID" type="hidden" />
-                <input asp-for="Utilisateur.ApplicationUserID" value="@ViewBag.ApplicationUserID" type="hidden" />
-
-                <input type="submit" value="Go !" class="btn btn-success" />
+                <label asp-for="Heros.BonusCharisme" class="control-label"></label>
+                <input asp-for="Heros.BonusCharisme" class="form-control" />
+                <span asp-validation-for="Heros.BonusCharisme" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Heros.ClasseDuPersonnage" class="control-label"></label>
+                <select asp-for="Heros.ClasseDuPersonnage" class="form-control"></select>
+                <span asp-validation-for="Heros.ClasseDuPersonnage" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Heros.PointsDeVieMax" class="control-label"></label>
+                <input asp-for="Heros.PointsDeVieMax" class="form-control" />
+                <span asp-validation-for="Heros.PointsDeVieMax" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Heros.PointsDeVieActuels" class="control-label"></label>
+                <input asp-for="Heros.PointsDeVieActuels" class="form-control" />
+                <span asp-validation-for="Heros.PointsDeVieActuels" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Heros.PointsExperience" class="control-label"></label>
+                <input asp-for="Heros.PointsExperience" class="form-control" />
+                <span asp-validation-for="Heros.PointsExperience" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Heros.NiveauDuPersonnage" class="control-label"></label>
+                <select asp-for="Heros.NiveauDuPersonnage" class="form-control"></select>
+                <span asp-validation-for="Heros.NiveauDuPersonnage" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Heros.AttaqueMaitriseArme" class="control-label"></label>
+                <input asp-for="Heros.AttaqueMaitriseArme" class="form-control" />
+                <span asp-validation-for="Heros.AttaqueMaitriseArme" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Heros.ClasseArmure" class="control-label"></label>
+                <input asp-for="Heros.ClasseArmure" class="form-control" />
+                <span asp-validation-for="Heros.ClasseArmure" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Heros.BonusAuDegatPhysique" class="control-label"></label>
+                <input asp-for="Heros.BonusAuDegatPhysique" class="form-control" />
+                <span asp-validation-for="Heros.BonusAuDegatPhysique" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Heros.AttaqueMaitriseMagique" class="control-label"></label>
+                <input asp-for="Heros.AttaqueMaitriseMagique" class="form-control" />
+                <span asp-validation-for="Heros.AttaqueMaitriseMagique" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Heros.BonusAuDegatMagique" class="control-label"></label>
+                <input asp-for="Heros.BonusAuDegatMagique" class="form-control" />
+                <span asp-validation-for="Heros.BonusAuDegatMagique" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Heros.Reflexe" class="control-label"></label>
+                <input asp-for="Heros.Reflexe" class="form-control" />
+                <span asp-validation-for="Heros.Reflexe" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Heros.Vigueur" class="control-label"></label>
+                <input asp-for="Heros.Vigueur" class="form-control" />
+                <span asp-validation-for="Heros.Vigueur" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Heros.Volonte" class="control-label"></label>
+                <input asp-for="Heros.Volonte" class="form-control" />
+                <span asp-validation-for="Heros.Volonte" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input asp-for="Histoire.HistoireID" type="hidden" value="@ViewBag.HistoireID"/>
+                <input asp-for="Utilisateur.ApplicationUserID" type="hidden" value="@ViewBag.ApplicationUserID"/>
+                <input type="submit" value="Create" class="btn btn-default" />
             </div>
         </form>
     </div>

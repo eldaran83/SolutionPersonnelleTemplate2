@@ -62,11 +62,13 @@ namespace SolutionPersonnelleTemplate
             services.AddScoped<IRepositoryHistoire, HistoireRepository>();
             //Add application services for message
             services.AddScoped<IRepositoryMessage, MessageRepository>();
-            //Add application services for Partie
-            services.AddScoped<IRepositoryPartie, PartieRepository>();
+
             //Add application services for Personne
             services.AddScoped<IPersonneInterface, PersonneManager>();
-            //add application services for Moteur du jeu 
+
+            //Add application services for Partie
+            services.AddScoped<IRepositoryPartie, PartieRepository>();
+             //add application services for Moteur du jeu 
             services.AddScoped<IMoteurDuJeu, MoteurDuJeuManager>();
             
             services.AddMvc();

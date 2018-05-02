@@ -1,4 +1,5 @@
 ﻿using SolutionPersonnelleTemplate.Data;
+using SolutionPersonnelleTemplate.Models.BLL.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -8,7 +9,14 @@ using System.Threading.Tasks;
 namespace SolutionPersonnelleTemplate.Models.BO
 {
     public class Personne
-    {        //PK
+    {
+        //private readonly IPersonneInterface _personneManager;
+        //public Personne( IPersonneInterface personneManager)
+        //{
+        //    _personneManager = personneManager;
+        //}
+
+        //PK
         public int PersonneID { get; set; }
 
         [Required]
@@ -154,20 +162,6 @@ namespace SolutionPersonnelleTemplate.Models.BO
 
             set { _Volonte = QuelBonusPourLaCaracteristique(ValeurDeLaCaracteristiqueATester(Caracteristiques.Sagesse)); }
         }
-
-
-
-
-        private readonly ApplicationDbContext _context;
-        /// <summary>
-        /// constructeur de classe
-        /// </summary>
-        public Personne(ApplicationDbContext context)
-        {
-            _context = context;
-        }
-
-
 
 
         /// <summary>

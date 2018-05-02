@@ -24,9 +24,11 @@ namespace SolutionPersonnelleTemplate.Controllers.LogicWebSite
         private readonly IRepositoryPartie _partieManager;
         private readonly IRepositoryMessage _messageManager;
 
+        private readonly IPersonneInterface _personneManager;
+
         public PartieController(ApplicationDbContext context, UserManager<ApplicationUser> userManager,
             IUtilisateurInterface utilisateurManager, IRepositoryHistoire histoireManager,
-            IRepositoryPartie partieManager, IRepositoryMessage messageManager)
+            IRepositoryPartie partieManager, IRepositoryMessage messageManager, IPersonneInterface personneManager)
         {
             _context = context;
             _userManager = userManager;
@@ -34,6 +36,7 @@ namespace SolutionPersonnelleTemplate.Controllers.LogicWebSite
             _histoireManager = histoireManager;
             _partieManager = partieManager;
             _messageManager = messageManager;
+            _personneManager = personneManager;
         }
 
         public async Task<IActionResult> MonAventure(int? partieID)

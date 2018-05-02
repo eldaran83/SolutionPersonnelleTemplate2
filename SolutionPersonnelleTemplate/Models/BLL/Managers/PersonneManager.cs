@@ -14,19 +14,22 @@ namespace SolutionPersonnelleTemplate.Models.BLL.Managers
         private readonly ApplicationDbContext _context;
         private readonly IRepositoryFichier _fichierRepository;
         private readonly IHostingEnvironment _env;
-        private readonly Personne _perso;
+      
         /// <summary>
         /// contructeur 
         /// </summary>
         /// <param name="context"></param>
-        public PersonneManager(ApplicationDbContext context, IRepositoryFichier fichierRepository, IHostingEnvironment env, Personne perso)
+        public PersonneManager(ApplicationDbContext context, IRepositoryFichier fichierRepository, IHostingEnvironment env)
         {
             _context = context;
             _fichierRepository = fichierRepository;
             _env = env;
-            _perso = perso;
-         }
 
+         }
+        //ATTENTION IL FAUT PRESQUE TOUT CHANGER !!!
+        //on ne peut pas mettre les methodes qui se trouvent dans personne car ca pete !!
+        //les mettre dans la classe moteurDUjeu !!
+        //PS: les dropdownlist dans la vue son vide , ca ne prend pas avec les enum semble t il 
         public async Task<Personne> AjouterPersonneAsync(Personne personne)
         {
             Personne laPersonne = new Personne
@@ -37,35 +40,35 @@ namespace SolutionPersonnelleTemplate.Models.BLL.Managers
                 ClasseDuPersonnage = personne.ClasseDuPersonnage,
                 //caractéristique
                 Force = personne.Force,
-                BonusForce = _perso.QuelBonusPourLaCaracteristique(personne.Force),
+             //   BonusForce = _perso.QuelBonusPourLaCaracteristique(personne.Force),
                 Dexterite = personne.Dexterite,
-                BonusDexterite = _perso.QuelBonusPourLaCaracteristique(personne.Dexterite),
+             //   BonusDexterite = _perso.QuelBonusPourLaCaracteristique(personne.Dexterite),
                 Constitution = personne.Constitution,
-                BonusConstitution = _perso.QuelBonusPourLaCaracteristique(personne.Constitution),
+             //   BonusConstitution = _perso.QuelBonusPourLaCaracteristique(personne.Constitution),
                 Intelligence = personne.Intelligence,
-                BonusIntelligence = _perso.QuelBonusPourLaCaracteristique(personne.Intelligence),
+             //   BonusIntelligence = _perso.QuelBonusPourLaCaracteristique(personne.Intelligence),
                 Sagesse = personne.Sagesse,
-                BonusSagesse = _perso.QuelBonusPourLaCaracteristique(personne.Sagesse),
+              //  BonusSagesse = _perso.QuelBonusPourLaCaracteristique(personne.Sagesse),
                 Charisme = personne.Charisme,
-                BonusCharisme = _perso.QuelBonusPourLaCaracteristique(personne.Charisme),
+//BonusCharisme = _perso.QuelBonusPourLaCaracteristique(personne.Charisme),
                 // point de vie
-                PointsDeVieMax = _perso.PointDeViePremierNiveau(personne.ClasseDuPersonnage),
-                PointsDeVieActuels = _perso.PointDeViePremierNiveau(personne.ClasseDuPersonnage),
+              //  PointsDeVieMax = _perso.PointDeViePremierNiveau(personne.ClasseDuPersonnage),
+//PointsDeVieActuels = _perso.PointDeViePremierNiveau(personne.ClasseDuPersonnage),
                 //niveau 
                 PointsExperience = 1, // le personnage commence avec 1 point
                 NiveauDuPersonnage = Personne.Niveau.Niveau1, // le personnage commence au niveau 1
                 //Zone de combat 
                 AttaqueMaitriseArme = 1, // a changer apres calcul a définir dans les regles 
                 ClasseArmure = 1,// a changer apres calcul a définir dans les regles 
-                BonusAuDegatPhysique = _perso.BonusAuDegatPhysique,
+             //   BonusAuDegatPhysique = _perso.BonusAuDegatPhysique,
 
                 AttaqueMaitriseMagique= 1, // a changer apres calcul a définir dans les regles
-                BonusAuDegatMagique = _perso.BonusAuDegatMagique,
+              //  BonusAuDegatMagique = _perso.BonusAuDegatMagique,
 
                 // défences
-                Reflexe = _perso.Reflexe,
-                Vigueur = _perso.Vigueur,
-                Volonte = _perso.Volonte
+             //   Reflexe = _perso.Reflexe,
+             //   Vigueur = _perso.Vigueur,
+              //  Volonte = _perso.Volonte
             };
 
             _context.Personnes.Add(laPersonne);
