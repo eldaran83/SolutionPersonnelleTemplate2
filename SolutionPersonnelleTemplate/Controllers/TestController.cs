@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Routing;
 using SolutionPersonnelleTemplate.Data;
 using SolutionPersonnelleTemplate.Models.BLL.Interfaces;
 using SolutionPersonnelleTemplate.Models.BO;
+using static SolutionPersonnelleTemplate.Models.BLL.Managers.MoteurDuJeuManager;
 
 namespace SolutionPersonnelleTemplate.Controllers
 {
@@ -57,12 +58,12 @@ namespace SolutionPersonnelleTemplate.Controllers
             }));
         }
 
-        public async Task<IActionResult> Competence(Personne.Caracteristiques caracteristiqueATester, int difficulte)
+        public async Task<IActionResult> Competence(Personne laPersonne, Caracteristiques caracteristiqueATester, int difficulte)
         {
             //pour le test je recupere le personnage deja crée apres ca sera celui dela partie
             Personne lePerso = _context.Personnes.Where(u => u.PersonneID == 4).FirstOrDefault();
 
-            int laValeurATester =  lePerso.ValeurDeLaCaracteristiqueATester(caracteristiqueATester);
+            int laValeurATester = _moteurDuJeu.ValeurDeLaCaracteristiqueATester(laPersonne, caracteristiqueATester);
 
             bool reussiteOuPasAuTest = await _moteurDuJeu.TestCaracteristique(laValeurATester, difficulte);
 

@@ -14,18 +14,21 @@ namespace SolutionPersonnelleTemplate.Models.BLL.Managers
         private readonly ApplicationDbContext _context;
         private readonly IRepositoryFichier _fichierRepository;
         private readonly IHostingEnvironment _env;
-      
+        private readonly IMoteurDuJeu _moteurDuJeu;
+
         /// <summary>
         /// contructeur 
         /// </summary>
         /// <param name="context"></param>
-        public PersonneManager(ApplicationDbContext context, IRepositoryFichier fichierRepository, IHostingEnvironment env)
+        public PersonneManager(ApplicationDbContext context, IRepositoryFichier fichierRepository,
+            IMoteurDuJeu moteurDuJeu,IHostingEnvironment env)
         {
             _context = context;
             _fichierRepository = fichierRepository;
             _env = env;
+            _moteurDuJeu = moteurDuJeu;
 
-         }
+        }
         //ATTENTION IL FAUT PRESQUE TOUT CHANGER !!!
         //on ne peut pas mettre les methodes qui se trouvent dans personne car ca pete !!
         //les mettre dans la classe moteurDUjeu !!
@@ -40,20 +43,20 @@ namespace SolutionPersonnelleTemplate.Models.BLL.Managers
                 ClasseDuPersonnage = personne.ClasseDuPersonnage,
                 //caractéristique
                 Force = personne.Force,
-             //   BonusForce = _perso.QuelBonusPourLaCaracteristique(personne.Force),
+                BonusForce =  _moteurDuJeu.QuelBonusPourLaCaracteristique(personne.Force),
                 Dexterite = personne.Dexterite,
-             //   BonusDexterite = _perso.QuelBonusPourLaCaracteristique(personne.Dexterite),
+                BonusDexterite =  _moteurDuJeu.QuelBonusPourLaCaracteristique(personne.Dexterite),
                 Constitution = personne.Constitution,
-             //   BonusConstitution = _perso.QuelBonusPourLaCaracteristique(personne.Constitution),
+                BonusConstitution =  _moteurDuJeu.QuelBonusPourLaCaracteristique(personne.Constitution),
                 Intelligence = personne.Intelligence,
-             //   BonusIntelligence = _perso.QuelBonusPourLaCaracteristique(personne.Intelligence),
+                BonusIntelligence =  _moteurDuJeu.QuelBonusPourLaCaracteristique(personne.Intelligence),
                 Sagesse = personne.Sagesse,
-              //  BonusSagesse = _perso.QuelBonusPourLaCaracteristique(personne.Sagesse),
+                BonusSagesse =  _moteurDuJeu.QuelBonusPourLaCaracteristique(personne.Sagesse),
                 Charisme = personne.Charisme,
-//BonusCharisme = _perso.QuelBonusPourLaCaracteristique(personne.Charisme),
+                BonusCharisme =  _moteurDuJeu.QuelBonusPourLaCaracteristique(personne.Charisme),
                 // point de vie
-              //  PointsDeVieMax = _perso.PointDeViePremierNiveau(personne.ClasseDuPersonnage),
-//PointsDeVieActuels = _perso.PointDeViePremierNiveau(personne.ClasseDuPersonnage),
+                //  PointsDeVieMax = _perso.PointDeViePremierNiveau(personne.ClasseDuPersonnage),
+                //PointsDeVieActuels = _perso.PointDeViePremierNiveau(personne.ClasseDuPersonnage),
                 //niveau 
                 PointsExperience = 1, // le personnage commence avec 1 point
                 NiveauDuPersonnage = Personne.Niveau.Niveau1, // le personnage commence au niveau 1
