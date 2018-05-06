@@ -18,6 +18,17 @@ namespace SolutionPersonnelleTemplate.Models.BLL.Interfaces
         Task<int> GagnerPointDeViePassageDeNiveau(Personne laPersonneDontOnDoitTesterSaCaract, Classe classeDuPerso);
         int ValeurDeLaCaracteristiqueATester(Personne laPersonneDontOnDoitTesterSaCaract, Caracteristiques caracteristique);
         bool EstVivant(Personne laPersonneDontOnDoitTesterSaCaract);
+        int BonusDeBaseDeMaitriseArmesPourLeNiveau(Personne personne);
+        int BonusDeBaseDeMaitriseMagiquePourLeNiveau(Personne personne);
+        int BonusDeDegatsMagiqueParClasse(Personne personne);
+        Task<bool> HerosAtIlLinitiative(Personne leHeros, Personne leMonstre);
+        int ValeurDeVigueur(Personne leHeros);
+        int ValeurDeReflexe(Personne leHeros);
+        int ValeurDeVolonte(Personne leHeros);
+
+
+
+        int CalculeQuelleClassedArmure(Personne laPersonne);
 
     }
 }

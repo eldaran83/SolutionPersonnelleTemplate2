@@ -35,6 +35,8 @@ namespace SolutionPersonnelleTemplate.Models.BLL.Managers
         //PS: les dropdownlist dans la vue son vide , ca ne prend pas avec les enum semble t il 
         public async Task<Personne> AjouterPersonneAsync(Personne personne)
         {
+            //il faut mettre le niveau du heros a 1 ici 
+            personne.NiveauDuPersonnage = Personne.Niveau.Niveau1;
             Personne laPersonne = new Personne
             {
                 Nom = personne.Nom,
@@ -55,23 +57,23 @@ namespace SolutionPersonnelleTemplate.Models.BLL.Managers
                 Charisme = personne.Charisme,
                 BonusCharisme =  _moteurDuJeu.QuelBonusPourLaCaracteristique(personne.Charisme),
                 // point de vie
-                //  PointsDeVieMax = _perso.PointDeViePremierNiveau(personne.ClasseDuPersonnage),
-                //PointsDeVieActuels = _perso.PointDeViePremierNiveau(personne.ClasseDuPersonnage),
+                PointsDeVieMax = _moteurDuJeu.PointDeViePremierNiveau(personne,personne.ClasseDuPersonnage),
+                PointsDeVieActuels = _moteurDuJeu.PointDeViePremierNiveau(personne,personne.ClasseDuPersonnage),
                 //niveau 
                 PointsExperience = 1, // le personnage commence avec 1 point
                 NiveauDuPersonnage = Personne.Niveau.Niveau1, // le personnage commence au niveau 1
                 //Zone de combat 
-                AttaqueMaitriseArme = 1, // a changer apres calcul a définir dans les regles 
-                ClasseArmure = 1,// a changer apres calcul a définir dans les regles 
-             //   BonusAuDegatPhysique = _perso.BonusAuDegatPhysique,
+                AttaqueMaitriseArme = _moteurDuJeu.BonusDeBaseDeMaitriseArmesPourLeNiveau(personne),
+                ClasseArmure = _moteurDuJeu.CalculeQuelleClassedArmure(personne),// a changer apres implémentation des équipements pour prendre en compte les armures
+                BonusAuDegatPhysique = _moteurDuJeu.QuelBonusPourLaCaracteristique(personne.Force),
 
-                AttaqueMaitriseMagique= 1, // a changer apres calcul a définir dans les regles
-              //  BonusAuDegatMagique = _perso.BonusAuDegatMagique,
+                AttaqueMaitriseMagique= _moteurDuJeu.BonusDeBaseDeMaitriseMagiquePourLeNiveau(personne), 
+                BonusAuDegatMagique = _moteurDuJeu.BonusDeBaseDeMaitriseMagiquePourLeNiveau(personne),
 
                 // défences
-             //   Reflexe = _perso.Reflexe,
-             //   Vigueur = _perso.Vigueur,
-              //  Volonte = _perso.Volonte
+                Reflexe = _moteurDuJeu.ValeurDeReflexe(personne),
+                Vigueur = _moteurDuJeu.ValeurDeVigueur(personne),
+                Volonte = _moteurDuJeu.ValeurDeVolonte(personne)
             };
 
             _context.Personnes.Add(laPersonne);

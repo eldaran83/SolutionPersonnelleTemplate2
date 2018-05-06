@@ -7,6 +7,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using static SolutionPersonnelleTemplate.Models.BO.Personne;
+using System.ComponentModel;
 
 namespace SolutionPersonnelleTemplate.Models.BLL.Managers
 {
@@ -16,7 +17,63 @@ namespace SolutionPersonnelleTemplate.Models.BLL.Managers
 
         public MoteurDuJeuManager(ApplicationDbContext context)
         {
+            Des _des = new Des();
             _context = context;
+        }
+
+        /// <summary>
+        /// retourne le bonus de base pour une classe et un niveau donné
+        /// le bonus = le bonus par rapport au lvl + le bonus de la caractéristique choisie
+        /// </summary>
+        /// <param name="laClasseDuPerso"></param>
+        /// <param name="leNiveauDuPersonnage"></param>
+        /// <returns></returns>
+        public int BonusDeBaseDeMaitriseArmesPourLeNiveau(Personne personne)
+        {
+            int bonusDeBasePourLeNiveau = 0;
+                switch (personne.NiveauDuPersonnage)
+                {
+                    case Niveau.Niveau1:
+                    case Niveau.Niveau2:
+                    case Niveau.Niveau3:
+                    case Niveau.Niveau4:
+                    bonusDeBasePourLeNiveau = 2;
+                        break;
+                    case Niveau.Niveau5:
+                    case Niveau.Niveau6:
+                    case Niveau.Niveau7:
+                    case Niveau.Niveau8:
+                    bonusDeBasePourLeNiveau = 3;
+                        break;
+                    case Niveau.Niveau9:                     
+                    case Niveau.Niveau10:
+                    case Niveau.Niveau11:
+                    case Niveau.Niveau12:
+                    bonusDeBasePourLeNiveau = 4;
+                        break;
+                    case Niveau.Niveau13:
+                    case Niveau.Niveau14:
+                    case Niveau.Niveau15:
+                    case Niveau.Niveau16:
+                    bonusDeBasePourLeNiveau = 5;
+                        break;
+                    case Niveau.Niveau17:
+                    case Niveau.Niveau18:
+                    case Niveau.Niveau19:
+                    case Niveau.Niveau20:
+                    bonusDeBasePourLeNiveau = 6;
+                        break;
+                    default:
+                        break;
+                }
+            int bonusDeBasePourLaCaract = 0;
+
+            if (personne.Force >0)
+            {
+                bonusDeBasePourLaCaract = QuelBonusPourLaCaracteristique(personne.Force);
+            }
+            int bonusDeMaitrise = 0;
+            return bonusDeMaitrise = bonusDeBasePourLeNiveau+ bonusDeBasePourLaCaract;
         }
 
         /// <summary>
@@ -67,79 +124,36 @@ namespace SolutionPersonnelleTemplate.Models.BLL.Managers
             int leBonus = -4;
             switch (laValeurDeCaracteristique)
             {
-                case 1:
-                case 2:
-                case 3:
-                    leBonus = -4;
+                case 1: case 2: case 3: leBonus = -4;
                     break;
-                case 4:
-                case 5:
-                    leBonus = -3;
+                case 4:                case 5:                    leBonus = -3;
                     break;
-                case 6:
-                case 7:
-                    leBonus = -2;
+                case 6:                case 7:                    leBonus = -2;
                     break;
-                case 8:
-                case 9:
-                    leBonus = -1;
+                case 8:                case 9:                    leBonus = -1;
                     break;
-                case 10:
-                case 11:
-                    leBonus = 0;
+                case 10:                case 11:                    leBonus = 0;
                     break;
-                case 12:
-                case 13:
-                    leBonus = 1;
+                case 12:                case 13:                    leBonus = 1;
                     break;
-                case 14:
-                case 15:
-                    leBonus = 2;
+                case 14:                case 15:                    leBonus = 2;
                     break;
-                case 16:
-                case 17:
-                    leBonus = 3;
+                case 16:                case 17:                    leBonus = 3;
                     break;
-                case 18:
-                case 19:
-                    leBonus = 4;
+                case 18:                case 19:                    leBonus = 4;
                     break;
-                default:
-                    leBonus = 0; //ca ne doit jamais arriver
+                default:                    leBonus = 0; //ca ne doit jamais arriver
                     break;
             }
             return leBonus;
         }
 
-        //les caractéristiques présentes dans le jeu
-        public enum Caracteristiques
-        {
-            // les caract du personnage
-            Force,
-            Dexterite,
-            Constitution,
-            Intelligence,
-            Sagesse,
-            Charisme,
-            //les points de vies
-            PointsDeVieMax,
-            PointsDeVieActuels,
-            //l 'expérience et lvl du personnage 
-            PointsExperience,
-
-            //pour les combats
-            AttaqueMaitriseArme,
-            ClasseArmure,
-
-            AttaqueMaitriseMagique,
-
-            //défences
-            Reflexe,
-            Vigueur,
-            Volonte
-
-        }
-
+        /// <summary>
+        /// renvoi la valeur de la caractéristique de la personne à tester
+        /// </summary>
+        /// <param name="laPersonneDontOnDoitTesterSaCaract"></param>
+        /// <param name="caracteristique"></param>
+        /// <returns></returns>
         public int ValeurDeLaCaracteristiqueATester(Personne laPersonneDontOnDoitTesterSaCaract , Caracteristiques caracteristique)
         {
             int valeurDeLaCaract = 0;
@@ -263,6 +277,7 @@ namespace SolutionPersonnelleTemplate.Models.BLL.Managers
                 return false;
             }
         }
+       
         /// <summary>
         /// determine si un test de caractéristique est reussi ou pas 
         /// </summary>
@@ -286,7 +301,250 @@ namespace SolutionPersonnelleTemplate.Models.BLL.Managers
             {
                 return false; // ne devrais pas arriver mais au cas où
             }  
-            
+         }
+
+        /// <summary>
+        /// renvoi la classe d'armure du personnage 
+        /// </summary>
+        /// <param name="laPersonne"></param>
+        /// <returns></returns>
+        public int CalculeQuelleClassedArmure(Personne laPersonne)
+        {
+            //Penser lors de l'implémentation des equipements à la refaire pour prendre en compte les armures
+            int classeArmure = 10; //valeur de base de la classe d'armure cf régles du jeu 
+            return classeArmure + QuelBonusPourLaCaracteristique(laPersonne.Dexterite);
+        }
+
+        /// <summary>
+        /// renvoie le bonus de la maitrise magique du perso en fonction de sa classe
+        /// clerc = sagesse ; magicien et le reste = intelligence
+        /// </summary>
+        /// <param name="personne"></param>
+        /// <returns></returns>
+        public int BonusDeBaseDeMaitriseMagiquePourLeNiveau(Personne personne)
+        {
+            int bonusDeBasePourLeNiveau = 0;
+            switch (personne.NiveauDuPersonnage)
+            {
+                case Niveau.Niveau1:
+                case Niveau.Niveau2:
+                case Niveau.Niveau3:
+                case Niveau.Niveau4:
+                    bonusDeBasePourLeNiveau = 2;
+                    break;
+                case Niveau.Niveau5:
+                case Niveau.Niveau6:
+                case Niveau.Niveau7:
+                case Niveau.Niveau8:
+                    bonusDeBasePourLeNiveau = 3;
+                    break;
+                case Niveau.Niveau9:
+                case Niveau.Niveau10:
+                case Niveau.Niveau11:
+                case Niveau.Niveau12:
+                    bonusDeBasePourLeNiveau = 4;
+                    break;
+                case Niveau.Niveau13:
+                case Niveau.Niveau14:
+                case Niveau.Niveau15:
+                case Niveau.Niveau16:
+                    bonusDeBasePourLeNiveau = 5;
+                    break;
+                case Niveau.Niveau17:
+                case Niveau.Niveau18:
+                case Niveau.Niveau19:
+                case Niveau.Niveau20:
+                    bonusDeBasePourLeNiveau = 6;
+                    break;
+                default:
+                    break;
+            }
+            int bonusDeBasePourLaCaract = 0;
+
+            switch (personne.ClasseDuPersonnage)
+            {
+                case Classe.Clerc:
+                    bonusDeBasePourLaCaract = QuelBonusPourLaCaracteristique(personne.Sagesse);
+                    break;
+                case Classe.Guerrier:
+                    bonusDeBasePourLaCaract = QuelBonusPourLaCaracteristique(personne.Intelligence);
+                    break;
+                case Classe.Magicien:
+                    bonusDeBasePourLaCaract = QuelBonusPourLaCaracteristique(personne.Intelligence);
+                    break;
+                case Classe.Roublard:
+                    bonusDeBasePourLaCaract = QuelBonusPourLaCaracteristique(personne.Intelligence);
+                    break;
+                default:
+                    break;
+            }
+            int bonusDeMaitrise = 0;
+            return bonusDeMaitrise = bonusDeBasePourLeNiveau + bonusDeBasePourLaCaract;
+        }
+
+        /// <summary>
+        /// renvoie le bonus aux dégats magique en fonction de la classe
+        /// Clerc = sagesse , le reste = intelligence
+        /// </summary>
+        /// <param name="personne"></param>
+        /// <returns></returns>
+        public int BonusDeDegatsMagiqueParClasse(Personne personne)
+        {
+            int bonusDeBasePourLaCaract = 0;
+
+            switch (personne.ClasseDuPersonnage)
+            {
+                case Classe.Clerc:
+                    bonusDeBasePourLaCaract = QuelBonusPourLaCaracteristique(personne.Sagesse);
+                    break;
+                case Classe.Guerrier:
+                    bonusDeBasePourLaCaract = QuelBonusPourLaCaracteristique(personne.Intelligence);
+                    break;
+                case Classe.Magicien:
+                    bonusDeBasePourLaCaract = QuelBonusPourLaCaracteristique(personne.Intelligence);
+                    break;
+                case Classe.Roublard:
+                    bonusDeBasePourLaCaract = QuelBonusPourLaCaracteristique(personne.Intelligence);
+                    break;
+                default:
+                    break;
+            }
+         
+            return bonusDeBasePourLaCaract ;
+        }
+
+        /// <summary>
+        /// permet de savoir si le heros a l initiative sur le monstre ou pas ?
+        /// init = 10+ 1D20+ la caract de la classe
+        /// </summary>
+        /// <param name="leHeros"></param>
+        /// <param name="leMonstre"></param>
+        /// <returns></returns>
+        public async Task<bool> HerosAtIlLinitiative(Personne leHeros, Personne leMonstre)
+        {
+            Des leLancerDeDES = new Des();
+            int initiativeHeros = 0;
+
+            switch (leHeros.ClasseDuPersonnage)
+            {
+                case Classe.Clerc:
+                    initiativeHeros = 10 + await leLancerDeDES.LanceLeDe(Des.TypeDeDes.D20) + QuelBonusPourLaCaracteristique(leHeros.Sagesse);
+                    break;
+                case Classe.Guerrier:
+                    initiativeHeros = 10 + await leLancerDeDES.LanceLeDe(Des.TypeDeDes.D20) + QuelBonusPourLaCaracteristique(leHeros.Force);
+                    break;
+                case Classe.Magicien:
+                    initiativeHeros = 10 + await leLancerDeDES.LanceLeDe(Des.TypeDeDes.D20) + QuelBonusPourLaCaracteristique(leHeros.Intelligence);
+                    break;
+                case Classe.Roublard:
+                    initiativeHeros = 10 + await leLancerDeDES.LanceLeDe(Des.TypeDeDes.D20) + QuelBonusPourLaCaracteristique(leHeros.Dexterite);
+                    break;
+                default:
+                    break;
+            }
+
+            int initiativeMonstre = 10+await leLancerDeDES.LanceLeDe(Des.TypeDeDes.D20)+QuelBonusPourLaCaracteristique(leMonstre.Dexterite);
+
+            if (initiativeHeros >= initiativeMonstre)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+
+        /// <summary>
+        /// renvoi la valeur de la caracteristique pour reflexe
+        /// </summary>
+        /// <param name="leHeros"></param>
+        /// <returns></returns>
+        public int ValeurDeReflexe(Personne leHeros)
+        {
+            int valeurReflexe = 10 + QuelBonusPourLaCaracteristique(leHeros.Dexterite);
+            return valeurReflexe;
+        }
+        /// <summary>
+        /// renvoi la valeur de la caracteristique pour Vigueur
+        /// </summary>
+        /// <param name="leHeros"></param>
+        /// <returns></returns>
+        public int ValeurDeVigueur(Personne leHeros)
+        {
+            int valeurVigueur = 10 + QuelBonusPourLaCaracteristique(leHeros.Constitution);
+            return valeurVigueur;
+        }
+        /// <summary>
+        /// renvoi la valeur de la caracteristique pour Volonte
+        /// </summary>
+        /// <param name="leHeros"></param>
+        /// <returns></returns>
+        public int ValeurDeVolonte(Personne leHeros)
+        {
+            int valeurVolonte = 10 + QuelBonusPourLaCaracteristique(leHeros.Sagesse);
+            return valeurVolonte;
+        }
+
+        //les caractéristiques présentes dans le jeu
+        public enum Caracteristiques : int
+        {
+            // les caract du personnage
+            [Description("Force")]
+            Force,
+            [Description("Dexterite")]
+            Dexterite,
+            [Description("Constitution")]
+            Constitution,
+            [Description("Intelligence")]
+            Intelligence,
+            [Description("Sagesse")]
+            Sagesse,
+            [Description("Charisme")]
+            Charisme,
+            //les points de vies
+            [Description("Points de Vie Max")]
+            PointsDeVieMax,
+            [Description("Points de Vie actuels")]
+            PointsDeVieActuels,
+            //l 'expérience et lvl du personnage 
+            [Description("Points d'expérience")]
+            PointsExperience,
+
+            //pour les combats
+            [Description("Maitrise Attaque aux armes")]
+            AttaqueMaitriseArme,
+            [Description("Classe d'armure")]
+            ClasseArmure,
+            [Description("Maitrise Attaque Magique")]
+            AttaqueMaitriseMagique,
+
+            //défences
+            [Description("Réflexe")]
+            Reflexe,
+            [Description("Vigueur")]
+            Vigueur,
+            [Description("Volonté")]
+            Volonte
+         }
+
+        //les difficultés du jeu 
+        public enum DifficultesDuJeu : int
+        {
+            [Description("Trés facile")]
+            Simple = 5,
+            [Description("Facile")]
+            Facile = 10,
+            [Description("Moyen")]
+            Moyen = 15,
+            [Description("Difficile")]
+            Difficile =20,
+            [Description("Trés difficile")]
+            Hardue = 25,
+            [Description("Impossible")]
+            Impossible = 30,
+
+
         }
     }
 }

@@ -2,6 +2,7 @@
 using SolutionPersonnelleTemplate.Models.BLL.Interfaces;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
@@ -98,66 +99,75 @@ namespace SolutionPersonnelleTemplate.Models.BO
         [Display(Name = "Volonté")]
         public int Volonte { get; set; }
 
-
-        //public enum Caracteristiques
-        //{
-        //    // les caract du personnage
-        //    Force,
-        //    Dexterite,
-        //    Constitution,
-        //    Intelligence,
-        //    Sagesse,
-        //    Charisme,
-        //    //les points de vies
-        //    PointsDeVieMax,
-        //    PointsDeVieActuels,
-        //    //l 'expérience et lvl du personnage 
-        //    PointsExperience, 
-
-        //    //pour les combats
-        //    AttaqueMaitriseArme,
-        //    ClasseArmure,
-
-        //    AttaqueMaitriseMagique,
-
-        //    //défences
-        //    Reflexe,
-        //    Vigueur,
-        //    Volonte
-
-        //}
-
-        
-
-       
         /// <summary>
-        /// les classes disponibles dans le jeux
+        /// les classes disponibles dans le jeu pour un personnage
         /// </summary>
-        public enum Classe
+        public enum Classe : int
         {
-            Clerc,
-            Guerrier,
-            Magicien,
-            Roublard
+            [Description("Clerc")]
+            Clerc =1,
+            [Description("Guerrier")]
+            Guerrier=2,
+            [Description("Magicien")]
+            Magicien=3,
+            [Description("Roublard")]
+            Roublard=4
         }
-        
-        
-
-        public enum Sexe
+        /// <summary>
+        /// les sexes disponibles dans le jeu pour le personnage
+        /// </summary>
+        public enum Sexe : int
         {
-            Homme,
-            Femme
+            [Description("Homme")]
+            Homme = 1,
+            [Description("Femme")]
+            Femme = 2
         }
-
-        public enum Niveau
+        /// <summary>
+        /// niveaux disponibles dans le jeu pour le personnage
+        /// </summary>
+        public enum Niveau : int
         {
-            Niveau1,Niveau2,Niveau3,Niveau4,Niveau5,Niveau6,Niveau7,Niveau8,Niveau9,Niveau10,Niveau11,Niveau12,Niveau13, Niveau14, Niveau15, Niveau16, Niveau17,Niveau18, Niveau19, Niveau20
-        }
-
-        public int BonusDeBasePourLeNiveauDeLaClasse(Classe laClasseDuPerso, Niveau leNiveauDuPersonnage)
-        {
-            // int leBonus = _context.BonusDesClassesJoueurs.Where(c => c.Classe == laClasseDuPerso).Where(n => n.Niveau == leNiveauDuPersonnage).FirstOrDefault();
-            return 0;// a changer apres correction
+            [Description("Niveau 1")]
+            Niveau1 = 1,
+            [Description("Niveau 2")]
+            Niveau2 = 2,
+            [Description("Niveau 3")]
+            Niveau3 = 3,
+            [Description("Niveau 4")]
+            Niveau4 =4,
+            [Description("Niveau 5")]
+            Niveau5 =5,
+            [Description("Niveau 6")]
+            Niveau6 =6,
+            [Description("Niveau 7")]
+            Niveau7 =7,
+            [Description("Niveau 8")]
+            Niveau8 =8,
+            [Description("Niveau 9")]
+            Niveau9 = 9,
+            [Description("Niveau 10")]
+            Niveau10 =10,
+            [Description("Niveau 11")]
+            Niveau11 =11,
+            [Description("Niveau 12")]
+            Niveau12 =12,
+            [Description("Niveau 13")]
+            Niveau13=13,
+            [Description("Niveau 14")]
+            Niveau14=14,
+            [Description("Niveau 15")]
+            Niveau15=15,
+            [Description("Niveau 16")]
+            Niveau16=16,
+            [Description("Niveau 17")]
+            Niveau17=17,
+            [Description("Niveau 18")]
+            Niveau18=18,
+            [Description("Niveau 19")]
+            Niveau19=19,
+            [Description("Niveau 20")]
+            Niveau20=20
         }
     }
 }

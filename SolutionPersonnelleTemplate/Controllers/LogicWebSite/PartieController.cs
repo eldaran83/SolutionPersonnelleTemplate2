@@ -12,6 +12,7 @@ using SolutionPersonnelleTemplate.Models;
 using SolutionPersonnelleTemplate.Models.BLL.Interfaces;
 using SolutionPersonnelleTemplate.Models.BO;
 using SolutionPersonnelleTemplate.Models.ViewModels;
+using static SolutionPersonnelleTemplate.Models.BO.Personne;
 
 namespace SolutionPersonnelleTemplate.Controllers.LogicWebSite
 {
@@ -121,6 +122,23 @@ namespace SolutionPersonnelleTemplate.Controllers.LogicWebSite
             ViewBag.HistoireID = creerSonHeros.Histoire.HistoireID;
             ViewBag.ApplicationUserID = creerSonHeros.Utilisateur.ApplicationUserID;
 
+            //DROPdownlist pour le sexe
+            var enumDataSexe = from Sexe s in Enum.GetValues(typeof(Sexe))
+                               select new
+                               {
+                                   ID = (int)s,
+                                   Name = s.ToString()
+                               };
+            ViewBag.EnumListSexe = new SelectList(enumDataSexe, "ID", "Name");
+            //DropdownList pour la classe 
+            var enumDataClasse = from Classe c in Enum.GetValues(typeof(Classe))
+                                 select new
+                                 {
+                                     ID = (int)c,
+                                     Name = c.ToString()
+                                 };
+             ViewBag.EnumListClasse = new SelectList(enumDataClasse, "ID", "Name");
+
             return View(creerSonHeros);
         }
 
@@ -135,11 +153,24 @@ namespace SolutionPersonnelleTemplate.Controllers.LogicWebSite
             catch (Exception ex)
             {
                 Console.WriteLine("ajout heros ou partie mal passé" + ex);
+                //DROPdownlist pour le sexe
+                var enumDataSexe = from Sexe s in Enum.GetValues(typeof(Sexe))
+                                   select new
+                                   {
+                                       ID = (int)s,
+                                       Name = s.ToString()
+                                   };
+                ViewBag.EnumListSexe = new SelectList(enumDataSexe, "ID", "Name");
+                //DropdownList pour la classe 
+                var enumDataClasse = from Classe c in Enum.GetValues(typeof(Classe))
+                                     select new
+                                     {
+                                         ID = (int)c,
+                                         Name = c.ToString()
+                                     };
+                ViewBag.EnumListClasse = new SelectList(enumDataClasse, "ID", "Name");
+                return View(creerSonHerosModel);
             }
-
-
-
-
             return View("Index"); // redirection a changer pour pointer la où il faut 
         }
 
