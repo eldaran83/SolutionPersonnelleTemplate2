@@ -414,6 +414,113 @@ namespace SolutionPersonnelleTemplate.Models.BLL.Managers
         }
 
         /// <summary>
+        /// methode pour frapper une personne/monstre
+        /// </summary>
+        /// <param name="lAttaquant"></param>
+        /// <param name="leDefenceur"></param>
+        /// <returns></returns>
+        public async Task<int> Frappe(Personne lAttaquant, Personne leDefenceur)
+        {
+            //pour le test les deux combattants ont une arme fistive à 1D6
+            Des _des = new Des();
+            int degatsArmeAttaquant = await _des.LanceLeDe(Des.TypeDeDes.D6);
+             int pointDegatsFaitsParAttaquant = 0;
+          
+            //l'attaquant touche ou pas 
+            int jetDattaque = lAttaquant.AttaqueMaitriseArme + await _des.LanceLeDe(Des.TypeDeDes.D20);
+
+            if (await TestCaracteristique(jetDattaque, leDefenceur.ClasseArmure))
+            {
+                //Penser à gérer le fait des coups crtiques qui doivent mulpilier les degats !!
+                pointDegatsFaitsParAttaquant = degatsArmeAttaquant + lAttaquant.BonusAuDegatMagique;
+                if (pointDegatsFaitsParAttaquant > 0)
+                {      //il fait des degats
+                     leDefenceur.PointsDeVieActuels -= pointDegatsFaitsParAttaquant;
+                }
+            }
+            else
+            {
+                leDefenceur.PointsDeVieActuels = leDefenceur.PointsDeVieActuels;
+            }
+             return leDefenceur.PointsDeVieActuels;  //renvoi les points de vies actuels du défenceur
+         }
+
+        /// <summary>
+        /// Methode qui simule un combat en entier de A à Z
+        /// </summary>
+        /// <param name="leHeros"></param>
+        /// <param name="leMonstre"></param>
+        /// <returns></returns>
+        public async Task<string> Combattre(Personne leHeros, Personne leMonstre)
+        {
+             string derouleDuCombat = "";
+            //le heros attaque t il en premier ?
+            bool leHerosFrappeLePremierPourLePremierRound = await HerosAtIlLinitiative(leHeros, leMonstre);
+            if (leHerosFrappeLePremierPourLePremierRound)
+            {//le heros frappe le premier
+
+                derouleDuCombat += "<h3>Vous avez eu l'initiative au combat<h3>";
+            }
+            else
+            {
+                derouleDuCombat += "<h3>Vous n'avez pas eu l'initiative au combat<h3>";
+            }
+
+                //tant que l un des deux est en vie
+                while (EstVivant(leHeros) && EstVivant(leMonstre))
+            {
+                 if (leHerosFrappeLePremierPourLePremierRound)
+                {//le heros frappe le premier
+
+                    //si il touche il fait les degats et les points de vie du défenceur sont modifiés
+                    int pvMonstreAvantAttaque=leMonstre.PointsDeVieActuels;
+                    leMonstre.PointsDeVieActuels = await Frappe(leHeros, leMonstre);
+                    int degatsSubis = pvMonstreAvantAttaque - leMonstre.PointsDeVieActuels;
+                    if (degatsSubis >0)
+                    {
+                        string degatsSubisEnString = degatsSubis.ToString();
+                        derouleDuCombat += "<p>Vous avez frappez l'adversaire et lui avait infligé " + degatsSubisEnString + " point de dégats</p>";
+                        //pour que le heros ne frappe pas à tous coups 
+                        leHerosFrappeLePremierPourLePremierRound = false;
+                    }
+                    else {
+                         derouleDuCombat += "<p>Vous avez frappez l'adversaire sans lui infliger des dégats</p>";
+                        //pour que le heros ne frappe pas à tous coups 
+                        leHerosFrappeLePremierPourLePremierRound = false;
+                    }
+
+                    
+                }
+                else
+                {
+                    //si lemonstre touche il fait les degats et les points de vie du défenceur sont modifiés
+                    int pvHeroAvantAttaque = leHeros.PointsDeVieActuels;
+                    leHeros.PointsDeVieActuels = await Frappe(leMonstre,leHeros);
+                    int degatsSubis = pvHeroAvantAttaque - leHeros.PointsDeVieActuels;
+                    if (degatsSubis > 0)
+                    {
+                       string degatsSubisEnString = degatsSubis.ToString();
+                        derouleDuCombat += "<p>Vous avez été frappé par votre l'adversaire et il vous a infligé " + degatsSubisEnString + " point de dégats et vos points de vie sont maintenant de "+ leHeros.PointsDeVieActuels +"</p>";
+                        //pour que le heros ne frappe pas à tous coups 
+                        leHerosFrappeLePremierPourLePremierRound = true;
+                    }
+                    else
+                    {
+                         derouleDuCombat += "<p>Vous avez été frappé par votre l'adversaire sans qu'il vous inflige des dégats</p>";
+                        //pour que le heros ne frappe pas à tous coups 
+                        leHerosFrappeLePremierPourLePremierRound = true;
+                    }
+                   
+                }
+            }
+ 
+            //celui qui a l intit attaque 
+             return derouleDuCombat;
+             //si l adversaire est encore en vie c est à l autre d'attaquer 
+ 
+        }
+
+        /// <summary>
         /// permet de savoir si le heros a l initiative sur le monstre ou pas ?
         /// init = 10+ 1D20+ la caract de la classe
         /// </summary>

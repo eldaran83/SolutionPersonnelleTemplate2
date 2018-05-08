@@ -25,6 +25,96 @@ namespace SolutionPersonnelleTemplate.Controllers
             _moteurDuJeu = moteurDuJeu;
         }
 
+        public async Task<IActionResult> Combattre()
+        {
+            Personne heros = new Personne
+            {
+                Nom = "Toto le héros",
+
+                //Classe du perso 
+                ClasseDuPersonnage = Personne.Classe.Guerrier,
+                //caractéristique
+                Force = 15,
+                BonusForce = _moteurDuJeu.QuelBonusPourLaCaracteristique(15),
+                Dexterite = 14,
+                BonusDexterite = _moteurDuJeu.QuelBonusPourLaCaracteristique(14),
+                Constitution = 15,
+                BonusConstitution = _moteurDuJeu.QuelBonusPourLaCaracteristique(15),
+                Intelligence = 8,
+                BonusIntelligence = _moteurDuJeu.QuelBonusPourLaCaracteristique(8),
+                Sagesse = 10,
+                BonusSagesse = _moteurDuJeu.QuelBonusPourLaCaracteristique(10),
+                Charisme = 10,
+                BonusCharisme = _moteurDuJeu.QuelBonusPourLaCaracteristique(10),
+                // point de vie
+                PointsDeVieMax = 15,
+                PointsDeVieActuels = 15,
+                //niveau 
+                PointsExperience = 1, // le personnage commence avec 1 point
+                NiveauDuPersonnage = Personne.Niveau.Niveau1, // le personnage commence au niveau 1
+                //Zone de combat 
+                AttaqueMaitriseArme = 4,
+                ClasseArmure = 14,
+                BonusAuDegatPhysique = 2,
+
+                AttaqueMaitriseMagique = -1,
+                BonusAuDegatMagique = -1,
+
+                // défences
+                Reflexe = 1,
+                Vigueur = 2,
+                Volonte = -1
+
+            };
+
+            Personne monstre = new Personne
+            {
+                Nom = "Bou le monstre",
+
+                //Classe du perso 
+                ClasseDuPersonnage = Personne.Classe.Guerrier,
+                //caractéristique
+                Force = 15,
+                BonusForce = _moteurDuJeu.QuelBonusPourLaCaracteristique(15),
+                Dexterite = 14,
+                BonusDexterite = _moteurDuJeu.QuelBonusPourLaCaracteristique(14),
+                Constitution = 15,
+                BonusConstitution = _moteurDuJeu.QuelBonusPourLaCaracteristique(15),
+                Intelligence = 8,
+                BonusIntelligence = _moteurDuJeu.QuelBonusPourLaCaracteristique(8),
+                Sagesse = 10,
+                BonusSagesse = _moteurDuJeu.QuelBonusPourLaCaracteristique(10),
+                Charisme = 10,
+                BonusCharisme = _moteurDuJeu.QuelBonusPourLaCaracteristique(10),
+                // point de vie
+                PointsDeVieMax = 15,
+                PointsDeVieActuels = 15,
+                //niveau 
+                PointsExperience = 1, // le personnage commence avec 1 point
+                NiveauDuPersonnage = Personne.Niveau.Niveau1, // le personnage commence au niveau 1
+                //Zone de combat 
+                AttaqueMaitriseArme = 4,
+                ClasseArmure = 14,
+                BonusAuDegatPhysique = 2,
+
+                AttaqueMaitriseMagique = -1,
+                BonusAuDegatMagique = -1,
+
+                // défences
+                Reflexe = 1,
+                Vigueur = 2,
+                Volonte = -1
+
+            };
+
+            string deroulementCombat =  await _moteurDuJeu.Combattre(heros, monstre);
+          // ViewData["deroulementCombat"] = deroulementCombat;
+           ViewData["deroulementCombat"] = "<p>toto</p><p>titi</p>";
+            
+            return View();
+
+        }
+
         public IActionResult Index(int? degatInflige, bool? competence)
         {
             if (degatInflige != null)

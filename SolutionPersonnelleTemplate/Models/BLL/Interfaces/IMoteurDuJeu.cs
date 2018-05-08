@@ -26,6 +26,8 @@ namespace SolutionPersonnelleTemplate.Models.BLL.Interfaces
         int ValeurDeReflexe(Personne leHeros);
         int ValeurDeVolonte(Personne leHeros);
 
+        Task<string> Combattre(Personne leHeros, Personne leMonstre);
+        Task<int> Frappe(Personne lAttaquant, Personne leDefenceur);
 
 
         int CalculeQuelleClassedArmure(Personne laPersonne);
