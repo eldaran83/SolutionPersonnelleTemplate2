@@ -25,255 +25,197 @@ namespace SolutionPersonnelleTemplate.Controllers
             _moteurDuJeu = moteurDuJeu;
         }
 
-
-        public async Task<IActionResult> Combattre2()
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> PhaseDeCombat(DeroulementDuCombat deroulement)
         {
-            Personne heros = new Personne
-            {
-                Nom = "Toto le héros",
+            int round = deroulement.NombreRound;
+            bool? init = deroulement.JoueurInit;
+            ActionCombat? action = deroulement.ActionChoisie;
+            Personne leHeros = deroulement.LeHeros;
+            Personne leMonstre = deroulement.LeMonstre;
 
-                //Classe du perso 
-                ClasseDuPersonnage = Personne.Classe.Guerrier,
-                //caractéristique
-                Force = 15,
-                BonusForce = _moteurDuJeu.QuelBonusPourLaCaracteristique(15),
-                Dexterite = 14,
-                BonusDexterite = _moteurDuJeu.QuelBonusPourLaCaracteristique(14),
-                Constitution = 15,
-                BonusConstitution = _moteurDuJeu.QuelBonusPourLaCaracteristique(15),
-                Intelligence = 8,
-                BonusIntelligence = _moteurDuJeu.QuelBonusPourLaCaracteristique(8),
-                Sagesse = 10,
-                BonusSagesse = _moteurDuJeu.QuelBonusPourLaCaracteristique(10),
-                Charisme = 10,
-                BonusCharisme = _moteurDuJeu.QuelBonusPourLaCaracteristique(10),
-                // point de vie
-                PointsDeVieMax = 15,
-                PointsDeVieActuels = 15,
-                //niveau 
-                PointsExperience = 1, // le personnage commence avec 1 point
-                NiveauDuPersonnage = Personne.Niveau.Niveau1, // le personnage commence au niveau 1
-                //Zone de combat 
-                AttaqueMaitriseArme = 4,
-                ClasseArmure = 14,
-                BonusAuDegatPhysique = 2,
-
-                AttaqueMaitriseMagique = -1,
-                BonusAuDegatMagique = -1,
-
-                // défences
-                Reflexe = 1,
-                Vigueur = 2,
-                Volonte = -1
-
-            };
-
-            Personne monstre = new Personne
-            {
-                Nom = "Bou le monstre",
-
-                //Classe du perso 
-                ClasseDuPersonnage = Personne.Classe.Guerrier,
-                //caractéristique
-                Force = 15,
-                BonusForce = _moteurDuJeu.QuelBonusPourLaCaracteristique(15),
-                Dexterite = 4,
-                BonusDexterite = _moteurDuJeu.QuelBonusPourLaCaracteristique(14),
-                Constitution = -4,
-                BonusConstitution = _moteurDuJeu.QuelBonusPourLaCaracteristique(15),
-                Intelligence = 8,
-                BonusIntelligence = _moteurDuJeu.QuelBonusPourLaCaracteristique(8),
-                Sagesse = 10,
-                BonusSagesse = _moteurDuJeu.QuelBonusPourLaCaracteristique(10),
-                Charisme = 10,
-                BonusCharisme = _moteurDuJeu.QuelBonusPourLaCaracteristique(10),
-                // point de vie
-                PointsDeVieMax = 15,
-                PointsDeVieActuels = 15,
-                //niveau 
-                PointsExperience = 1, // le personnage commence avec 1 point
-                NiveauDuPersonnage = Personne.Niveau.Niveau1, // le personnage commence au niveau 1
-                //Zone de combat 
-                AttaqueMaitriseArme = 4,
-                ClasseArmure = 14,
-                BonusAuDegatPhysique = 2,
-
-                AttaqueMaitriseMagique = -1,
-                BonusAuDegatMagique = -1,
-
-                // défences
-                Reflexe = 1,
-                Vigueur = 2,
-                Volonte = -1
-
-            };
-      
-            //on fais le 1er round sans action juste pour l init
-            Dictionary<string, object> leCombat = await _moteurDuJeu.PhaseDeCombat(0, null, null, heros, monstre);
-
-            int nbRound = Convert.ToInt16(leCombat["Round n°"]);
-
-            bool leJoueurAtIlLInit;
-            var joueurInitVar = leCombat["initiativeHeros"];
-            //leJoueurAtIlLInit = joueurInitVar;
-
-            if (joueurInitVar.Equals(true))
-            {
-                leJoueurAtIlLInit = true;
-            }
-            else
-            {
-                leJoueurAtIlLInit = false;
-            }
-
-
-            Personne heroCombat = leCombat["leHeros"] as Personne;
-            Personne monstreCombat = leCombat["leMonstre"] as Personne;
-
-            DeroulementDuCombat leDeroulementDuCombat = new DeroulementDuCombat
-            {
-                NombreRound= nbRound,
-                JoueurInit = leJoueurAtIlLInit,
-                ActionChoisie = ActionCombat.CombattrePhysique,
-                LeHeros = heroCombat,
-                LeMonstre =monstreCombat
-            };
-            var pvHeros = leDeroulementDuCombat.LeHeros.PointsDeVieActuels;
-            var pvMonstre = leDeroulementDuCombat.LeMonstre.PointsDeVieActuels;
-
-
-
-            while (_moteurDuJeu.EstVivant(leDeroulementDuCombat.LeMonstre) && _moteurDuJeu.EstVivant(leDeroulementDuCombat.LeHeros))
+            if (ModelState.IsValid)
             {
                 //on fais un nouveau round avec les infos du round precedent
-                Dictionary<string, object> nouveauRound = await _moteurDuJeu.PhaseDeCombat(
-                    leDeroulementDuCombat.NombreRound,
-                    leDeroulementDuCombat.JoueurInit,
-                    leDeroulementDuCombat.ActionChoisie,
-                    heros,
-                    monstre);
+                Dictionary<string, object> nouveauRound = await _moteurDuJeu.PhaseDeCombat(round, init, action, leHeros, leMonstre);
 
-                int nombreRoundnouveauRound = Convert.ToInt16(nouveauRound["Round n°"]);
-                leDeroulementDuCombat.NombreRound = nombreRoundnouveauRound;
-
-                leDeroulementDuCombat.JoueurInit = leDeroulementDuCombat.JoueurInit;
-
-                leDeroulementDuCombat.ActionChoisie = ActionCombat.CombattrePhysique;
-
+                int nbRound = Convert.ToInt16(nouveauRound["Round n°"]);
                 Personne heroCombatAutreRound = nouveauRound["leHeros"] as Personne;
-                leDeroulementDuCombat.LeHeros = heroCombatAutreRound;
-               Personne monstreCombatAutreRound = nouveauRound["leMonstre"] as Personne;
-                leDeroulementDuCombat.LeMonstre = monstreCombatAutreRound;
+                Personne monstreCombatAutreRound = nouveauRound["leMonstre"] as Personne;
 
+                DeroulementDuCombat leDeroulementDuCombatNouveauRound = new DeroulementDuCombat
+                {
+                    NombreRound = nbRound,
+                    JoueurInit = init,
+                    ActionChoisie = action,
+                    LeHeros = heroCombatAutreRound,
+                    LeMonstre = monstreCombatAutreRound,
+                    MessageDuCombat = nouveauRound["leMessage"] as string
+                };
+                leDeroulementDuCombatNouveauRound.LeHeros.PointsDeVieActuels = heroCombatAutreRound.PointsDeVieActuels;
+                leDeroulementDuCombatNouveauRound.LeMonstre.PointsDeVieActuels = monstreCombatAutreRound.PointsDeVieActuels;
 
-                var pvHerosAutreRound = leDeroulementDuCombat.LeHeros.PointsDeVieActuels;
-                var pvMonstreAutreRound = leDeroulementDuCombat.LeMonstre.PointsDeVieActuels;
+                if (_moteurDuJeu.EstVivant(leDeroulementDuCombatNouveauRound.LeHeros) && _moteurDuJeu.EstVivant(leDeroulementDuCombatNouveauRound.LeMonstre))
+                {
+                    //ils sont en vie on continue
+                    return View(leDeroulementDuCombatNouveauRound);
+                }
+                else
+                {
+                    //on a gagné ou perdu 
+                    if (leDeroulementDuCombatNouveauRound.LeHeros.PointsDeVieActuels > 1)
+                    {
+                        ViewBag.Combat = "Gagné";
+                        return View(leDeroulementDuCombatNouveauRound); // A CHANGER APRES TEST
+                    }
+                    else
+                    {
+                        ViewBag.Combat = "Perdu";
+                        return View(leDeroulementDuCombatNouveauRound); // A CHANGER APRES TEST
+                    }
+                }
+
             }
-
-            if (leDeroulementDuCombat.LeHeros.PointsDeVieActuels >1)
-            {
-                ViewBag.Combat = "Gagné";
-            }
-            else
-            {
-                ViewBag.Combat = "Perdu";
-            }
-            return View();
-
+            return View(deroulement);
         }
 
-
-
-        public async Task<IActionResult> Combattre()
+        public async Task<IActionResult> PhaseDeCombat(int round, bool init, ActionCombat? action, Personne leHeros, Personne leMonstre)
         {
-            Personne heros = new Personne
+            if (round <1)
             {
-                Nom = "Toto le héros",
+                Personne heros = new Personne
+                {
+                    Nom = "Toto le héros",
 
-                //Classe du perso 
-                ClasseDuPersonnage = Personne.Classe.Guerrier,
-                //caractéristique
-                Force = 15,
-                BonusForce = _moteurDuJeu.QuelBonusPourLaCaracteristique(15),
-                Dexterite = 14,
-                BonusDexterite = _moteurDuJeu.QuelBonusPourLaCaracteristique(14),
-                Constitution = 15,
-                BonusConstitution = _moteurDuJeu.QuelBonusPourLaCaracteristique(15),
-                Intelligence = 8,
-                BonusIntelligence = _moteurDuJeu.QuelBonusPourLaCaracteristique(8),
-                Sagesse = 10,
-                BonusSagesse = _moteurDuJeu.QuelBonusPourLaCaracteristique(10),
-                Charisme = 10,
-                BonusCharisme = _moteurDuJeu.QuelBonusPourLaCaracteristique(10),
-                // point de vie
-                PointsDeVieMax = 15,
-                PointsDeVieActuels = 15,
-                //niveau 
-                PointsExperience = 1, // le personnage commence avec 1 point
-                NiveauDuPersonnage = Personne.Niveau.Niveau1, // le personnage commence au niveau 1
-                //Zone de combat 
-                AttaqueMaitriseArme = 4,
-                ClasseArmure = 14,
-                BonusAuDegatPhysique = 2,
+                    //Classe du perso 
+                    ClasseDuPersonnage = Personne.Classe.Guerrier,
+                    //caractéristique
+                    Force = 5,
+                    BonusForce = _moteurDuJeu.QuelBonusPourLaCaracteristique(5),
+                    Dexterite = 1,
+                    BonusDexterite = _moteurDuJeu.QuelBonusPourLaCaracteristique(1),
+                    Constitution = 15,
+                    BonusConstitution = _moteurDuJeu.QuelBonusPourLaCaracteristique(15),
+                    Intelligence = 8,
+                    BonusIntelligence = _moteurDuJeu.QuelBonusPourLaCaracteristique(8),
+                    Sagesse = 10,
+                    BonusSagesse = _moteurDuJeu.QuelBonusPourLaCaracteristique(10),
+                    Charisme = 10,
+                    BonusCharisme = _moteurDuJeu.QuelBonusPourLaCaracteristique(10),
+                    // point de vie
+                    PointsDeVieMax = 15,
+                    PointsDeVieActuels = 15,
+                    //niveau 
+                    PointsExperience = 1, // le personnage commence avec 1 point
+                    NiveauDuPersonnage = Personne.Niveau.Niveau1, // le personnage commence au niveau 1
+                    //Zone de combat 
+                    AttaqueMaitriseArme = 4,
+                    ClasseArmure = 14,
+                    BonusAuDegatPhysique = 2,
 
-                AttaqueMaitriseMagique = -1,
-                BonusAuDegatMagique = -1,
+                    AttaqueMaitriseMagique = -1,
+                    BonusAuDegatMagique = -1,
 
-                // défences
-                Reflexe = 1,
-                Vigueur = 2,
-                Volonte = -1
+                    // défences
+                    Reflexe = 1,
+                    Vigueur = 2,
+                    Volonte = -1
 
-            };
+                };
 
-            Personne monstre = new Personne
+                leHeros = heros;
+
+                Personne monstre = new Personne
+                {
+                    Nom = "Bou le monstre",
+
+                    //Classe du perso 
+                    ClasseDuPersonnage = Personne.Classe.Guerrier,
+                    //caractéristique
+                    Force = 15,
+                    BonusForce = _moteurDuJeu.QuelBonusPourLaCaracteristique(15),
+                    Dexterite = 14,
+                    BonusDexterite = _moteurDuJeu.QuelBonusPourLaCaracteristique(14),
+                    Constitution = -4,
+                    BonusConstitution = _moteurDuJeu.QuelBonusPourLaCaracteristique(15),
+                    Intelligence = 8,
+                    BonusIntelligence = _moteurDuJeu.QuelBonusPourLaCaracteristique(8),
+                    Sagesse = 10,
+                    BonusSagesse = _moteurDuJeu.QuelBonusPourLaCaracteristique(10),
+                    Charisme = 10,
+                    BonusCharisme = _moteurDuJeu.QuelBonusPourLaCaracteristique(10),
+                    // point de vie
+                    PointsDeVieMax = 15,
+                    PointsDeVieActuels = 15,
+                    //niveau 
+                    PointsExperience = 1, // le personnage commence avec 1 point
+                    NiveauDuPersonnage = Personne.Niveau.Niveau1, // le personnage commence au niveau 1
+                    //Zone de combat 
+                    AttaqueMaitriseArme = 4,
+                    ClasseArmure = 14,
+                    BonusAuDegatPhysique = 2,
+
+                    AttaqueMaitriseMagique = -1,
+                    BonusAuDegatMagique = -1,
+
+                    // défences
+                    Reflexe = 1,
+                    Vigueur = 2,
+                    Volonte = -1
+
+                };
+
+                leMonstre = monstre;
+
+                //on fais le 1er round sans action juste pour l init
+                Dictionary<string, object> leCombat = await _moteurDuJeu.PhaseDeCombat(0, null, null, leHeros, leMonstre);
+
+                int nbRound = Convert.ToInt16(leCombat["Round n°"]);
+                bool leJoueurAtIlLInit;
+                var joueurInitVar = leCombat["initiativeHeros"];
+                string leMessageCombat = leCombat["leMessage"] as string;
+                if (joueurInitVar.Equals(true))
+                {
+                    leJoueurAtIlLInit = true;
+                }
+                else
+                {
+                    leJoueurAtIlLInit = false;
+                }
+
+
+                Personne heroCombat = leCombat["leHeros"] as Personne;
+                Personne monstreCombat = leCombat["leMonstre"] as Personne;
+
+                DeroulementDuCombat leDeroulementDuCombat = new DeroulementDuCombat
+                {
+                    NombreRound = nbRound,
+                    JoueurInit = leJoueurAtIlLInit,
+                    ActionChoisie = ActionCombat.CombattrePhysique,
+                    LeHeros = heroCombat,
+                    LeMonstre = monstreCombat, 
+                    MessageDuCombat = leMessageCombat
+                };
+                var pvHeros = leDeroulementDuCombat.LeHeros.PointsDeVieActuels;
+                var pvMonstre = leDeroulementDuCombat.LeMonstre.PointsDeVieActuels;
+
+                return View(leDeroulementDuCombat);
+
+            }
+            else // on est dans un round different du premier
             {
-                Nom = "Bou le monstre",
 
-                //Classe du perso 
-                ClasseDuPersonnage = Personne.Classe.Guerrier,
-                //caractéristique
-                Force = 15,
-                BonusForce = _moteurDuJeu.QuelBonusPourLaCaracteristique(15),
-                Dexterite = 14,
-                BonusDexterite = _moteurDuJeu.QuelBonusPourLaCaracteristique(14),
-                Constitution = 15,
-                BonusConstitution = _moteurDuJeu.QuelBonusPourLaCaracteristique(15),
-                Intelligence = 8,
-                BonusIntelligence = _moteurDuJeu.QuelBonusPourLaCaracteristique(8),
-                Sagesse = 10,
-                BonusSagesse = _moteurDuJeu.QuelBonusPourLaCaracteristique(10),
-                Charisme = 10,
-                BonusCharisme = _moteurDuJeu.QuelBonusPourLaCaracteristique(10),
-                // point de vie
-                PointsDeVieMax = 15,
-                PointsDeVieActuels = 15,
-                //niveau 
-                PointsExperience = 1, // le personnage commence avec 1 point
-                NiveauDuPersonnage = Personne.Niveau.Niveau1, // le personnage commence au niveau 1
-                //Zone de combat 
-                AttaqueMaitriseArme = 4,
-                ClasseArmure = 14,
-                BonusAuDegatPhysique = 2,
-
-                AttaqueMaitriseMagique = -1,
-                BonusAuDegatMagique = -1,
-
-                // défences
-                Reflexe = 1,
-                Vigueur = 2,
-                Volonte = -1
-
-            };
-
-            string deroulementCombat =  await _moteurDuJeu.Combattre(heros, monstre);
-          // ViewData["deroulementCombat"] = deroulementCombat;
-           ViewData["deroulementCombat"] = "<p>toto</p><p>titi</p>";
-            
-            return View();
+                return View();
+            }
 
         }
 
+
+
+
+
+ 
         public IActionResult Index(int? degatInflige, bool? competence)
         {
             if (degatInflige != null)

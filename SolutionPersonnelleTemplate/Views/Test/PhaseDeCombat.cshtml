@@ -1,0 +1,105 @@
+﻿@model SolutionPersonnelleTemplate.Models.BO.DeroulementDuCombat
+
+@{
+    ViewData["Title"] = "PhaseDeCombat";
+}
+
+
+
+<h2>Round N° @Model.NombreRound</h2>
+<h3>Héros : @Model.LeHeros.Nom</h3>
+<h4>PV : @Model.LeHeros.PointsDeVieActuels</h4>
+
+<h3>Héros : @Model.LeMonstre.Nom</h3>
+<h4>PV : @Model.LeMonstre.PointsDeVieActuels</h4>
+
+<p>Message : @Model.MessageDuCombat</p>
+
+<form asp-action="PhaseDeCombat" method="post">
+    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+    <input type="hidden" asp-for="NombreRound" value="@Model.NombreRound" />
+    <input type="hidden" asp-for="JoueurInit" value="@Model.JoueurInit" />
+    <input type="hidden" asp-for="ActionChoisie" value="@Model.ActionChoisie" />
+
+    @*le heros*@
+    <input type="hidden" asp-for="LeHeros.AttaqueMaitriseArme" />
+    <input type="hidden" asp-for="LeHeros.AttaqueMaitriseMagique" />
+    <input type="hidden" asp-for="LeHeros.BonusAuDegatMagique" />
+    <input type="hidden" asp-for="LeHeros.BonusAuDegatPhysique" />
+    <input type="hidden" asp-for="LeHeros.BonusCharisme" />
+    <input type="hidden" asp-for="LeHeros.BonusConstitution" />
+    <input type="hidden" asp-for="LeHeros.BonusDexterite" />
+    <input type="hidden" asp-for="LeHeros.BonusForce" />
+    <input type="hidden" asp-for="LeHeros.BonusIntelligence" />
+    <input type="hidden" asp-for="LeHeros.BonusSagesse" />
+    <input type="hidden" asp-for="LeHeros.Charisme" />
+    <input type="hidden" asp-for="LeHeros.ClasseArmure" />
+    <input type="hidden" asp-for="LeHeros.ClasseDuPersonnage" />
+    <input type="hidden" asp-for="LeHeros.Constitution" />
+    <input type="hidden" asp-for="LeHeros.Dexterite" />
+    <input type="hidden" asp-for="LeHeros.Force" />
+    <input type="hidden" asp-for="LeHeros.Intelligence" />
+    <input type="hidden" asp-for="LeHeros.NiveauDuPersonnage" />
+    <input type="hidden" asp-for="LeHeros.Nom" />
+    <input type="hidden" asp-for="LeHeros.PointsDeVieActuels" value="@Model.LeHeros.PointsDeVieActuels" />
+    <input type="hidden" asp-for="LeHeros.PointsDeVieMax" />
+    <input type="hidden" asp-for="LeHeros.PointsExperience" />
+    <input type="hidden" asp-for="LeHeros.Reflexe" />
+    <input type="hidden" asp-for="LeHeros.Sagesse" />
+    <input type="hidden" asp-for="LeHeros.SexePersonnage" />
+    <input type="hidden" asp-for="LeHeros.Vigueur" />
+    <input type="hidden" asp-for="LeHeros.Volonte" />
+
+    @*IL MANQUE SON ID EXPRESS*@
+
+    @*le Monstre*@
+    <input type="hidden" asp-for="LeMonstre.AttaqueMaitriseArme" />
+    <input type="hidden" asp-for="LeMonstre.AttaqueMaitriseMagique" />
+    <input type="hidden" asp-for="LeMonstre.BonusAuDegatMagique" />
+    <input type="hidden" asp-for="LeMonstre.BonusAuDegatPhysique" />
+    <input type="hidden" asp-for="LeMonstre.BonusCharisme" />
+    <input type="hidden" asp-for="LeMonstre.BonusConstitution" />
+    <input type="hidden" asp-for="LeMonstre.BonusDexterite" />
+    <input type="hidden" asp-for="LeMonstre.BonusForce" />
+    <input type="hidden" asp-for="LeMonstre.BonusIntelligence" />
+    <input type="hidden" asp-for="LeMonstre.BonusSagesse" />
+    <input type="hidden" asp-for="LeMonstre.Charisme" />
+    <input type="hidden" asp-for="LeMonstre.ClasseArmure" />
+    <input type="hidden" asp-for="LeMonstre.ClasseDuPersonnage" />
+    <input type="hidden" asp-for="LeMonstre.Constitution" />
+    <input type="hidden" asp-for="LeMonstre.Dexterite" />
+    <input type="hidden" asp-for="LeMonstre.Force" />
+    <input type="hidden" asp-for="LeMonstre.Intelligence" />
+    <input type="hidden" asp-for="LeMonstre.NiveauDuPersonnage" />
+    <input type="hidden" asp-for="LeMonstre.Nom" />
+    <input type="hidden" asp-for="LeMonstre.PointsDeVieActuels" value="@Model.LeMonstre.PointsDeVieActuels" />
+    <input type="hidden" asp-for="LeMonstre.PointsDeVieMax" />
+    <input type="hidden" asp-for="LeMonstre.PointsExperience" />
+    <input type="hidden" asp-for="LeMonstre.Reflexe" />
+    <input type="hidden" asp-for="LeMonstre.Sagesse" />
+    <input type="hidden" asp-for="LeMonstre.SexePersonnage" />
+    <input type="hidden" asp-for="LeMonstre.Vigueur" />
+    <input type="hidden" asp-for="LeMonstre.Volonte" />
+    @*IL MANQUE SON ID EXPRESS*@
+    @*le Message*@
+    <input type="hidden" asp-for="MessageDuCombat" value="@Model.MessageDuCombat" />
+
+    @if (@ViewBag.Combat != null)
+    {
+
+        <p>Le combat est fini et il est @ViewBag.Combat</p>
+        <div>
+            <a asp-action="Index" asp-controller="Test"  class="btn  btn-info">Retour Index Test</a>
+        </div>
+
+    }
+    else
+    {
+        <input type="submit" value="Frapper" class="btn btn-success" />
+    }
+
+</form>
+
+
+

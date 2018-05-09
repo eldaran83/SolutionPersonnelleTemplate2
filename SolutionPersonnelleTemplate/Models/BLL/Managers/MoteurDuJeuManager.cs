@@ -419,7 +419,7 @@ namespace SolutionPersonnelleTemplate.Models.BLL.Managers
         /// <param name="lAttaquant"></param>
         /// <param name="leDefenceur"></param>
         /// <returns></returns>
-        public async Task<int> Frappe(Personne lAttaquant, Personne leDefenceur)
+        public async Task<int> Frapper(Personne lAttaquant, Personne leDefenceur)
         {
             //pour le test les deux combattants ont une arme fistive à 1D6
             Des _des = new Des();
@@ -460,17 +460,16 @@ namespace SolutionPersonnelleTemplate.Models.BLL.Managers
         /// <param name="leHeros"></param>
         /// <param name="leMonstre"></param>
         /// <returns></returns>
-        public async Task<Dictionary<string,object>> PhaseDeCombat(int nombreRound, bool? joueurInit, ActionCombat? actionChoisie, Personne leHeros, Personne leMonstre)
+        public async Task<Dictionary<string, object>> PhaseDeCombat(int nombreRound, bool? joueurInit, ActionCombat? actionChoisie, Personne leHeros, Personne leMonstre)
         {
-            //List<object> listeDeroulementDuCombat = new List<object>(4);
             // Création du dictionnaire.
             Dictionary<string, object> listeDeroulementDuCombat = new Dictionary<string, object>();
-
+            string leMessage = "";
             //A quel round du combat on est 
             if (nombreRound == 0)
             {
                 nombreRound = 1; // si c'est pas valorisé ca veut dire que c est le début du combat , donc on valorise à 1
-                listeDeroulementDuCombat.Add("Round n°",nombreRound);
+                listeDeroulementDuCombat.Add("Round n°", nombreRound);
             }
             else
             {
@@ -479,7 +478,7 @@ namespace SolutionPersonnelleTemplate.Models.BLL.Managers
                 listeDeroulementDuCombat.Add("Round n°", nombreRound);
             }
             //qui a l initiative ?  
-            if(joueurInit == null)
+            if (joueurInit == null)
             {
                 bool leHerosFrappeLePremierPourLePremierRound = await HerosAtIlLinitiative(leHeros, leMonstre);
                 if (leHerosFrappeLePremierPourLePremierRound == true)
@@ -495,98 +494,177 @@ namespace SolutionPersonnelleTemplate.Models.BLL.Managers
                     listeDeroulementDuCombat.Add("initiativeHeros", joueurInit);
                 }
             }
-            //bool leHerosFrappeLePremierPourLePremierRound = await HerosAtIlLinitiative(leHeros, leMonstre);
-            
-            //on valorise l init pour tout le combat 
-            //if (leHerosFrappeLePremierPourLePremierRound == true)
-            //{
-            //    joueurInit = true;
-            //    //on valorise la liste
-            //    listeDeroulementDuCombat.Add("initiativeHeros", joueurInit);
-            //}
-            //else
-            //{
-            //    joueurInit = false;
-            //    //on valorise la liste
-            //    listeDeroulementDuCombat.Add("initiativeHeros", joueurInit);
-            //}
-            
-            //TANTQUE l'un des deux est vivant ( && cf ancienne methode)
-            while (EstVivant(leHeros) && EstVivant(leMonstre))
-            {
-                //Déroulement d'un round 
-                //-1 celui qui a l initiative choisit son action : pour le moment uniquement combattre
-                if (joueurInit == true) //-1.1 si c est le joueur qui a gagné l init 
-                    //ca sera lui qui attaquera le premier
-                { //:on propose le choix
-                    //-1.11 s il n y a pas de choix de fait
-                    if (actionChoisie == null)
+
+            //Déroulement d'un round 
+            //-1 celui qui a l initiative choisit son action : pour le moment uniquement combattre
+            if (joueurInit == true) //-1.1 si c est le joueur qui a gagné l init 
+                                    //ca sera lui qui attaquera le premier
+            { //:on propose le choix
+              //-1.11 s il n y a pas de choix de fait
+                if (actionChoisie == null)
+                {
+
+                    //-1.12 on propose le choix
+                    //on valorise la liste avec les protagonistes au combat
+                    listeDeroulementDuCombat.Add("leHeros", leHeros);
+                    listeDeroulementDuCombat.Add("leMonstre", leMonstre);
+                    leMessage = "Vous avez gagné l'initiative au combat, quelle action voulez-vous effectuer ?";
+                    listeDeroulementDuCombat.Add("leMessage", leMessage);
+                    return listeDeroulementDuCombat;
+                }
+                else  //-2 si un choix est fait
+                {
+                    if (actionChoisie == ActionCombat.CombattrePhysique)
                     {
-                        //-1.12 on propose le choix
-                        //on valorise la liste avec les protagonistes au combat
-                        //   listeDeroulementDuCombat.Add(leHeros);
-                        listeDeroulementDuCombat.Add("leHeros", leHeros);
-                        //listeDeroulementDuCombat.Add(leMonstre);
-                        listeDeroulementDuCombat.Add("leMonstre", leMonstre);
-                       
-                        return listeDeroulementDuCombat;
-                    }
-                    else  //-2 si un choix est fait
-                    {
-                        if (actionChoisie == ActionCombat.CombattrePhysique)
+                        //points de vie du monstre avant le combat 
+                        int pointsVieAvantCombatMonstre = leMonstre.PointsDeVieActuels;
+                        //-2.1 l'action est résolue
+                        int pointsDegatsSubisParLeMonstre = await PasseDarme(leHeros, leMonstre);
+
+                        if (pointsDegatsSubisParLeMonstre > 0)
                         {
-                            //points de vie du monstre avant le combat 
-                            int pointsVieAvantCombatMonstre = leMonstre.PointsDeVieActuels;
+                            leMessage = "Vous avez porté une attaque et infligé " + pointsDegatsSubisParLeMonstre +
+                                " point(s) de dégat(s) à votre adversaire.";
+                        }
+                        else
+                        {
+                            leMessage = "Vous avez porté une attaque sans infliger de point de dégat à votre adversaire.";
+                        }
+                        //mise a jour des points de vie du monstre
+                        leMonstre.PointsDeVieActuels -= pointsDegatsSubisParLeMonstre;
+                        //met à jour du monstre dans le dictionnaire pour les autres rounds
+                        listeDeroulementDuCombat.Remove("leMonstre");
+                        listeDeroulementDuCombat.Add("leMonstre", leMonstre);
+                        //met à jour du message dans le dictionnaire pour les autres rounds
+                        listeDeroulementDuCombat.Remove("leMessage");
+                        listeDeroulementDuCombat.Add("leMessage", leMessage);
+                        //-2.2 si l'adversaire est encore en vie il peut frapper
+                        if (EstVivant(leMonstre))
+                        { //le monstre est vivant et c est a lui d attaquer le heros
+
+                            //points de vie du heros avant le combat 
+                            int pointsVieAvantCombatHeros = leHeros.PointsDeVieActuels;
                             //-2.1 l'action est résolue
-                            int pointsDegatsSubisParLeMonstre = await PasseDarme(leHeros, leMonstre);
-                            //mise a jour des points de vie du monstre
-                            leMonstre.PointsDeVieActuels -= pointsDegatsSubisParLeMonstre;
-                            //met à jour du monstre dans le dictionnaire pour les autres rounds
-                            listeDeroulementDuCombat.Remove("leMonstre");
-                            listeDeroulementDuCombat.Add("leMonstre", leMonstre);
-
-                            //-2.2 si l'adversaire est encore en vie il peut frapper
-                            if (EstVivant(leMonstre))
+                            int pointsDegatsSubisParLeHeros = await PasseDarme(leMonstre, leHeros);
+                            if (pointsDegatsSubisParLeHeros > 0)
                             {
-                                //le monstre est vivant et c est a lui d attaquer le heros
-
-                                //points de vie du heros avant le combat 
-                                int pointsVieAvantCombatHeros = leHeros.PointsDeVieActuels;
-                                //-2.1 l'action est résolue
-                                int pointsDegatsSubisParLeHeros = await PasseDarme(leMonstre,leHeros);
-                                //mise a jour des points de vie du heros
-                                leHeros.PointsDeVieActuels -= pointsDegatsSubisParLeHeros;
-                                //met à jour du heros dans le dictionnaire pour les autres rounds
-                                listeDeroulementDuCombat.Remove("leHeros");
-                                listeDeroulementDuCombat.Add("leHeros", leHeros);
-
+                                leMessage += " Votre adversaire vous a porté une attaque et infligé " + pointsDegatsSubisParLeHeros +
+                                    " point(s) de dégat(s).";
                             }
                             else
-                            {//le monstre est mort
-
-                                //PENSER A FAIRE GAGNER DES PTS EXP !!!
-
-
-                                //mise à jour du heros 
-                                listeDeroulementDuCombat.Remove("leHeros");
-                                listeDeroulementDuCombat.Add("leHeros", leHeros);
+                            {
+                                leMessage += " Votre adversaire vous a porté une attaque sans vous infliger de point de dégat.";
                             }
-                           
-                            return listeDeroulementDuCombat;
+
+                            //mise a jour des points de vie du heros
+                            leHeros.PointsDeVieActuels -= pointsDegatsSubisParLeHeros;
+                            //met à jour du heros dans le dictionnaire pour les autres rounds
+                            listeDeroulementDuCombat.Remove("leHeros");
+                            listeDeroulementDuCombat.Add("leHeros", leHeros);
+                            //met à jour du message dans le dictionnaire pour les autres rounds
+                            listeDeroulementDuCombat.Remove("leMessage");
+                            listeDeroulementDuCombat.Add("leMessage", leMessage);
                         }
-                     }
+                        else
+                        {//le monstre est mort
+
+                            //PENSER A FAIRE GAGNER DES PTS EXP !!!
+
+
+                            //mise à jour du heros 
+                            listeDeroulementDuCombat.Remove("leHeros");
+                            listeDeroulementDuCombat.Add("leHeros", leHeros);
+
+                            leMessage = "vous avez tué votre adversaire";
+                            listeDeroulementDuCombat.Remove("leMessage");
+                            listeDeroulementDuCombat.Add("leMessage", leMessage);
+                        }
+
+                        return listeDeroulementDuCombat;
+                    }
                 }
-                else //-3 l'adversaire (celui qui n'a pas eu l init) choisit son action : pour le moment uniquemnt combattre
-                {// c'est lui qui attequera en second
-                    return null;
-                    //-3.1 si c'est le joueur on propose le choix
-                    //-4 l'action est résolue
+            }
+            else//le joueur n a pas l init
+            {
+                //si l action est null on renvoi
+                if (actionChoisie == null)
+                {
+
+                    //-1.12 on propose le choix
+                    //on valorise la liste avec les protagonistes au combat
+                    listeDeroulementDuCombat.Add("leHeros", leHeros);
+                    listeDeroulementDuCombat.Add("leMonstre", leMonstre);
+                    leMessage = "Vous avez perdu l'initiative au combat, quelle action voulez-vous effectuer ?";
+                    listeDeroulementDuCombat.Add("leMessage", leMessage);
+                    return listeDeroulementDuCombat;
                 }
-                return null;
-                //-5 fin du round , nouveau round, on valorise le contenu du déroulement du combat, plus de jet d init mais on garde le meme ordre que pour le 1er round
-             }
+                else//si une action est choisie
+                {
+                    //le monstre attaque car c est lui qui a l init 
+                    //points de vie du heros avant le combat 
+                    int pointsVieAvantCombatHeros = leHeros.PointsDeVieActuels;
+                    //-2.1 l'action est résolue
+                    int pointsDegatsSubisParLeHeros = await PasseDarme(leMonstre, leHeros);
+                    if (pointsDegatsSubisParLeHeros > 0)
+                    {
+                        leMessage += " Votre adversaire vous a porté une attaque et infligé " + pointsDegatsSubisParLeHeros +
+                            " point(s) de dégat(s).";
+                    }
+                    else
+                    {
+                        leMessage += " Votre adversaire vous a porté une attaque sans vous infliger de point de dégat.";
+                    }
+
+                    //mise a jour des points de vie du heros
+                    leHeros.PointsDeVieActuels -= pointsDegatsSubisParLeHeros;
+                    //met à jour du heros dans le dictionnaire pour les autres rounds
+                    listeDeroulementDuCombat.Remove("leHeros");
+                    listeDeroulementDuCombat.Add("leHeros", leHeros);
+                    //met à jour du message dans le dictionnaire pour les autres rounds
+                    listeDeroulementDuCombat.Remove("leMessage");
+                    listeDeroulementDuCombat.Add("leMessage", leMessage);
+
+                    //si le joueur est vivant ALORS il peut faire l action qu il avait choisir
+                    if (EstVivant(leHeros))
+                    {
+                        //points de vie du monstre avant le combat 
+                        int pointsVieAvantCombatMonstre = leMonstre.PointsDeVieActuels;
+                        //-2.1 l'action est résolue
+                        int pointsDegatsSubisParLeMonstre = await PasseDarme(leHeros, leMonstre);
+
+                        if (pointsDegatsSubisParLeMonstre > 0)
+                        {
+                            leMessage += "Vous avez porté une attaque et infligé " + pointsDegatsSubisParLeMonstre +
+                                " point(s) de dégat(s) à votre adversaire.";
+                        }
+                        else
+                        {
+                            leMessage += "Vous avez porté une attaque sans infliger de point de dégat à votre adversaire.";
+                        }
+                        //mise a jour des points de vie du monstre
+                        leMonstre.PointsDeVieActuels -= pointsDegatsSubisParLeMonstre;
+                        //met à jour du monstre dans le dictionnaire pour les autres rounds
+                        listeDeroulementDuCombat.Remove("leMonstre");
+                        listeDeroulementDuCombat.Add("leMonstre", leMonstre);
+                        //met à jour du message dans le dictionnaire pour les autres rounds
+                        listeDeroulementDuCombat.Remove("leMessage");
+                        listeDeroulementDuCombat.Add("leMessage", leMessage);
+
+                        return listeDeroulementDuCombat;
+                    }
+                    else //Sinon c est que le heros est mort et on renvoi
+                    {
+
+                        return listeDeroulementDuCombat;
+                    }
+                   
+                }
+
+            }
+            //-5 fin du round , nouveau round, on valorise le contenu du déroulement du combat, plus de jet d init mais on garde le meme ordre que pour le 1er round
+
             return listeDeroulementDuCombat;
-         }
+        }
 
         /// <summary>
         /// methode d'une passe d'arme entre 2 personnes
@@ -626,84 +704,6 @@ namespace SolutionPersonnelleTemplate.Models.BLL.Managers
         }
 
 
-        /// <summary>
-        /// Methode qui simule un combat en entier de A à Z
-        /// </summary>
-        /// <param name="leHeros"></param>
-        /// <param name="leMonstre"></param>
-        /// <returns></returns>
-        public async Task<string> Combattre(Personne leHeros, Personne leMonstre)
-        {
-             string derouleDuCombat = "";
-            int nombreDuRound = 1;
-
-            //le heros attaque t il en premier ?
-            bool leHerosFrappeLePremierPourLePremierRound = await HerosAtIlLinitiative(leHeros, leMonstre);
-            if (leHerosFrappeLePremierPourLePremierRound)
-            {//le heros frappe le premier
-
-                derouleDuCombat += "<h3>Vous avez eu l'initiative au combat<h3>";
-            }
-            else
-            {
-                derouleDuCombat += "<h3>Vous n'avez pas eu l'initiative au combat<h3>";
-            }
-
-                //tant que l un des deux est en vie
-                while (EstVivant(leHeros) && EstVivant(leMonstre))
-            {
-                 if (leHerosFrappeLePremierPourLePremierRound)
-                {//le heros frappe le premier
-                    //proposer de faire une action
-                    //pour le moment il n y a qu une action possible : attaquer
-
-                    //si il touche il fait les degats et les points de vie du défenceur sont modifiés
-                    int pvMonstreAvantAttaque=leMonstre.PointsDeVieActuels;
-                    leMonstre.PointsDeVieActuels = await Frappe(leHeros, leMonstre);
-                    int degatsSubis = pvMonstreAvantAttaque - leMonstre.PointsDeVieActuels;
-                    if (degatsSubis >0)
-                    {
-                        string degatsSubisEnString = degatsSubis.ToString();
-                        derouleDuCombat += "<p>Vous avez frappez l'adversaire et lui avait infligé " + degatsSubisEnString + " point de dégats</p>";
-                        //pour que le heros ne frappe pas à tous coups 
-                        leHerosFrappeLePremierPourLePremierRound = false;
-                    }
-                    else {
-                         derouleDuCombat += "<p>Vous avez frappez l'adversaire sans lui infliger des dégats</p>";
-                        //pour que le heros ne frappe pas à tous coups 
-                        leHerosFrappeLePremierPourLePremierRound = false;
-                    }
-
-                    
-                }
-                else
-                {
-                    //si lemonstre touche il fait les degats et les points de vie du défenceur sont modifiés
-                    int pvHeroAvantAttaque = leHeros.PointsDeVieActuels;
-                    leHeros.PointsDeVieActuels = await Frappe(leMonstre,leHeros);
-                    int degatsSubis = pvHeroAvantAttaque - leHeros.PointsDeVieActuels;
-                    if (degatsSubis > 0)
-                    {
-                       string degatsSubisEnString = degatsSubis.ToString();
-                        derouleDuCombat += "<p>Vous avez été frappé par votre l'adversaire et il vous a infligé " + degatsSubisEnString + " point de dégats et vos points de vie sont maintenant de "+ leHeros.PointsDeVieActuels +"</p>";
-                        //pour que le heros ne frappe pas à tous coups 
-                        leHerosFrappeLePremierPourLePremierRound = true;
-                    }
-                    else
-                    {
-                         derouleDuCombat += "<p>Vous avez été frappé par votre l'adversaire sans qu'il vous inflige des dégats</p>";
-                        //pour que le heros ne frappe pas à tous coups 
-                        leHerosFrappeLePremierPourLePremierRound = true;
-                    }
-                   
-                }
-            }
- 
-            //celui qui a l intit attaque 
-             return derouleDuCombat;
-             //si l adversaire est encore en vie c est à l autre d'attaquer 
- 
-        }
 
         /// <summary>
         /// permet de savoir si le heros a l initiative sur le monstre ou pas ?

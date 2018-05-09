@@ -13,6 +13,7 @@ namespace SolutionPersonnelleTemplate.Models.BO
         public ActionCombat? ActionChoisie { get; set; }
         public Personne LeHeros { get; set; }
         public Personne LeMonstre { get; set; }
+        public string MessageDuCombat { get; set; }
 
     }
 }
